@@ -32,26 +32,31 @@ public class GroceryInstance {
   }
 
   /**
-   * Method for displaying the date as an instance of String. Useful when trying to display the best
-   * before date.
+   * Method for displaying the best before date as an instance of String. Useful when trying to
+   * display the best before date.
    */
   public String getBestBeforeString() {
     return this.bestBefore;
   }
 
   /**
-   * Method for returning the date as an instance of Date. Useful when comparing the current date
-   * and the best before date.
+   * Method for returning the best before date as an instance of Date. Useful when comparing the
+   * current date and the best before date.
    *
    * @throws ParseException The method throws a ParseException in case the given BestBefore String
    *                        is in an invalid date format (only "DD-MM-YYYY"`) is accepted).
    */
-  public Date getBestBeforeDate() throws ParseException {
+  public Date getBestBeforeDate() {
     // Creates a dateformat dd-MM-yyyy
     SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     // Parses this instance's bestBefore String object to a Date object.
-    return format.parse(this.bestBefore);
+    try {
+      return format.parse(this.bestBefore);
+    } catch (ParseException e) {
+      System.out.println("Feil format på datoen! (dd.MM.yyyy)");
+      return null;
+    }
   }
 
   // Set-methods

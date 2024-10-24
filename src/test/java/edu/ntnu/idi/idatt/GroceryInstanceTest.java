@@ -35,7 +35,7 @@ class GroceryInstanceTest {
   }
 
   @Test
-  void getBestBeforeDate() throws ParseException {
+  void getBestBeforeDate() {
     assertEquals(new GregorianCalendar(2024, Calendar.NOVEMBER, 2).getTime(),
         tomato1.getBestBeforeDate());
   }
