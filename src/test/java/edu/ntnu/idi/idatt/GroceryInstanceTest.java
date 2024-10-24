@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 class GroceryInstanceTest {
 
-  Grocery tomato = new Grocery("Tomat", "stk.");
+  GroceryType tomato = new GroceryType("Tomat", "stk.");
   GroceryInstance tomato1 = new GroceryInstance(tomato, 5, 2,
       "02.11.2024");
 

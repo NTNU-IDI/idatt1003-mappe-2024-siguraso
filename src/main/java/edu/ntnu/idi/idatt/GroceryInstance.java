@@ -7,7 +7,7 @@ import java.util.Date;
 public class GroceryInstance {
 
   // Object variables
-  private final Grocery groceryType;
+  private final GroceryType groceryType;
   private double amount;
   private double pricePerUnit;
   private final String bestBefore;
@@ -27,7 +27,7 @@ public class GroceryInstance {
    * @param bestBefore   The best before date (given as an instance of String in the format
    *                     "DD.MM.YYYY").
    */
-  GroceryInstance(Grocery groceryType, double amount, double pricePerUnit, String bestBefore) {
+  GroceryInstance(GroceryType groceryType, double amount, double pricePerUnit, String bestBefore) {
     this.groceryType = groceryType;
     this.amount = amount;
     this.bestBefore = bestBefore;

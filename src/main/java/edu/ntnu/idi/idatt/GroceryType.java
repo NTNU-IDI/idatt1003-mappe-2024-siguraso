@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt;
 
-public class Grocery {
+public class GroceryType {
 
   // Object variables
   private final String name;
@@ -14,7 +14,7 @@ public class Grocery {
    * @param name            The name of the grocery.
    * @param measurementUnit The unit most often used to measure said grocery.
    */
-  Grocery(String name, String measurementUnit) {
+  GroceryType(String name, String measurementUnit) {
     this.name = name;
     this.measurementUnit = measurementUnit;
   }

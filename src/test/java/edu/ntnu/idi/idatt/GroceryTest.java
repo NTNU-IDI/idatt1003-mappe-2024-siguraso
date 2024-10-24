@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class GroceryTest {
 
-  Grocery surST = new Grocery("Surstrømming", "stk.");
+  GroceryType surST = new GroceryType("Surstrømming", "stk.");
 
   @Test
   void getName() {
