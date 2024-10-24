@@ -7,24 +7,40 @@ import java.util.Date;
 public class GroceryInstance {
 
   // Object variables
-  private final Grocery grocery;
+  private final Grocery groceryType;
   private double amount;
+  private double pricePerUnit;
   private final String bestBefore;
 
   // Constructor
-  GroceryInstance(Grocery grocery, double amount, String bestBefore) {
-    this.grocery = grocery;
+
+  /**
+   * Creates an "Instance" of a given GroceryType object, and adds information that can differ based
+   * on for example date of purchase (e.g. different best before dates) and the place of purchase
+   * (e.g. different prices per unit),
+   *
+   * @param groceryType  Instance of the GroceryType class, which grocery ware is it?
+   * @param amount       The amount of this GroceryType (based on the given unit measurement given
+   *                     in this GroceryType instance).
+   * @param pricePerUnit The cost per unit (based on the give unit measurement given in this
+   *                     GroceryType instance).
+   * @param bestBefore   The best before date (given as an instance of String in the format
+   *                     "DD.MM.YYYY").
+   */
+  GroceryInstance(Grocery groceryType, double amount, double pricePerUnit, String bestBefore) {
+    this.groceryType = groceryType;
     this.amount = amount;
     this.bestBefore = bestBefore;
+    this.pricePerUnit = pricePerUnit;
   }
 
   // Get-methods
   public String getName() {
-    return this.grocery.getName();
+    return this.groceryType.getName();
   }
 
   public String getMeasurementUnit() {
-    return this.grocery.getMeasurementUnit();
+    return this.groceryType.getMeasurementUnit();
   }
 
   public double getAmount() {
@@ -41,10 +57,8 @@ public class GroceryInstance {
 
   /**
    * Method for returning the best before date as an instance of Date. Useful when comparing the
-   * current date and the best before date.
-   *
-   * @throws ParseException The method throws a ParseException in case the given BestBefore String
-   *                        is in an invalid date format (only "DD-MM-YYYY"`) is accepted).
+   * current date and the best before date. Throws a ParseException if the date is not in the format
+   * "DD.MM.YYYY".
    */
   public Date getBestBeforeDate() {
     // Creates a dateformat dd-MM-yyyy
@@ -59,8 +73,16 @@ public class GroceryInstance {
     }
   }
 
+  public double getPricePerUnit() {
+    return this.pricePerUnit;
+  }
+
   // Set-methods
   public void setAmount(double amount) {
     this.amount = amount;
+  }
+
+  public void setPricePerUnit(double pricePerUnit) {
+    this.pricePerUnit = pricePerUnit;
   }
 }

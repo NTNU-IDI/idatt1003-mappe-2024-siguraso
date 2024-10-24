@@ -2,17 +2,16 @@ package edu.ntnu.idi.idatt;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.text.ParseException;
 import org.junit.jupiter.api.Test;
 
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
 
 class GroceryInstanceTest {
 
   Grocery tomato = new Grocery("Tomat", "stk.");
-  GroceryInstance tomato1 = new GroceryInstance(tomato, 5, "02.11.2024");
+  GroceryInstance tomato1 = new GroceryInstance(tomato, 5, 2,
+      "02.11.2024");
 
   @Test
   void getName() {
@@ -41,8 +40,19 @@ class GroceryInstanceTest {
   }
 
   @Test
+  void getPricePerUnit() {
+    assertEquals(2.0, tomato1.getPricePerUnit());
+  }
+
+  @Test
   void setAmount() {
     tomato1.setAmount(6);
     assertEquals(6, tomato1.getAmount());
+  }
+
+  @Test
+  void setPricePerUnit() {
+    tomato1.setPricePerUnit(3);
+    assertEquals(3.0, tomato1.getPricePerUnit());
   }
 }
