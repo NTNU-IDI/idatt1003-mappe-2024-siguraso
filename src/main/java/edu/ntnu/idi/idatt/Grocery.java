@@ -1,13 +1,12 @@
 package edu.ntnu.idi.idatt;
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
-
 public class Grocery {
 
   // Object variables
   private final String name;
   private final String measurementUnit;
+
+  // Constructor
 
   /**
    * Grocery class that defines important information about one type of grocery.
@@ -20,5 +19,12 @@ public class Grocery {
     this.measurementUnit = measurementUnit;
   }
 
+  // Get-methods
+  public String getName() {
+    return name;
+  }
 
+  public String getMeasurementUnit() {
+    return measurementUnit;
+  }
 }
