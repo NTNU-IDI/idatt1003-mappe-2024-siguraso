@@ -75,8 +75,8 @@ public class FoodStorage {
     double sum = 0;
 
     // for-loop for each item in the index table.
-    for (int i = 0; i < index.length; i++) {
-      sum += this.groceries.get(index[i]).getPrice();
+    for (int j : index) {
+      sum += this.groceries.get(j - 1).getPrice();
     }
 
     return sum;
