@@ -82,6 +82,9 @@ public class FoodStorage {
     return sum;
   }
 
+  /**
+   * Finds the total value of all items in food storage.
+   */
   public double getTotalValue() {
     double sum = 0;
 
@@ -92,5 +95,32 @@ public class FoodStorage {
     return sum;
   }
 
+  /**
+   * Returns an ArrayList that contains all out of date items in the food storage.
+   */
+  public ArrayList<GroceryInstance> getOutOfDateInstances() {
+    ArrayList<GroceryInstance> outdatedInstances = new ArrayList<>();
 
+    for (GroceryInstance grocery : this.groceries) {
+      if (grocery.isOutOfDate()) {
+        outdatedInstances.add(grocery);
+      }
+    }
+
+    return outdatedInstances;
+  }
+
+  /**
+   * Returns the total value of all out of date items.
+   */
+  public double getOutOfDateValue() {
+    ArrayList<GroceryInstance> outdatedInstances = this.getOutOfDateInstances();
+    double sum = 0;
+
+    for (GroceryInstance outdatedInstance : outdatedInstances) {
+      sum += outdatedInstance.getPrice();
+    }
+
+    return sum;
+  }
 }
