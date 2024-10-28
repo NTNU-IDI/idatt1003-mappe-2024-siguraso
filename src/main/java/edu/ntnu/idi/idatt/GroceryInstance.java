@@ -77,6 +77,10 @@ public class GroceryInstance {
     return this.pricePerUnit;
   }
 
+  public double getPrice() {
+    return this.amount * this.pricePerUnit;
+  }
+
   // Set-methods
   public void setAmount(double amount) {
     this.amount = amount;
@@ -85,4 +89,17 @@ public class GroceryInstance {
   public void setPricePerUnit(double pricePerUnit) {
     this.pricePerUnit = pricePerUnit;
   }
+
+  // Other void-methods.
+  public void removeAmount(double amount) {
+    this.amount -= amount;
+  }
+
+  // Boolean methods
+  public Boolean isOutOfDate() {
+    Date today = new Date();
+
+    return this.getBestBeforeDate().before(today);
+  }
+
 }
