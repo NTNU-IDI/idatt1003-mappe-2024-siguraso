@@ -20,8 +20,8 @@ public class GroceryInstance {
    * (e.g. different prices per unit),
    *
    * @param groceryType  Instance of the GroceryType class, which grocery ware is it?
-   * @param amount       The amount of this GroceryType (based on the given unit measurement given
-   *                     in this GroceryType instance).
+   * @param amount       The amount of this GroceryType (based on the given unit measurement in this
+   *                     GroceryType instance).
    * @param pricePerUnit The cost per unit (based on the give unit measurement given in this
    *                     GroceryType instance).
    * @param bestBefore   The best before date (given as an instance of String in the format
