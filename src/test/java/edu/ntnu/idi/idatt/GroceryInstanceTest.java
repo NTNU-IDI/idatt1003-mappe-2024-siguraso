@@ -55,4 +55,11 @@ class GroceryInstanceTest {
     tomato1.setPricePerUnit(3);
     assertEquals(3.0, tomato1.getPricePerUnit());
   }
+
+  @Test
+  void isOutOfDate() {
+    assertFalse(tomato1.isOutOfDate());
+  }
+
+
 }

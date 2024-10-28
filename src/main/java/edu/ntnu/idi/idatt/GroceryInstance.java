@@ -96,6 +96,10 @@ public class GroceryInstance {
   }
 
   // Boolean methods
+
+  /**
+   * Checks weather or not theis GroceryInstance is out of date.
+   */
   public Boolean isOutOfDate() {
     Date today = new Date();
 
