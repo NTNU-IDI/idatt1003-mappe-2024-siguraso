@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class FoodStorage {
 
   ArrayList<GroceryInstance> groceries;
+  ArrayList<GroceryType> groceryTypes = new ArrayList<>();
+
 
   /**
    * A class that stores multiple instances of the GroceryInstance class. Used to view how much of
@@ -14,6 +16,15 @@ public class FoodStorage {
    */
   public FoodStorage(ArrayList<GroceryInstance> groceries) {
     this.groceries = groceries;
+
+    // adds a bunch of basic and common GroceryTypes, so that the user doesn't have to.
+    this.groceryTypes.add(new GroceryType("Tomato", "kg"));
+    this.groceryTypes.add(new GroceryType("Milk", "L"));
+    this.groceryTypes.add(new GroceryType("Bread", "pcs."));
+    this.groceryTypes.add(new GroceryType("Apple", "kg"));
+    this.groceryTypes.add(new GroceryType("Potato", "kg"));
+    this.groceryTypes.add(new GroceryType("Butter", "pcs."));
+    this.groceryTypes.add(new GroceryType("Cucumber", "pcs."));
   }
 
   // Get-methods
@@ -122,5 +133,23 @@ public class FoodStorage {
     }
 
     return sum;
+  }
+
+  /**
+   * Gets all instances of GroceryInstance.
+   *
+   * @return An ArrayList containing all instances of GroceryInstance.
+   */
+  public ArrayList<GroceryInstance> getAllGroceries() {
+    return this.groceries;
+  }
+
+  /**
+   * Gets all instances of GroceryType
+   *
+   * @return An ArrayList containing all instances of GroceryType.
+   */
+  public ArrayList<GroceryType> getAllGroceryTypes() {
+    return this.groceryTypes;
   }
 }
