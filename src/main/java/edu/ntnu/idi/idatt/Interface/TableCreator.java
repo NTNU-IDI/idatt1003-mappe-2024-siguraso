@@ -11,7 +11,7 @@ public class TableCreator {
   /**
    * Create different types of tables for different types of classes.
    */
-  TableCreator() {
+  public TableCreator() {
   }
 
   /**
@@ -43,18 +43,18 @@ public class TableCreator {
 
   public void foodStorageTable(ArrayList<GroceryInstance> instances) {
     // creates the format for the table.
-    String tableFormat = "│ %-3d │ %-17s │ %,-9.2f │ %-6s │ %,-10.2f │ %,-10.2f │ %-10s │%n";
+    String tableFormat = "│ %-3d │ %-17s │ %,-12.2f │ %-6s │ %,-10.2f │ %,-10.2f │ %-10s │%n";
 
     // prints out the top of the table. (the header)
 
     // character mapping: total: 67 chars: 3 chars num, 17 chars name, 6 chars amount, 4 Chars unit,
     //                                     7 chars Price, 10 chars Price/unit DD.MM.YYYY
     System.out.format(
-        "+─────+───────────────────+───────────+────────+────────────+────────────+────────────+%n");
+        "+─────+───────────────────+───────────+───────────+────────────+────────────+────────────+%n");
     System.out.format(
-        "│ Num │ Name              │ Amount    │ Unit   │ Price      │ Price/Unit │ BestBefore │%n");
+        "│ Num │ Name              │ Amount    │ Unit      │ Price      │ Price/Unit │ BestBefore │%n");
     System.out.format(
-        "+─────+───────────────────+───────────+────────+────────────+────────────+────────────+%n");
+        "+─────+───────────────────+───────────+───────────+────────────+────────────+────────────+%n");
 
     for (int i = 0; i < instances.size(); i++) {
       // takes the format given for each line, and prints it out with the all the info
@@ -66,7 +66,7 @@ public class TableCreator {
 
     // prints out bottom of table
     System.out.format(
-        "+─────+───────────────────+───────────+────────+────────────+────────────+────────────+%n");
+        "+─────+───────────────────+───────────+───────────+────────────+────────────+────────────+%n");
   }
 
 }
