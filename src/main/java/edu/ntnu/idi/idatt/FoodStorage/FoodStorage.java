@@ -1,10 +1,10 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.FoodStorage;
 
 import java.util.ArrayList;
 
 public class FoodStorage {
 
-  ArrayList<GroceryInstance> groceries = new ArrayList<>();
+  ArrayList<GroceryInstance> groceries;
 
   /**
    * A class that stores multiple instances of the GroceryInstance class. Used to view how much of
@@ -12,7 +12,7 @@ public class FoodStorage {
    *
    * @param groceries An ArrayList that takes instances of the GroceryInstance datatype.
    */
-  FoodStorage(ArrayList<GroceryInstance> groceries) {
+  public FoodStorage(ArrayList<GroceryInstance> groceries) {
     this.groceries = groceries;
   }
 
@@ -21,7 +21,7 @@ public class FoodStorage {
   /**
    * Fetches an instance of a GroceryInstance from the food storage, based on what index is given.
    */
-  GroceryInstance getSpecificInstance(int index) {
+  public GroceryInstance getSpecificInstance(int index) {
     return this.groceries.get(index - 1);
   }
 
@@ -36,10 +36,10 @@ public class FoodStorage {
     ArrayList<GroceryInstance> searchResults = new ArrayList<>();
 
     // for-loop to check if any of the instances of GroceryInstance contains the search term string.
-    for (int i = 0; i < this.groceries.size(); i++) {
+    for (GroceryInstance grocery : this.groceries) {
       // if the name of grocery of the index i contains the search term, add it to the results list.
-      if (this.groceries.get(i).getName().toLowerCase().contains(searchTerm.toLowerCase())) {
-        searchResults.add(this.groceries.get(i));
+      if (grocery.getName().toLowerCase().contains(searchTerm.toLowerCase())) {
+        searchResults.add(grocery);
       }
     }
 

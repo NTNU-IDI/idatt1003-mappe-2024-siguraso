@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.Interface;
 
 import java.util.ArrayList;
 import java.util.Scanner;

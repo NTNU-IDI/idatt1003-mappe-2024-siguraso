@@ -1,5 +1,7 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.Interface;
 
+import edu.ntnu.idi.idatt.FoodStorage.GroceryInstance;
+import edu.ntnu.idi.idatt.FoodStorage.GroceryType;
 import java.util.ArrayList;
 
 public class TableCreator {
@@ -65,8 +67,6 @@ public class TableCreator {
     // prints out bottom of table
     System.out.format(
         "+─────+───────────────────+───────────+────────+────────────+────────────+────────────+%n");
-
-
   }
 
 }

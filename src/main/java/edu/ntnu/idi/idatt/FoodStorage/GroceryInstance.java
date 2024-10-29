@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.FoodStorage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,7 +27,8 @@ public class GroceryInstance {
    * @param bestBefore   The best before date (given as an instance of String in the format
    *                     "DD.MM.YYYY").
    */
-  GroceryInstance(GroceryType groceryType, double amount, double pricePerUnit, String bestBefore) {
+  public GroceryInstance(GroceryType groceryType, double amount, double pricePerUnit,
+      String bestBefore) {
     this.groceryType = groceryType;
     this.amount = amount;
     this.bestBefore = bestBefore;

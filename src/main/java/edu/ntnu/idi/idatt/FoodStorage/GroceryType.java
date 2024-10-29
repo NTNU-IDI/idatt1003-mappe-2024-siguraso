@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.FoodStorage;
 
 public class GroceryType {
 
@@ -14,7 +14,7 @@ public class GroceryType {
    * @param name            The name of the grocery.
    * @param measurementUnit The unit most often used to measure said grocery.
    */
-  GroceryType(String name, String measurementUnit) {
+  public GroceryType(String name, String measurementUnit) {
     this.name = name;
     this.measurementUnit = measurementUnit;
   }
