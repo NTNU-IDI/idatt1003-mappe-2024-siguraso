@@ -20,8 +20,6 @@ public class Interface {
           break;
       }
     }
-
-
   }
 
   // methods
