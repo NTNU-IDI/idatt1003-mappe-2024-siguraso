@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.FoodStorage;
+package edu.ntnu.idi.idatt.Grocery;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

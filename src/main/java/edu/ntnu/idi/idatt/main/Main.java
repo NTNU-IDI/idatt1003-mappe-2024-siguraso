@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.main;
 
 import edu.ntnu.idi.idatt.Interface.ChoiceWindow;
+
 import java.util.Scanner;
 
 public class Main {

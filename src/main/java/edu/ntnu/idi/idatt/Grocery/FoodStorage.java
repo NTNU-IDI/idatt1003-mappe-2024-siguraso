@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.FoodStorage;
+package edu.ntnu.idi.idatt.Grocery;
 
 import java.util.ArrayList;
 

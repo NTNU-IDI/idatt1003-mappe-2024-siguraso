@@ -1,7 +1,7 @@
 package edu.ntnu.idi.idatt.Interface;
 
-import edu.ntnu.idi.idatt.FoodStorage.GroceryInstance;
-import edu.ntnu.idi.idatt.FoodStorage.GroceryType;
+import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
+import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import java.util.ArrayList;
 
 public class TableCreator {

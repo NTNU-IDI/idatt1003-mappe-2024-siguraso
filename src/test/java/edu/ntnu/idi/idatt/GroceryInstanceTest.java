@@ -2,8 +2,8 @@ package edu.ntnu.idi.idatt;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.ntnu.idi.idatt.FoodStorage.GroceryInstance;
-import edu.ntnu.idi.idatt.FoodStorage.GroceryType;
+import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
+import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import org.junit.jupiter.api.Test;
 
 import java.util.GregorianCalendar;
