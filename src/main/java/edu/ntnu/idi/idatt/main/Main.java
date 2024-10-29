@@ -3,7 +3,7 @@ package edu.ntnu.idi.idatt.main;
 import edu.ntnu.idi.idatt.Interface.ChoiceWindow;
 import java.util.Scanner;
 
-public class Interface {
+public class Main {
 
   public static void main(String[] args) {
     clearScreen();
