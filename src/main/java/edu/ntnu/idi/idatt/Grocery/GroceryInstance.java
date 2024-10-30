@@ -69,7 +69,7 @@ public class GroceryInstance {
     try {
       return format.parse(this.bestBefore);
     } catch (ParseException e) {
-      System.out.println("Feil format på datoen! (dd.MM.yyyy)");
+      System.out.println("Wrong date format! (DD.MM.YYYY)");
       return null;
     }
   }
@@ -101,7 +101,7 @@ public class GroceryInstance {
   /**
    * Checks weather or not theis GroceryInstance is out of date.
    */
-  public Boolean isOutOfDate() {
+  public boolean isOutOfDate() {
     Date today = new Date();
 
     return this.getBestBeforeDate().before(today);

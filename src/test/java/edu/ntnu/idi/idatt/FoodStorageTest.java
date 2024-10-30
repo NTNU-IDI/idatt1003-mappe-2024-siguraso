@@ -62,7 +62,7 @@ class FoodStorageTest {
 
     ArrayList<GroceryInstance> tomatoSearch = foodStorage.groceryInstanceSearch("tomato");
 
-    assertEquals("Tomato", tomatoSearch.get(0).getName());
+    assertEquals("tomato", tomatoSearch.get(0).getName());
     assertEquals("Tomato", tomatoSearch.get(1).getName());
   }
 

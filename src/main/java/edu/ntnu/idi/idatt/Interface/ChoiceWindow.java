@@ -77,7 +77,7 @@ public class ChoiceWindow {
     while (true) {
       try {
         // prints the specified dialog message, as well as displaying instructions fot the user.
-        System.out.println(dialogMessage + "Enter an integer (1 - " + this.choices.size() + ")");
+        System.out.println(dialogMessage + "(Enter an integer 1 - " + this.choices.size() + ")");
         // prints out the choiceString using the getChoiceString method.
         System.out.println(this.getChoiceString());
 

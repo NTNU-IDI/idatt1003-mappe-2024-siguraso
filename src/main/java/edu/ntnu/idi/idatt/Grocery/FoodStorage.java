@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class FoodStorage {
 
-  ArrayList<GroceryInstance> groceries;
+  ArrayList<GroceryInstance> groceryInstances;
   ArrayList<GroceryType> groceryTypes = new ArrayList<>();
 
 
@@ -12,10 +12,10 @@ public class FoodStorage {
    * A class that stores multiple instances of the GroceryInstance class. Used to view how much of
    * each grocery the user has.
    *
-   * @param groceries An ArrayList that takes instances of the GroceryInstance datatype.
+   * @param groceryInstances An ArrayList that takes instances of the GroceryInstance datatype.
    */
-  public FoodStorage(ArrayList<GroceryInstance> groceries) {
-    this.groceries = groceries;
+  public FoodStorage(ArrayList<GroceryInstance> groceryInstances) {
+    this.groceryInstances = groceryInstances;
 
     // adds a bunch of basic and common GroceryTypes, so that the user doesn't have to.
     this.groceryTypes.add(new GroceryType("Tomato", "kg"));
@@ -30,10 +30,18 @@ public class FoodStorage {
   // Get-methods
 
   /**
-   * Fetches an instance of a GroceryInstance from the food storage, based on what index is given.
+   * Fetches an instance of GroceryInstance from the food storage, based on what index is given.
    */
   public GroceryInstance getSpecificInstance(int index) {
-    return this.groceries.get(index - 1);
+    return this.groceryInstances.get(index - 1);
+  }
+
+  /**
+   * Fetches an instance of GroceryType from the GroceryTypes ArrayList based on what index is
+   * given.
+   */
+  public GroceryType getSpecificType(int index) {
+    return this.groceryTypes.get(index - 1);
   }
 
   /**
@@ -47,9 +55,9 @@ public class FoodStorage {
     ArrayList<GroceryInstance> searchResults = new ArrayList<>();
 
     // for-loop to check if any of the instances of GroceryInstance contains the search term string.
-    for (GroceryInstance grocery : this.groceries) {
+    for (GroceryInstance grocery : this.groceryInstances) {
       // if the name of grocery of the index i contains the search term, add it to the results list.
-      if (grocery.getName().toLowerCase().contains(searchTerm.toLowerCase())) {
+      if (grocery.getName().equalsIgnoreCase(searchTerm)) {
         searchResults.add(grocery);
       }
     }
@@ -62,7 +70,14 @@ public class FoodStorage {
    * Removes an instance of GroceryInstance from the food storage, based on the index given.
    */
   public void removeInstance(int index) {
-    this.groceries.remove(index - 1);
+    this.groceryInstances.remove(index - 1);
+  }
+
+  /**
+   * Adds an instance of GroceryInstance to the food storage.
+   */
+  public void addInstance(GroceryInstance grocery) {
+    this.groceryInstances.add(grocery);
   }
 
   /**
@@ -74,7 +89,7 @@ public class FoodStorage {
    *               measurement unit defined in the groceryType object).
    */
   public void removeInstanceAmount(int index, double amount) {
-    this.groceries.get(index - 1).removeAmount(amount);
+    this.groceryInstances.get(index - 1).removeAmount(amount);
   }
 
   /**
@@ -87,7 +102,7 @@ public class FoodStorage {
 
     // for-loop for each item in the index table.
     for (int j : index) {
-      sum += this.groceries.get(j - 1).getPrice();
+      sum += this.groceryInstances.get(j - 1).getPrice();
     }
 
     return sum;
@@ -99,7 +114,7 @@ public class FoodStorage {
   public double getTotalValue() {
     double sum = 0;
 
-    for (GroceryInstance grocery : this.groceries) {
+    for (GroceryInstance grocery : this.groceryInstances) {
       sum += grocery.getPrice();
     }
 
@@ -112,7 +127,7 @@ public class FoodStorage {
   public ArrayList<GroceryInstance> getOutOfDateInstances() {
     ArrayList<GroceryInstance> outdatedInstances = new ArrayList<>();
 
-    for (GroceryInstance grocery : this.groceries) {
+    for (GroceryInstance grocery : this.groceryInstances) {
       if (grocery.isOutOfDate()) {
         outdatedInstances.add(grocery);
       }
@@ -140,8 +155,8 @@ public class FoodStorage {
    *
    * @return An ArrayList containing all instances of GroceryInstance.
    */
-  public ArrayList<GroceryInstance> getAllGroceries() {
-    return this.groceries;
+  public ArrayList<GroceryInstance> getAllGroceryInstances() {
+    return this.groceryInstances;
   }
 
   /**

@@ -41,13 +41,13 @@ public class TableCreator {
     System.out.format("+─────+──────────────────+──────────────────+%n");
   }
 
-  public void foodStorageTable(ArrayList<GroceryInstance> instances) {
+  public void groceryInstanceTable(ArrayList<GroceryInstance> instances) {
     // creates the format for the table.
-    String tableFormat = "│ %-3d │ %-17s │ %,-12.2f │ %-6s │ %,-10.2f │ %,-10.2f │ %-10s │%n";
+    String tableFormat = "│ %-3d │ %-17s │ %,-9.2f │ %-9s │ %,-10.2f │ %,-10.2f │ %-10s │%n";
 
     // prints out the top of the table. (the header)
 
-    // character mapping: total: 67 chars: 3 chars num, 17 chars name, 6 chars amount, 4 Chars unit,
+    // character mapping: total: 67 chars: 3 chars num, 17 chars name, 9 chars amount, 9 Chars unit,
     //                                     7 chars Price, 10 chars Price/unit DD.MM.YYYY
     System.out.format(
         "+─────+───────────────────+───────────+───────────+────────────+────────────+────────────+%n");
