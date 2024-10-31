@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.main;
 
 import edu.ntnu.idi.idatt.Grocery.FoodStorage;
+import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import edu.ntnu.idi.idatt.Interface.ChoiceWindow;
 import edu.ntnu.idi.idatt.Interface.TableCreator;
 
@@ -15,7 +16,7 @@ public class Main {
 
   // methods
   // misc. methods:
-  public static void clearScreen() {
+  private static void clearScreen() {
     System.out.print("\033[H\033[2J");
     System.out.flush();
   }
@@ -36,6 +37,57 @@ public class Main {
   }
 
   // add groceryType/groceryInstance
+
+
+  public static void addGroceryType(Scanner sc, TableCreator tableCreator,
+      FoodStorage foodStorage) {
+    clearScreen();
+    System.out.println(
+        "Enter the name of the type of grocery you would like to add (e.g. Orange, Egg):");
+
+    String TypeName = sc.nextLine();
+
+    clearScreen();
+
+    System.out.println(
+        "Enter the measurement unit most used when measuring this type of grocery (e.g. kg, pcs.) "
+            + "(Max 9 characters):");
+
+    String UnitName = sc.nextLine();
+
+    clearScreen();
+    while (true) {
+      System.out.println("Is this OK (Y/N)?"
+          + "\nName: " + TypeName
+          + "\nUnit: " + UnitName);
+
+      try {
+        String yesNoSc = sc.nextLine();
+
+        if (yesNoSc.equalsIgnoreCase("Y")) {
+          foodStorage.addType(new GroceryType(TypeName, UnitName));
+          break;
+
+        } else if (yesNoSc.equalsIgnoreCase("N")) {
+          break;
+
+        } else {
+          clearScreen();
+          System.out.println("Please enter Y, if yes, or N, if no.\n\n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+        System.out.println("Please enter Y, if yes, or N, if no.\n\n");
+      }
+    }
+
+
+  }
+
+  public static GroceryInstance addGroceryInstance(GroceryInstance groceryType,
+      TableCreator tableCreator) {
+
+  }
 
 
   // menu-methods:
@@ -78,7 +130,6 @@ public class Main {
           break;
 
         case 2:
-          searchLoop:
           while (true) {
             System.out.println("Enter your search term:");
 
@@ -90,7 +141,6 @@ public class Main {
 
             if (searchResults.isEmpty()) {
 
-              YNloop:
               while (true) {
                 clearScreen();
                 // the search failed because there were no matching names, do you want to continue?
@@ -104,13 +154,13 @@ public class Main {
                   // if "n" searchLoop breaks, and it returns the user to the manageFoodStorage menu.
                   if (yesNoSc.equalsIgnoreCase("n")) {
                     clearScreen();
-                    break searchLoop;
+                    break;
 
                   }
                   // if "y" YNloop breaks, returning the user to the search menu.
                   else if (yesNoSc.equalsIgnoreCase("y")) {
                     clearScreen();
-                    break YNloop;
+                    break;
                   }
 
                 } catch (Exception e) {
@@ -127,7 +177,7 @@ public class Main {
               System.out.println("Press ENTER to continue.");
               sc.nextLine();
 
-              break searchLoop;
+              break;
 
             }
           }

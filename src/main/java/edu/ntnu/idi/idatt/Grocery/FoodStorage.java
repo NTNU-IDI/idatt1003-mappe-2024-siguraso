@@ -80,6 +80,10 @@ public class FoodStorage {
     this.groceryInstances.add(grocery);
   }
 
+  public void addType(GroceryType groceryType) {
+    this.groceryTypes.add(groceryType);
+  }
+
   /**
    * Removes a specific amount from a given grocery from the groceries ArrayList based on the index
    * given.
