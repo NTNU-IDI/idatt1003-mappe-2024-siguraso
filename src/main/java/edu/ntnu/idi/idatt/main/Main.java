@@ -3,12 +3,11 @@ package edu.ntnu.idi.idatt.main;
 import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import edu.ntnu.idi.idatt.Interface.ChoiceWindow;
+import edu.ntnu.idi.idatt.Interface.DialogOptionCreator;
 import edu.ntnu.idi.idatt.Interface.TableCreator;
 
 import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -21,72 +20,90 @@ public class Main {
     System.out.flush();
   }
 
-  //checks if a date is valid based on the date format used throughout the program.
-  public static boolean isValidDate(String dateString) {
-    try {
-      SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-      format.parse(dateString);
-
-      //if it can format the dateString, return true;
-      return true;
-    } catch (ParseException e) {
-
-      //if it cant format the dateString, return false:
-      return false;
-    }
-  }
-
   // add groceryType/groceryInstance
 
-
-  public static void addGroceryType(Scanner sc, TableCreator tableCreator,
-      FoodStorage foodStorage) {
+  /**
+   * Creates a new instance of GroceryType, and adds it to food storage.
+   *
+   * @param sc            Scanner used for user input.
+   * @param foodStorage   Used to append the new grocery type to food storage.
+   * @param dialogCreator Creates the dialog option windows.
+   */
+  public static void addGroceryType(Scanner sc,
+      FoodStorage foodStorage, DialogOptionCreator dialogCreator) {
     clearScreen();
-    System.out.println(
-        "Enter the name of the type of grocery you would like to add (e.g. Orange, Egg):");
 
-    String TypeName = sc.nextLine();
-
-    clearScreen();
-
-    System.out.println(
-        "Enter the measurement unit most used when measuring this type of grocery (e.g. kg, pcs.) "
-            + "(Max 9 characters):");
-
-    String UnitName = sc.nextLine();
+    String TypeName = dialogCreator.validTypeNameOption(sc,
+        "Enter the name of the type of grocery you would like to add");
 
     clearScreen();
-    while (true) {
-      System.out.println("Is this OK (Y/N)?"
-          + "\nName: " + TypeName
-          + "\nUnit: " + UnitName);
 
-      try {
-        String yesNoSc = sc.nextLine();
+    String UnitName = dialogCreator.validMeasurementUnitOption(sc,
+        "Enter the measurement unit most used when measuring this type of grocery");
 
-        if (yesNoSc.equalsIgnoreCase("Y")) {
-          foodStorage.addType(new GroceryType(TypeName, UnitName));
-          break;
+    clearScreen();
 
-        } else if (yesNoSc.equalsIgnoreCase("N")) {
-          break;
+    // returns either y or n.
+    String yesNoOption = dialogCreator.yesNoOption(sc, "Is this OK (Y/N)? "
+        + "\nName: " + TypeName + "\nUnit: " + UnitName);
 
-        } else {
-          clearScreen();
-          System.out.println("Please enter Y, if yes, or N, if no.\n\n");
-        }
-      } catch (Exception e) {
-        clearScreen();
-        System.out.println("Please enter Y, if yes, or N, if no.\n\n");
-      }
+    // if user wants to add the grocery instance, add it to the list. if not, it breaks the switch
+    // case and returns the user to the previous menu.
+    switch (yesNoOption) {
+      case "y":
+        foodStorage.addType(new GroceryType(TypeName, UnitName));
+        break;
+      case "n":
+        break;
     }
-
-
   }
 
-  public static GroceryInstance addGroceryInstance(GroceryInstance groceryType,
-      TableCreator tableCreator) {
+  /**
+   * Adds a GroceryType to a given FoodStorage instance.
+   *
+   * @param sc              Scanner used for user input.
+   * @param foodStorage     Food storage to append the new GroceryInstance and to fetch Available
+   *                        GroceryTypes.
+   * @param thisGroceryType the grocery type the new grocery instance is based on.
+   * @param dialogCreator   Used to create dialog windows.
+   */
+  public static void addGroceryInstance(Scanner sc, FoodStorage foodStorage,
+      GroceryType thisGroceryType, DialogOptionCreator dialogCreator) {
+    clearScreen();
 
+    double instanceAmount = dialogCreator.validAmountOption(sc, "Enter the amount of "
+        + thisGroceryType.getName() + " you would like to add");
+
+    clearScreen();
+
+    double pricePerUnit = dialogCreator.validPricePerUnitOption(sc,
+        "How much does it cost for 1 " + thisGroceryType.getMeasurementUnit() + " of "
+            + thisGroceryType.getName());
+
+    clearScreen();
+
+    String bestBefore = dialogCreator.validBestBeforeDateOption(sc,
+        "Enter the best before date of the grocery");
+
+    clearScreen();
+
+    String yesNoSc = dialogCreator.yesNoOption(sc,
+        "Would you like to add this grocery to food storage (Y/N)?"
+            + "\n\nName: " + thisGroceryType.getName()
+            + "\nAmount: " + instanceAmount + " " +
+            thisGroceryType.getMeasurementUnit()
+            + "\nPrice per " + thisGroceryType.getMeasurementUnit() + ": " + pricePerUnit
+            + "\nBest before date: " + bestBefore);
+    switch (yesNoSc) {
+      // if yes, add it to the GroceryInstance list in foodStorage and return to the previous menu.
+      case "y":
+        foodStorage.addInstance(
+            new GroceryInstance(thisGroceryType, instanceAmount, pricePerUnit, bestBefore));
+        break;
+      // if no, return to the previous menu
+      case "n":
+        break;
+    }
   }
 
 
@@ -101,7 +118,7 @@ public class Main {
   }
 
   private static void manageFoodStorageMenu(Scanner sc, FoodStorage foodStorage,
-      TableCreator tableCreator) {
+      TableCreator tableCreator, DialogOptionCreator dialogCreator) {
     ChoiceWindow manageFoodStorageMenu = new ChoiceWindow();
 
     manageFoodStorageMenu.addChoice("Display out-of-date food only.");
@@ -186,190 +203,44 @@ public class Main {
         case 3:
           tableCreator.groceryTypeTable(foodStorage.getAllGroceryTypes());
 
-          System.out.println(
-              "Do you want to add a grocery based on an already existing Grocery type (Y/N)? "
+          String yesNoSc = dialogCreator.yesNoOption(sc,
+              "Do you want to add a grocery based on an "
+                  + "already existing Grocery type (Y/N)? "
                   + "(see the above list)");
 
-          String yesNoSc;
-
-          while (true) {
-            //makes sure that the user inputs Y or N.
-            try {
-              yesNoSc = sc.nextLine();
-              sc.nextLine();
-
-              if (yesNoSc.equalsIgnoreCase("n") || yesNoSc.equalsIgnoreCase("y")) {
-                break;
-              } else {
-                clearScreen();
-                System.out.println("Please enter Y, if yes, or N, if no.");
-              }
-
-            } catch (Exception e) {
-              clearScreen();
-              System.out.println("Please enter Y, if yes, or N, if no.");
-            }
-          }
-
           // if yes, create a new grocery instance based on an already added grocery type
-          if (yesNoSc.equalsIgnoreCase("y")) {
-            tableCreator.groceryTypeTable(foodStorage.getAllGroceryTypes());
-
-            int groceryTypeIndex;
-
-            //makes sure the user inputs a valid index.
-            while (true) {
-              try {
-                System.out.println(
-                    "Please input the number (Num) of the Grocery type you would like to add.");
-
-                groceryTypeIndex = sc.nextInt();
-
-                // if it is a valid input based on the amount of total grocery types, break the loop.
-                if (groceryTypeIndex >= 1 && groceryTypeIndex <= foodStorage.getAllGroceryTypes()
-                    .size()) {
-                  break;
-                }
-                // if it isnt a valid input, restart the loop, and encourage the user
-                // to input a valid number.
-                else {
-                  clearScreen();
-                  System.out.println(
-                      "Please enter an integer 1 - " + foodStorage.getAllGroceryTypes().size()
-                          + ".\n\n");
-                }
-
-              } catch (Exception e) {
-                // if the user inputs something other than an integer,
-                // restart the loop and enourage the user again.
-                clearScreen();
-                System.out.println(
-                    "Please enter an integer 1 - " + foodStorage.getAllGroceryTypes().size()
-                        + ".\n\n");
-              }
-            }
-
-            double pricePerUnit;
-
-            // makes sure the user enters a valid number.
-            while (true) {
-              try {
-                System.out.println(
-                    "Please enter the price of " + foodStorage.getSpecificType(groceryTypeIndex)
-                        .getName() + " per " + foodStorage.getSpecificType(groceryTypeIndex)
-                        .getMeasurementUnit() + ".");
-
-                pricePerUnit = sc.nextDouble();
-                sc.nextLine();
-
-                // if it is a valid input (meaning not a negative number or a number above 999999)
-                // it breaks the loop and continues.
-                if (pricePerUnit > 0 && pricePerUnit < 1000000) {
-                  break;
-                }
-                // if it isnt a valid input, restart the loop, and encourage the user
-                // to input a valid number.
-                else {
-                  clearScreen();
-                  System.out.println("Please enter a price 0 - 999999\n\n");
-                }
-
-              } catch (Exception e) {
-                // if the user inputs something other than an integer,
-                // restart the loop and enourage the user again.
-                clearScreen();
-                System.out.println("Please enter a price 0 - 999999\n\n");
-              }
-            }
-
-            double groceryAmount;
-
-            // makes sure the user enters a valid number.
-            while (true) {
-              try {
-                System.out.println(
-                    "Please enter the amount of " + foodStorage.getSpecificType(groceryTypeIndex)
-                        .getMeasurementUnit() + " you would like to add.");
-
-                groceryAmount = sc.nextDouble();
-                sc.nextLine();
-
-                // if it is a valid input (meaning not a negative number or a number above 999999)
-                // it breaks the loop and continues.
-                if (groceryAmount > 0 && groceryAmount < 1000000) {
-                  break;
-                }
-                // if it isnt a valid input, restart the loop, and encourage the user
-                // to input a valid number.
-                else {
-                  clearScreen();
-                  System.out.println("Please enter an number 0 - 999999\n\n");
-                }
-
-              } catch (Exception e) {
-                // if the user inputs something other than an integer,
-                // restart the loop and enourage the user again.
-                clearScreen();
-                System.out.println("Please enter an number 0 - 999999\n\n");
-              }
-            }
-
-            String bestBefore;
-
-            while (true) {
+          switch (yesNoSc) {
+            case "y" -> {
               clearScreen();
-              System.out.println("Please enter the best before date. (DD.MM.YYYY)");
+              int groceryTypeIndex = dialogCreator.validGroceryTypeIndex(sc, foodStorage,
+                  tableCreator,
+                  "Chose one grocery based on its number (see (Num) of the above table)");
 
-              bestBefore = sc.nextLine();
-              sc.nextLine();
-
-              if (isValidDate(bestBefore)) {
-                break;
-              } else {
-                clearScreen();
-
-                System.out.println("Please enter the date using the format 'DD.MM.YYYY' \n\n");
-              }
+              addGroceryInstance(sc, foodStorage, foodStorage.getSpecificType(groceryTypeIndex),
+                  dialogCreator);
             }
+            case "n" -> {
+              String yesNoScInner = dialogCreator.yesNoOption(sc,
+                  "Do you want to create a new Grocery Instance?");
 
-            while (true) {
-              clearScreen();
-              System.out.println("Would you like to add this grocery to food storage (Y/N)?"
-                  + "\n\nName: " + foodStorage.getSpecificType(groceryTypeIndex).getName()
-                  + "\nAmount: " + groceryAmount + " " +
-                  foodStorage.getSpecificType(groceryTypeIndex).getMeasurementUnit() +
-                  "\nBest before date: " + bestBefore);
-
-              //makes sure that the user inputs Y or N.
-              try {
-                yesNoSc = sc.nextLine();
-                sc.nextLine();
-
-                if (yesNoSc.equalsIgnoreCase("n") || yesNoSc.equalsIgnoreCase("y")) {
-                  break;
-                } else {
+              switch (yesNoScInner) {
+                // if yes make a new grocerytype and make a new grocery instance based on the new
+                // grocery type, and return the user to the previous menu.
+                case "y" -> {
                   clearScreen();
-                  System.out.println("Please enter Y, if yes, or N, if no.");
+                  addGroceryType(sc, foodStorage, dialogCreator);
+
+                  clearScreen();
+                  // gets the newest grocery instance (since it automatically does index - 1, we write
+                  // 0 to get the newest instance in the Grocery type list.
+                  addGroceryInstance(sc, foodStorage,
+                      foodStorage.getSpecificType(foodStorage.getAllGroceryTypes().size()),
+                      dialogCreator);
                 }
-
-              } catch (Exception e) {
-                clearScreen();
-                System.out.println("Please enter Y, if yes, or N, if no.");
+                // if no, return to the previous menu.
+                case "n" -> {
+                }
               }
-            }
-
-            if (yesNoSc.equalsIgnoreCase("y")) {
-              // if the user wants to add this to the food storage, it appends it and breaks the
-              // switch case,
-              foodStorage.addInstance(
-                  new GroceryInstance(foodStorage.getSpecificType(groceryTypeIndex), groceryAmount,
-                      pricePerUnit, bestBefore));
-
-              break;
-            } else {
-              //if the user does not want to add this to the food storage, it breaks the switch case
-              // and returns the user to the manage food storage menu.
-              break;
             }
           }
 
@@ -380,12 +251,10 @@ public class Main {
 
       }
     }
-
-
   }
 
   private static void manageGroceryTypeMenu(Scanner sc, FoodStorage foodStorage,
-      TableCreator tableCreator) {
+      TableCreator tableCreator, DialogOptionCreator dialogCreator) {
     ChoiceWindow manageGroceryTypeMenu = new ChoiceWindow();
 
     manageGroceryTypeMenu.addChoice("Add grocery type.");
@@ -421,6 +290,7 @@ public class Main {
     clearScreen();
 
     //declares instances of scanner and table creator:
+    DialogOptionCreator dialogCreator = new DialogOptionCreator();
     TableCreator tableCreator = new TableCreator();
     Scanner sc = new Scanner(System.in);
 
@@ -432,10 +302,10 @@ public class Main {
 
       switch (mainMenuChoice) {
         case 1:
-          manageFoodStorageMenu(sc, foodStorage, tableCreator);
+          manageFoodStorageMenu(sc, foodStorage, tableCreator, dialogCreator);
           break;
         case 2:
-          manageGroceryTypeMenu(sc, foodStorage, tableCreator);
+          manageGroceryTypeMenu(sc, foodStorage, tableCreator, dialogCreator);
           break;
         case 3:
           sc.close();

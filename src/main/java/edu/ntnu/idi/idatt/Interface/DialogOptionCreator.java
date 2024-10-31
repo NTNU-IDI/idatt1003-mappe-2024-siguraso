@@ -1,6 +1,9 @@
 package edu.ntnu.idi.idatt.Interface;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 
 public class DialogOptionCreator {
 
@@ -15,7 +18,23 @@ public class DialogOptionCreator {
     System.out.flush();
   }
 
+  //checks if a date is valid based on the date format used throughout the program.
+  private static boolean isValidDate(String dateString) {
+    try {
+      SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+      format.parse(dateString);
+
+      //if it can format the dateString, return true;
+      return true;
+    } catch (ParseException e) {
+
+      //if it cant format the dateString, return false:
+      return false;
+    }
+  }
+
   // method for the different types of dialog options
+  // general methods to clea up the program:
 
   /**
    * Gives a dialog window that returns either y/Y or n/N based on the users input.
@@ -26,7 +45,7 @@ public class DialogOptionCreator {
    */
   public String yesNoOption(Scanner sc, String dialogMessage) {
     while (true) {
-      System.out.println(dialogMessage + " (Y/N)?");
+      System.out.println(dialogMessage);
 
       try {
         String yesNoSc = sc.nextLine();
@@ -34,7 +53,7 @@ public class DialogOptionCreator {
         //if the user inputs either y or n, it returns the input
         if (yesNoSc.equalsIgnoreCase("Y") || yesNoSc.equalsIgnoreCase("N")) {
           clearScreen();
-          return dialogMessage;
+          return yesNoSc.toLowerCase();
         } else {
           // if the user inputs an invalid string, it repeats the loop to the top.
           clearScreen();
@@ -49,6 +68,120 @@ public class DialogOptionCreator {
       }
     }
   }
+
+  /**
+   * Gives a dialog menu that takes the user input to determine what grocery type the user wants to
+   * initiate.
+   *
+   * @param sc            Scanner for user input.
+   * @param dialogMessage dialog message that displays over the user input.
+   * @param foodStorage   food storage that contains the available GroceryTypes.
+   * @param tableCreator  used to create a table to display all the available GroceryTypes.
+   * @return an integer that determines the index of what GroceryType the user wants to initiate.
+   */
+  public int validGroceryTypeIndex(Scanner sc, FoodStorage foodStorage,
+      TableCreator tableCreator, String dialogMessage) {
+    //if there are no instances of GroceryType in food storage, throw an illegal argument exception.
+    if (foodStorage.getAllGroceryTypes().isEmpty()) {
+      System.out.println();
+      throw new IllegalArgumentException(
+          "Can't fetch grocery types, since there are none stored in "
+              + "food storage!");
+    }
+
+    while (true) {
+      try {
+        tableCreator.groceryInstanceTable(foodStorage.getAllGroceryInstances());
+
+        System.out.println(
+            "\n" + dialogMessage + "(1 - " + foodStorage.getAllGroceryTypes().size() + "):");
+
+        sc.nextLine();
+        int groceryTypeIndex = sc.nextInt();
+
+        // if it is a valid index, return the usr input.
+        if (groceryTypeIndex > 0 && groceryTypeIndex <= foodStorage.getAllGroceryTypes().size()) {
+          return groceryTypeIndex;
+        } else {
+          clearScreen();
+          System.out.println(
+              "Please enter an integer (1 - " + foodStorage.getAllGroceryTypes().size()
+                  + "). \n\n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+        System.out.println(
+            "Please enter an integer (1 - " + foodStorage.getAllGroceryTypes().size() + ").\n\n");
+      }
+
+    }
+  }
+
+  // methods for adding specific values for GroceryInstance and GroceryTypes:
+
+  // for Grocery Types:
+
+  /**
+   * Gives a dialog tailor made for defining a GroceryType's measurement unit.
+   *
+   * @param sc            Scanner used for user input.
+   * @param dialogMessage Dialog message that displays over the user input.
+   * @return a String containing the measurement unit defined by the user.
+   */
+  public String validMeasurementUnitOption(Scanner sc, String dialogMessage) {
+    while (true) {
+      System.out.println(dialogMessage + " (enter a measurement unit, e.g. 'kg', 'pcs.', etc., "
+          + "max 9 characters.)?");
+
+      try {
+        String unitName = sc.nextLine();
+
+        // if the measurement unit is 9 characters or less it is valid.
+        if (unitName.length() <= 9) {
+          clearScreen();
+          return unitName;
+        } else {
+          clearScreen();
+          System.out.println("Please enter a measurement unit that's max 9 characters!\n\n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+        System.out.println("Please enter a measurement unit that's max 9 characters!\n\n");
+      }
+
+    }
+  }
+
+  /**
+   * Gives a dialog tailor made for defining a GroceryType's name.
+   *
+   * @param sc            Scanner used for the user input.
+   * @param dialogMessage Dialog message that displays over the user input
+   * @return a string tha contains the name of the GroceryType.
+   */
+  public String validTypeNameOption(Scanner sc, String dialogMessage) {
+    while (true) {
+      System.out.println(dialogMessage + " (max 17 characters)?");
+
+      try {
+        String typeName = sc.nextLine();
+
+        // if the name given is 17 characters or shorter, it is valid.
+        if (typeName.length() <= 17) {
+          clearScreen();
+          return typeName;
+        } else {
+          clearScreen();
+          System.out.println("Please enter a type that's max 17 characters!\n\n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+        System.out.println("Please enter a type that's max 17 characters!\n\n");
+      }
+    }
+  }
+
+  // for GroceryInstances:
 
   /**
    * Gives a dialog window that returns a double that is in the given character limit determined by
@@ -86,6 +219,13 @@ public class DialogOptionCreator {
     }
   }
 
+  /**
+   * Gives a dialog tailor made to define a GroceryInstance's amount.
+   *
+   * @param sc            Scanner used for the user input.
+   * @param dialogMessage Dialog message that displays above the user input.
+   * @return a double that defines the amount of a GroceryInstance
+   */
   public double validAmountOption(Scanner sc, String dialogMessage) {
     while (true) {
       System.out.println(dialogMessage + " (0 - 999)?");
@@ -111,6 +251,33 @@ public class DialogOptionCreator {
         clearScreen();
         System.out.println("Please enter a price 0 - 999\n\n");
 
+      }
+    }
+  }
+
+  /**
+   * Gives a dialog tailor made for a GroceryInstance's best before date.
+   *
+   * @param sc            Scanner used for user input.
+   * @param dialogMessage Dialog message that displays above the user input.
+   * @return the date in a valid string.
+   */
+  public String validBestBeforeDateOption(Scanner sc, String dialogMessage) {
+    while (true) {
+      System.out.println(dialogMessage + " (DD.MM.YYYY)?");
+
+      // if the date is valid, return the date string.
+      try {
+        String bestBeforeDate = sc.nextLine();
+        if (isValidDate(bestBeforeDate)) {
+          return bestBeforeDate;
+        } else {
+          clearScreen();
+          System.out.println("Please enter a valid best before date!\n\n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+        System.out.println("Please enter a valid best before date!\n\n");
       }
     }
   }
