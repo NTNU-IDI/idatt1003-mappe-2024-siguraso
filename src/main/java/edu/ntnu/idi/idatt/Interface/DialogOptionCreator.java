@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.Interface;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.Scanner;
 import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 
@@ -19,16 +18,24 @@ public class DialogOptionCreator {
   }
 
   //checks if a date is valid based on the date format used throughout the program.
-  private static boolean isValidDate(String dateString) {
+  public static boolean isValidDate(String dateString) {
+    String[] dateParts = dateString.split("\\.");
+
     try {
-      SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-      format.parse(dateString);
+      int day = Integer.parseInt(dateParts[0]);
+      int month = Integer.parseInt(dateParts[1]);
+      int year = Integer.parseInt(dateParts[2]);
 
-      //if it can format the dateString, return true;
-      return true;
-    } catch (ParseException e) {
+      // if the different parts are as long as they should be and are in an amount that is
+      // valid when it comes to date, it is a valid date.
+      return
+          (dateParts[0].length() == 2 && dateParts[1].length() == 2 && dateParts[2].length() == 4)
+              &&
+              (day > 0 && day <= 31 && month > 0 && month <= 12 && year > 0 && year < 9999);
 
-      //if it cant format the dateString, return false:
+    } catch (NumberFormatException e) {
+      // if it runs into an error when parsing the day, month and year, it isnt a valid date
+      // because it probably contains a different datatype than integer.
       return false;
     }
   }
