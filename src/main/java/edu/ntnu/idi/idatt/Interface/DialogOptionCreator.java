@@ -91,12 +91,11 @@ public class DialogOptionCreator {
 
     while (true) {
       try {
-        tableCreator.groceryInstanceTable(foodStorage.getAllGroceryInstances());
+        tableCreator.groceryTypeTable(foodStorage.getAllGroceryTypes());
 
         System.out.println(
-            "\n" + dialogMessage + "(1 - " + foodStorage.getAllGroceryTypes().size() + "):");
+            "\n" + dialogMessage + " (1 - " + foodStorage.getAllGroceryTypes().size() + "):");
 
-        sc.nextLine();
         int groceryTypeIndex = sc.nextInt();
 
         // if it is a valid index, return the usr input.
@@ -112,6 +111,46 @@ public class DialogOptionCreator {
         clearScreen();
         System.out.println(
             "Please enter an integer (1 - " + foodStorage.getAllGroceryTypes().size() + ").\n\n");
+      }
+
+    }
+  }
+
+  public int validGroceryInstanceIndex(Scanner sc, FoodStorage foodStorage,
+      TableCreator tableCreator, String dialogMessage) {
+    // if there are no instances of GroceryInstance in food storage,
+    // throw an illegal argument exception.
+    if (foodStorage.getAllGroceryInstances().isEmpty()) {
+      System.out.println();
+      throw new IllegalArgumentException(
+          "Can't fetch grocery instances, since there are none stored in "
+              + "food storage!");
+    }
+
+    while (true) {
+      try {
+        tableCreator.groceryInstanceTable(foodStorage.getAllGroceryInstances());
+
+        System.out.println(
+            "\n" + dialogMessage + " (1 - " + foodStorage.getAllGroceryInstances().size() + "):");
+
+        int groceryInstanceIndex = sc.nextInt();
+
+        // if it is a valid index, return the usr input.
+        if (groceryInstanceIndex > 0 &&
+            groceryInstanceIndex <= foodStorage.getAllGroceryInstances().size()) {
+          return groceryInstanceIndex;
+        } else {
+          clearScreen();
+          System.out.println(
+              "Please enter an integer (1 - " + foodStorage.getAllGroceryInstances().size()
+                  + "). \n\n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+        System.out.println(
+            "Please enter an integer (1 - " + foodStorage.getAllGroceryInstances().size()
+                + ").\n\n");
       }
 
     }
@@ -264,6 +303,7 @@ public class DialogOptionCreator {
    */
   public String validBestBeforeDateOption(Scanner sc, String dialogMessage) {
     while (true) {
+      sc.nextLine();
       System.out.println(dialogMessage + " (DD.MM.YYYY)?");
 
       // if the date is valid, return the date string.

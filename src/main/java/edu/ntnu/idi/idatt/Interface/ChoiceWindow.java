@@ -94,6 +94,7 @@ public class ChoiceWindow {
       } catch (Exception e) {
         // if the program runs into an error (e.g. the user inputs a string etc.) give the user a
         // friendly message with instructions.
+        sc.nextLine();
         clearScreen();
         System.out.println("Enter an integer 1 - " + this.choices.size() + "\n");
       }

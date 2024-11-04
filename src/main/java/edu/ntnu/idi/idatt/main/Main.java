@@ -71,8 +71,9 @@ public class Main {
       GroceryType thisGroceryType, DialogOptionCreator dialogCreator) {
     clearScreen();
 
-    double instanceAmount = dialogCreator.validAmountOption(sc, "Enter the amount of "
-        + thisGroceryType.getName() + " you would like to add");
+    double instanceAmount = dialogCreator.validAmountOption(sc,
+        "How many " + thisGroceryType.getMeasurementUnit() + " of " +
+            thisGroceryType.getName() + " you would like to add?");
 
     clearScreen();
 
@@ -110,7 +111,7 @@ public class Main {
   // menu-methods:
   private static int mainMenu(Scanner sc) {
     ChoiceWindow mainMenu = new ChoiceWindow();
-    mainMenu.addChoice("Manage/display food storage.");
+    mainMenu.addChoice("Manage food storage.");
     mainMenu.addChoice("Manage grocery types.");
     mainMenu.addChoice("Exit program.");
 
@@ -135,56 +136,44 @@ public class Main {
       int manageFoodStorageChoice = manageFoodStorageMenu.choiceSequnce(
           "Manage food storage: ", sc);
 
+      sc.nextLine();
+
       switch (manageFoodStorageChoice) {
-        case 1:
+        case 1 -> {
           tableCreator.groceryInstanceTable(foodStorage.getOutOfDateInstances());
 
           System.out.println("\n\nPress ENTER to continue...");
           sc.nextLine();
-          sc.nextLine();
-          sc.nextLine();
 
-          break;
+        }
 
-        case 2:
+        case 2 -> {
+          searchLoop:
           while (true) {
             System.out.println("Enter your search term:");
 
             String searchTerm = sc.nextLine();
-            sc.nextLine();
 
             ArrayList<GroceryInstance> searchResults = foodStorage.groceryInstanceSearch(
                 searchTerm);
 
             if (searchResults.isEmpty()) {
+              clearScreen();
+              // the search failed because there were no matching names, how do you want to
+              // continue?
+              System.out.println("The search term '" + searchTerm + "' gave no matching results.");
 
-              while (true) {
-                clearScreen();
-                // the search failed because there were no matching names, do you want to continue?
-                System.out.println("The search term " + searchTerm + " gave no matching results. \n"
-                    + "Do you want to search again? (Y/N)");
+              String yesNoSc = dialogCreator.yesNoOption(sc,
+                  "Would you like to search again? (Y/N)");
 
-                // makes sure the user inputs either Y or N.
-                try {
-                  String yesNoSc = sc.nextLine();
-
-                  // if "n" searchLoop breaks, and it returns the user to the manageFoodStorage menu.
-                  if (yesNoSc.equalsIgnoreCase("n")) {
-                    clearScreen();
-                    break;
-
-                  }
-                  // if "y" YNloop breaks, returning the user to the search menu.
-                  else if (yesNoSc.equalsIgnoreCase("y")) {
-                    clearScreen();
-                    break;
-                  }
-
-                } catch (Exception e) {
-                  System.out.println("Please enter Y, if yes, or N, if no.");
-                }
+              switch (yesNoSc) {
+                case "y":
+                  // if yes restart the search loop, and search again
+                  break;
+                case "n":
+                  // if no break the search loop, and return to the previous menu.
+                  break searchLoop;
               }
-
             } else {
               // if the search arraylist isnt empty, it prints out the search items in a table.
               clearScreen();
@@ -193,14 +182,11 @@ public class Main {
 
               System.out.println("Press ENTER to continue.");
               sc.nextLine();
-
-              break;
-
             }
           }
-          break;
+        }
 
-        case 3:
+        case 3 -> {
           tableCreator.groceryTypeTable(foodStorage.getAllGroceryTypes());
 
           String yesNoSc = dialogCreator.yesNoOption(sc,
@@ -221,7 +207,7 @@ public class Main {
             }
             case "n" -> {
               String yesNoScInner = dialogCreator.yesNoOption(sc,
-                  "Do you want to create a new Grocery Instance?");
+                  "Do you want to create a new Grocery Instance? (Y/N)");
 
               switch (yesNoScInner) {
                 // if yes make a new grocerytype and make a new grocery instance based on the new
@@ -243,12 +229,33 @@ public class Main {
               }
             }
           }
+        }
+        case 4 -> {
+          String yesNoSc = dialogCreator.yesNoOption(sc, "Do you really wish to remove"
+              + " a grocery from the food storage? (Y/N)");
 
-        case 4:
-          break;
-        case 5:
+          switch (yesNoSc) {
+            case "y" -> {
+              // if the user wants to continue, remove a grocery instance of the users choice.
+              int instanceRemoveIndex = dialogCreator.validGroceryInstanceIndex(sc, foodStorage,
+                  tableCreator,
+                  "Which grocery do you wish to remove from food storage? "
+                      + "(see 'num'-section of above table)");
+
+              foodStorage.removeInstance(instanceRemoveIndex);
+
+              System.out.println("Succesfully removed an instance of" + foodStorage.getSpecificType(
+                  instanceRemoveIndex).getName() + ".");
+            }
+
+            case "n" -> {
+              // if no, return the user to the previous menu.
+            }
+          }
+        }
+        case 5 -> {
           break foodStorageLoop;
-
+        }
       }
     }
   }
@@ -268,22 +275,47 @@ public class Main {
       tableCreator.groceryTypeTable(foodStorage.getAllGroceryTypes());
       int choice = manageGroceryTypeMenu.choiceSequnce("Manage grocery types: ", sc);
       switch (choice) {
-        case 1:
-          break;
-        case 2:
-          break;
-        case 3:
-          break;
-        case 4:
+        case 1 -> {
+          sc.nextLine();
+          addGroceryType(sc, foodStorage, dialogCreator);
+        }
+
+        case 2 -> {
+          
+        }
+
+        case 3 -> {
+          String yesNoSc = dialogCreator.yesNoOption(sc, "Do you really wish to remove"
+              + " a grocery type from the food storage? (Y/N)");
+
+          switch (yesNoSc) {
+            case "y" -> {
+              // if the user wants to continue, remove a grocery instance of the users choice.
+              int typeRemoveIndex = dialogCreator.validGroceryTypeIndex(sc, foodStorage,
+                  tableCreator,
+                  "Which grocery type do you wish to remove from food storage? "
+                      + "(see 'num'-section of above table)");
+
+              foodStorage.removeType(typeRemoveIndex);
+
+              System.out.println("Succesfully removed" + foodStorage.getSpecificType(
+                  typeRemoveIndex).getName() + ".");
+            }
+
+            case "n" -> {
+              // if no, return the user to the previous menu.
+            }
+          }
+        }
+        case 4 -> {
           break groceryTypeLoop;
-
-
+        }
       }
-    }
 
+
+    }
   }
 
-  // add-methods.
 
   // main method
   public static void main(String[] args) {

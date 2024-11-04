@@ -73,6 +73,10 @@ public class FoodStorage {
     this.groceryInstances.remove(index - 1);
   }
 
+  public void removeType(int index) {
+    this.groceryTypes.remove(index - 1);
+  }
+
   /**
    * Adds an instance of GroceryInstance to the food storage.
    */
