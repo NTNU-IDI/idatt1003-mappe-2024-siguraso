@@ -310,7 +310,6 @@ public class DialogOptionCreator {
    */
   public String validBestBeforeDateOption(Scanner sc, String dialogMessage) {
     while (true) {
-      sc.nextLine();
       System.out.println(dialogMessage + " (DD.MM.YYYY)?");
 
       // if the date is valid, return the date string.
@@ -320,11 +319,11 @@ public class DialogOptionCreator {
           return bestBeforeDate;
         } else {
           clearScreen();
-          System.out.println("Please enter a valid best before date!\n\n");
+          System.out.println("Please enter a valid best before date! (DD.MM.YYY)\n");
         }
       } catch (Exception e) {
         clearScreen();
-        System.out.println("Please enter a valid best before date!\n\n");
+        System.out.println("Please enter a valid best before date! (DD.MM.YYY)\n");
       }
     }
   }

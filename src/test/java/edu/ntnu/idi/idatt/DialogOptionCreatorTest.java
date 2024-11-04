@@ -16,7 +16,7 @@ class DialogOptionCreatorTest {
 
   @Test
   void isValidDate() throws ParseException {
-    assertTrue(DialogOptionCreator.isValidDate("21.03.2003"));
+    assertTrue(DialogOptionCreator.isValidDate("03.03.2003"));
   }
 
   @Test

@@ -83,6 +83,7 @@ public class Main {
 
     clearScreen();
 
+    sc.nextLine();
     String bestBefore = dialogCreator.validBestBeforeDateOption(sc,
         "Enter the best before date of the grocery");
 
@@ -281,7 +282,7 @@ public class Main {
         }
 
         case 2 -> {
-          
+
         }
 
         case 3 -> {
