@@ -3,8 +3,8 @@ package edu.ntnu.idi.idatt.Grocery;
 public class GroceryType {
 
   // Object variables
-  private final String name;
-  private final String measurementUnit;
+  private String name;
+  private String measurementUnit;
 
   // Constructor
 
@@ -27,4 +27,14 @@ public class GroceryType {
   public String getMeasurementUnit() {
     return measurementUnit;
   }
+
+  // Set-methods
+  public void setName(String newName) {
+    this.name = newName;
+  }
+
+  public void setMeasurementUnit(String newMeasurementUnit) {
+    this.measurementUnit = newMeasurementUnit;
+  }
+
 }

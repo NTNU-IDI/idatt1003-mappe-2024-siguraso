@@ -10,7 +10,7 @@ public class GroceryInstance {
   private final GroceryType groceryType;
   private double amount;
   private double pricePerUnit;
-  private final String bestBefore;
+  private String bestBefore;
 
   // Constructor
 
@@ -89,6 +89,10 @@ public class GroceryInstance {
 
   public void setPricePerUnit(double pricePerUnit) {
     this.pricePerUnit = pricePerUnit;
+  }
+
+  public void setBestBeforeDate(String newBestBefore) {
+    this.bestBefore = newBestBefore;
   }
 
   // Other void-methods.

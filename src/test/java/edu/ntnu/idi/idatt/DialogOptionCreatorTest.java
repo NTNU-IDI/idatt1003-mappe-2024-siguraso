@@ -15,11 +15,6 @@ import java.text.SimpleDateFormat;
 class DialogOptionCreatorTest {
 
   @Test
-  void isValidDate() throws ParseException {
-    assertTrue(DialogOptionCreator.isValidDate("03.03.2003"));
-  }
-
-  @Test
   void yesNoOption() {
   }
 

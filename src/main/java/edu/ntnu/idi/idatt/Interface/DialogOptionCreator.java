@@ -11,14 +11,13 @@ public class DialogOptionCreator {
   }
 
   // general methods:
-
   private static void clearScreen() {
     System.out.print("\033[H\033[2J");
     System.out.flush();
   }
 
-  //checks if a date is valid based on the date format used throughout the program.
-  public static boolean isValidDate(String dateString) {
+  // checks if a date is valid based on the date format used throughout the program.
+  private static boolean isValidDate(String dateString) {
     String[] dateParts = dateString.split("\\.");
 
     try {
@@ -177,7 +176,7 @@ public class DialogOptionCreator {
   public String validMeasurementUnitOption(Scanner sc, String dialogMessage) {
     while (true) {
       System.out.println(dialogMessage + " (enter a measurement unit, e.g. 'kg', 'pcs.', etc., "
-          + "max 9 characters.)?");
+          + "max 9 characters.).");
 
       try {
         String unitName = sc.nextLine();
@@ -207,6 +206,7 @@ public class DialogOptionCreator {
    */
   public String validTypeNameOption(Scanner sc, String dialogMessage) {
     while (true) {
+      clearScreen();
       System.out.println(dialogMessage + " (max 17 characters)?");
 
       try {
@@ -239,6 +239,7 @@ public class DialogOptionCreator {
    */
   public double validPricePerUnitOption(Scanner sc, String dialogMessage) {
     while (true) {
+      clearScreen();
       try {
         System.out.println(dialogMessage + " (0 - 999999)?");
 
@@ -274,6 +275,7 @@ public class DialogOptionCreator {
    */
   public double validAmountOption(Scanner sc, String dialogMessage) {
     while (true) {
+      clearScreen();
       System.out.println(dialogMessage + " (0 - 999)?");
 
       try {
@@ -289,6 +291,7 @@ public class DialogOptionCreator {
         else {
           clearScreen();
           System.out.println("Please enter a price 0 - 999\n\n");
+          sc.nextLine();
         }
 
       } catch (Exception e) {
@@ -296,6 +299,7 @@ public class DialogOptionCreator {
         // restart the loop and enourage the user again.
         clearScreen();
         System.out.println("Please enter a price 0 - 999\n\n");
+        sc.nextLine();
 
       }
     }
@@ -310,6 +314,7 @@ public class DialogOptionCreator {
    */
   public String validBestBeforeDateOption(Scanner sc, String dialogMessage) {
     while (true) {
+      clearScreen();
       System.out.println(dialogMessage + " (DD.MM.YYYY)?");
 
       // if the date is valid, return the date string.

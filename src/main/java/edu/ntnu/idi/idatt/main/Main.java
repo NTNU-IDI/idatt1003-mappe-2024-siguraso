@@ -10,6 +10,7 @@ import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.text.DecimalFormat;
 
 public class Main {
 
@@ -110,6 +111,7 @@ public class Main {
 
 
   // menu-methods:
+  // main menu
   private static int mainMenu(Scanner sc) {
     ChoiceWindow mainMenu = new ChoiceWindow();
     mainMenu.addChoice("Manage food storage.");
@@ -119,6 +121,7 @@ public class Main {
     return mainMenu.choiceSequnce("What do you want to do? ", sc);
   }
 
+  // menu to manage the food storage.
   private static void manageFoodStorageMenu(Scanner sc, FoodStorage foodStorage,
       TableCreator tableCreator, DialogOptionCreator dialogCreator) {
     ChoiceWindow manageFoodStorageMenu = new ChoiceWindow();
@@ -127,6 +130,8 @@ public class Main {
     manageFoodStorageMenu.addChoice("Search in food storage.");
     manageFoodStorageMenu.addChoice("Add grocery to storage.");
     manageFoodStorageMenu.addChoice("Remove grocery from storage.");
+    manageFoodStorageMenu.addChoice(
+        "Edit specific grocery (e.g. edit amount, best before date and price per unit)");
     manageFoodStorageMenu.addChoice("Return to main menu.");
 
     foodStorageLoop:
@@ -140,14 +145,24 @@ public class Main {
       sc.nextLine();
 
       switch (manageFoodStorageChoice) {
+
+        // display out of date food
         case 1 -> {
           tableCreator.groceryInstanceTable(foodStorage.getOutOfDateInstances());
 
-          System.out.println("\n\nPress ENTER to continue...");
+          // sets a decimal format similar to the one in the table
+          DecimalFormat df = new DecimalFormat("###,###.##");
+
+          System.out.println("\nCombined value of all out of date groceries: "
+              + df.format(foodStorage.getOutOfDateValue()));
+
+          System.out.println("\nPress ENTER to continue...");
+
           sc.nextLine();
 
         }
 
+        // Search food storage
         case 2 -> {
           searchLoop:
           while (true) {
@@ -176,17 +191,19 @@ public class Main {
                   break searchLoop;
               }
             } else {
-              // if the search arraylist isnt empty, it prints out the search items in a table.
+              // if the search arraylist isn't empty, it prints out the search items in a table.
               clearScreen();
               System.out.println("Search results:");
               tableCreator.groceryInstanceTable(foodStorage.groceryInstanceSearch(searchTerm));
 
               System.out.println("Press ENTER to continue.");
               sc.nextLine();
+              break;
             }
           }
         }
 
+        // add instance
         case 3 -> {
           tableCreator.groceryTypeTable(foodStorage.getAllGroceryTypes());
 
@@ -219,7 +236,7 @@ public class Main {
 
                   clearScreen();
                   // gets the newest grocery instance (since it automatically does index - 1, we write
-                  // 0 to get the newest instance in the Grocery type list.
+                  // 0 to get the newest instance in the Grocery type list).
                   addGroceryInstance(sc, foodStorage,
                       foodStorage.getSpecificType(foodStorage.getAllGroceryTypes().size()),
                       dialogCreator);
@@ -231,22 +248,36 @@ public class Main {
             }
           }
         }
+
+        // remove instance
         case 4 -> {
           String yesNoSc = dialogCreator.yesNoOption(sc, "Do you really wish to remove"
               + " a grocery from the food storage? (Y/N)");
+          int instanceRemoveIndex;
 
           switch (yesNoSc) {
             case "y" -> {
               // if the user wants to continue, remove a grocery instance of the users choice.
-              int instanceRemoveIndex = dialogCreator.validGroceryInstanceIndex(sc, foodStorage,
-                  tableCreator,
-                  "Which grocery do you wish to remove from food storage? "
-                      + "(see 'num'-section of above table)");
+              try {
+                instanceRemoveIndex = dialogCreator.validGroceryInstanceIndex(sc, foodStorage,
+                    tableCreator,
+                    "Which grocery do you wish to remove from food storage? "
+                        + "(see 'num'-section of above table)");
 
-              foodStorage.removeInstance(instanceRemoveIndex);
+                foodStorage.removeInstance(instanceRemoveIndex);
 
-              System.out.println("Succesfully removed an instance of" + foodStorage.getSpecificType(
-                  instanceRemoveIndex).getName() + ".");
+                System.out.println(
+                    "Successfully removed an instance of" + foodStorage.getSpecificType(
+                        instanceRemoveIndex).getName() + ".");
+
+              } catch (Exception e) {
+                // if there are no grocery instances in the main arraylist, inform the user and
+                // return to the previous menu.
+                clearScreen();
+                System.out.println(e.getMessage() + "\nPress Enter to continue.");
+
+                sc.nextLine();
+              }
             }
 
             case "n" -> {
@@ -254,7 +285,53 @@ public class Main {
             }
           }
         }
+
+        // edit grocery instance
         case 5 -> {
+          int editInstanceIndex;
+
+          try {
+            editInstanceIndex = dialogCreator.validGroceryInstanceIndex(sc, foodStorage,
+                tableCreator, "Which grocery would you like to edit?");
+
+            double newAmount = dialogCreator.validAmountOption(sc,
+                "Enter the updated amount of " +
+                    foodStorage.getSpecificInstance(editInstanceIndex).getName()
+                    + " (Changing from: " +
+                    foodStorage.getSpecificInstance(editInstanceIndex).getAmount() + " " +
+                    foodStorage.getSpecificInstance(editInstanceIndex).getMeasurementUnit() + ".)");
+
+            sc.nextLine();
+
+            String newBestBeforeDate = dialogCreator.validBestBeforeDateOption(sc,
+                "Enter the updated best before date. (Changing from "
+                    + foodStorage.getSpecificInstance(editInstanceIndex).getBestBeforeString()
+                    + ")");
+
+            double newPricePerUnit = dialogCreator.validPricePerUnitOption(sc,
+                "Enter the updated price per unit for " + foodStorage.getSpecificInstance(
+                    editInstanceIndex).getName() +
+                    " (Changing from " + foodStorage.getSpecificInstance(
+                    editInstanceIndex).getPricePerUnit() +
+                    " per " + foodStorage.getSpecificInstance(
+                    editInstanceIndex).getMeasurementUnit() + ")");
+
+            //sets the new values.
+            foodStorage.getSpecificInstance(editInstanceIndex).setAmount(newAmount);
+            foodStorage.getSpecificInstance(editInstanceIndex).setBestBeforeDate(newBestBeforeDate);
+            foodStorage.getSpecificInstance(editInstanceIndex).setPricePerUnit(newPricePerUnit);
+
+          } catch (Exception e) {
+            // if the food storage is empty, give the user instructions.
+            clearScreen();
+            System.out.println(e.getMessage() + "\nPress Enter to continue.");
+            sc.nextLine();
+
+          }
+        }
+
+        // return to main menu
+        case 6 -> {
           break foodStorageLoop;
         }
       }
@@ -266,7 +343,7 @@ public class Main {
     ChoiceWindow manageGroceryTypeMenu = new ChoiceWindow();
 
     manageGroceryTypeMenu.addChoice("Add grocery type.");
-    manageGroceryTypeMenu.addChoice("Edit grocery type.");
+    manageGroceryTypeMenu.addChoice("Edit grocery type (change name or measurement unit).");
     manageGroceryTypeMenu.addChoice("Delete grocery type.");
     manageGroceryTypeMenu.addChoice("Return to main menu.");
 
@@ -276,15 +353,39 @@ public class Main {
       tableCreator.groceryTypeTable(foodStorage.getAllGroceryTypes());
       int choice = manageGroceryTypeMenu.choiceSequnce("Manage grocery types: ", sc);
       switch (choice) {
+        // add type
         case 1 -> {
           sc.nextLine();
           addGroceryType(sc, foodStorage, dialogCreator);
         }
 
+        // edit type
         case 2 -> {
+          clearScreen();
+
+          int typeIndex = dialogCreator.validGroceryTypeIndex(sc, foodStorage, tableCreator,
+              "Which grocery do you wish to edit?");
+
+          sc.nextLine();
+          String newName = dialogCreator.validTypeNameOption(sc,
+              "Enter a new name for '" + foodStorage.getSpecificType(typeIndex).getName()
+                  + "' (Leave empty if you dont want to change it)");
+
+          String newUnit = dialogCreator.validMeasurementUnitOption(sc,
+              "Enter a new unit (Change from '" + foodStorage.getSpecificType(typeIndex)
+                  .getMeasurementUnit() + "', leave empty if you dont want to change it). \n");
+
+          if (!newName.isEmpty()) {
+            foodStorage.getSpecificType(typeIndex).setName(newName);
+          }
+
+          if (!newUnit.isEmpty()) {
+            foodStorage.getSpecificType(typeIndex).setMeasurementUnit(newUnit);
+          }
 
         }
 
+        // delete type
         case 3 -> {
           String yesNoSc = dialogCreator.yesNoOption(sc, "Do you really wish to remove"
               + " a grocery type from the food storage? (Y/N)");
@@ -299,7 +400,7 @@ public class Main {
 
               foodStorage.removeType(typeRemoveIndex);
 
-              System.out.println("Succesfully removed" + foodStorage.getSpecificType(
+              System.out.println("Successfully removed" + foodStorage.getSpecificType(
                   typeRemoveIndex).getName() + ".");
             }
 
@@ -308,6 +409,8 @@ public class Main {
             }
           }
         }
+
+        // return to main menu
         case 4 -> {
           break groceryTypeLoop;
         }
@@ -331,15 +434,21 @@ public class Main {
     FoodStorage foodStorage = new FoodStorage(allGroceries);
 
     while (true) {
+      // creates the main menu.
       int mainMenuChoice = mainMenu(sc);
 
       switch (mainMenuChoice) {
+        // sends the user to the 'manage food storage menu'
         case 1:
           manageFoodStorageMenu(sc, foodStorage, tableCreator, dialogCreator);
           break;
+
+        // sends the user to the 'manage grocery types' menu.
         case 2:
           manageGroceryTypeMenu(sc, foodStorage, tableCreator, dialogCreator);
           break;
+
+        // exits the program.
         case 3:
           sc.close();
           System.exit(0);
