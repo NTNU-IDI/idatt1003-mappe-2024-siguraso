@@ -1,8 +1,9 @@
 package edu.ntnu.idi.idatt.Interface;
 
+import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 
 import java.util.Scanner;
-import edu.ntnu.idi.idatt.Grocery.FoodStorage;
+import java.util.ArrayList;
 
 public class DialogOptionCreator {
 
@@ -16,7 +17,7 @@ public class DialogOptionCreator {
     System.out.flush();
   }
 
-  // checks if a date is valid based on the date format used throughout the program.
+  // checks if a date is valid based on the date format used throughout the script.
   private static boolean isValidDate(String dateString) {
     String[] dateParts = dateString.split("\\.");
 
@@ -75,15 +76,17 @@ public class DialogOptionCreator {
     }
   }
 
+  // methods to select different indexes
+
   /**
    * Gives a dialog menu that takes the user input to determine what grocery type the user wants to
    * initiate.
    *
    * @param sc            Scanner for user input.
-   * @param dialogMessage dialog message that displays over the user input.
-   * @param foodStorage   food storage that contains the available GroceryTypes.
-   * @param tableCreator  used to create a table to display all the available GroceryTypes.
-   * @return an integer that determines the index of what GroceryType the user wants to initiate.
+   * @param foodStorage   Food storage that contains the available GroceryTypes.
+   * @param tableCreator  Used to create a table to display all the available GroceryTypes.
+   * @param dialogMessage Dialog message that displays above the user input.
+   * @return An integer that determines the index of what GroceryType the user wants to initiate.
    */
   public int validGroceryTypeIndex(Scanner sc, FoodStorage foodStorage,
       TableCreator tableCreator, String dialogMessage) {
@@ -122,6 +125,18 @@ public class DialogOptionCreator {
     }
   }
 
+  /**
+   * Gives a dialog menu that takes the user input to determine what grocery instance the user wants
+   * to initiate, and makes sure it's a valid index based on the amount of grocery indexes in the
+   * list...
+   *
+   * @param sc            Scanner used for user input
+   * @param foodStorage   Food storage that contains the available GroceryInstances.
+   * @param tableCreator  Used to create a table to display all the available GroceryInstances.
+   * @param dialogMessage dialog message that displays above the user input.
+   * @return A valid integer that determines the index of what Grocery Instance the user wants to
+   * initiate.
+   */
   public int validGroceryInstanceIndex(Scanner sc, FoodStorage foodStorage,
       TableCreator tableCreator, String dialogMessage) {
     // if there are no instances of GroceryInstance in food storage,
@@ -162,6 +177,74 @@ public class DialogOptionCreator {
     }
   }
 
+  /**
+   * Gives a dialog menu that takes the multiple user inputs to determine what GroceryInstances the
+   * user wants to initiate.
+   *
+   * @param sc            Scanner used for user input.
+   * @param foodStorage   Food Storage that contains the available GroceryInstances.
+   * @param tableCreator  Used to create a table to display all the available GroceryInstances.
+   * @param dialogMessage Dialog message that displays above the user input.
+   * @return An ArrayList containing Integers of indexes of GroceryInstance that the user wants to
+   * initiate.
+   */
+  public ArrayList<Integer> multipleValidGroceryInstanceIndex(Scanner sc, FoodStorage foodStorage,
+      TableCreator tableCreator, String dialogMessage) {
+    // is there arent any grocery instances in food Storage, throw an error.
+    if (foodStorage.getAllGroceryInstances().isEmpty()) {
+      throw new IllegalArgumentException(
+          "Can't fetch grocery instances, since there are none stored in "
+              + "food storage!");
+    }
+
+    ArrayList<Integer> groceryInstanceIndexes = new ArrayList<>();
+    int currentIndex;
+
+    // Adds one value, then checks if the user wants to add more values.
+    // If yes, give the user an input and restart the
+    // loop, if no return the values that are already in the groceryInstanceIndexes ArrayList.
+    // The method also makes sure the user doesn't add the same index twice.
+    while (true) {
+      try {
+        tableCreator.groceryInstanceTable(foodStorage.getAllGroceryInstances());
+
+        System.out.println("\nCurrent added values: " + groceryInstanceIndexes);
+
+        System.out.println(
+            "Enter another value: (1 - " + foodStorage.getAllGroceryInstances().size() + ").");
+
+        currentIndex = sc.nextInt();
+
+        if (currentIndex > 0 && currentIndex <= foodStorage.getAllGroceryInstances().size()
+            && !groceryInstanceIndexes.contains(currentIndex)) {
+          groceryInstanceIndexes.add(currentIndex);
+        } else {
+          clearScreen();
+          System.out.println("Please enter an integer (1 - " +
+              foodStorage.getAllGroceryInstances().size()
+              + "), that you haven't already added! \n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+        System.out.println("Please enter an integer (1 - " +
+            foodStorage.getAllGroceryInstances().size() + "), that you haven't already added!\n");
+      }
+
+      tableCreator.groceryInstanceTable(foodStorage.getAllGroceryInstances());
+
+      System.out.println("\nCurrent added values: " + groceryInstanceIndexes);
+
+      sc.nextLine();
+      String yesNoSc = yesNoOption(sc,
+          "Would you like to add another value (Currently added values: " +
+              groceryInstanceIndexes + ")? (Y/N)");
+
+      if (yesNoSc.equals("n")) {
+        return groceryInstanceIndexes;
+      }
+    }
+  }
+
   // methods for adding specific values for GroceryInstance and GroceryTypes:
 
   // for Grocery Types:
@@ -170,7 +253,7 @@ public class DialogOptionCreator {
    * Gives a dialog tailor made for defining a GroceryType's measurement unit.
    *
    * @param sc            Scanner used for user input.
-   * @param dialogMessage Dialog message that displays over the user input.
+   * @param dialogMessage Dialog message that displays above the user input.
    * @return a String containing the measurement unit defined by the user.
    */
   public String validMeasurementUnitOption(Scanner sc, String dialogMessage) {
@@ -198,10 +281,10 @@ public class DialogOptionCreator {
   }
 
   /**
-   * Gives a dialog tailor made for defining a GroceryType's name.
+   * Gives a dialog tailor-made for defining a GroceryType's name.
    *
    * @param sc            Scanner used for the user input.
-   * @param dialogMessage Dialog message that displays over the user input
+   * @param dialogMessage Dialog message that displays above the user input
    * @return a string tha contains the name of the GroceryType.
    */
   public String validTypeNameOption(Scanner sc, String dialogMessage) {
@@ -234,34 +317,34 @@ public class DialogOptionCreator {
    * the GroceryInstance table.
    *
    * @param sc            Scanner used for user input.
-   * @param dialogMessage Dialog message that diplays above the user input.
+   * @param dialogMessage Dialog message that displays above the user input.
    * @return A valid double for price per unit.
    */
   public double validPricePerUnitOption(Scanner sc, String dialogMessage) {
     while (true) {
       clearScreen();
       try {
-        System.out.println(dialogMessage + " (0 - 999999)?");
+        System.out.println(dialogMessage + " (0 - 99999)?");
 
         double pricePerUnit = sc.nextDouble();
 
         // if it is a valid input (meaning not a negative number or a number above 999999)
         // it breaks the loop and continues.
-        if (pricePerUnit > 0 && pricePerUnit < 1000000) {
+        if (pricePerUnit > 0 && pricePerUnit < 100000) {
           return pricePerUnit;
         }
         // if it isnt a valid input, restart the loop, and encourage the user
         // to input a valid number.
         else {
           clearScreen();
-          System.out.println("Please enter a price 0 - 999999\n\n");
+          System.out.println("Please enter a price 0 - 99999\n\n");
         }
 
       } catch (Exception e) {
         // if the user inputs something other than an integer,
-        // restart the loop and enourage the user again.
+        // restart the loop and encourage the user again.
         clearScreen();
-        System.out.println("Please enter a price 0 - 999999\n\n");
+        System.out.println("Please enter a price 0 - 99999\n\n");
       }
     }
   }
@@ -283,7 +366,7 @@ public class DialogOptionCreator {
 
         // if it is a valid input (meaning not a negative number or a number above 999)
         // it breaks the loop and continues.
-        if (amount > 0 && amount < 999) {
+        if (amount > 0 && amount <= 999) {
           return amount;
         }
         // if it isnt a valid input, restart the loop, and encourage the user
@@ -296,7 +379,7 @@ public class DialogOptionCreator {
 
       } catch (Exception e) {
         // if the user inputs something other than an integer,
-        // restart the loop and enourage the user again.
+        // restart the loop and en encourage the user again.
         clearScreen();
         System.out.println("Please enter a price 0 - 999\n\n");
         sc.nextLine();
@@ -306,7 +389,7 @@ public class DialogOptionCreator {
   }
 
   /**
-   * Gives a dialog tailor made for a GroceryInstance's best before date.
+   * Gives a dialog tailor-made for a GroceryInstance's best before date.
    *
    * @param sc            Scanner used for user input.
    * @param dialogMessage Dialog message that displays above the user input.

@@ -60,9 +60,9 @@ class FoodStorageTest {
 
     FoodStorage foodStorage = new FoodStorage(items);
 
-    ArrayList<GroceryInstance> tomatoSearch = foodStorage.groceryInstanceSearch("tomato");
+    ArrayList<GroceryInstance> tomatoSearch = foodStorage.groceryInstanceSearch("tom");
 
-    assertEquals("tomato", tomatoSearch.get(0).getName());
+    assertEquals("Tomato", tomatoSearch.get(0).getName());
     assertEquals("Tomato", tomatoSearch.get(1).getName());
   }
 
@@ -244,4 +244,6 @@ class FoodStorageTest {
 
     assertEquals((2 * 23) + (4 * 13), foodStorage.getOutOfDateValue());
   }
+
+
 }

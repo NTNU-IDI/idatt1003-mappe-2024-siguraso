@@ -1,6 +1,8 @@
 package edu.ntnu.idi.idatt.Grocery;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Collection;
 
 public class FoodStorage {
 
@@ -57,7 +59,7 @@ public class FoodStorage {
     // for-loop to check if any of the instances of GroceryInstance contains the search term string.
     for (GroceryInstance grocery : this.groceryInstances) {
       // if the name of grocery of the index i contains the search term, add it to the results list.
-      if (grocery.getName().equalsIgnoreCase(searchTerm)) {
+      if (grocery.getName().toLowerCase().contains(searchTerm.toLowerCase())) {
         searchResults.add(grocery);
       }
     }
@@ -148,10 +150,9 @@ public class FoodStorage {
    * Returns the total value of all out of date items.
    */
   public double getOutOfDateValue() {
-    ArrayList<GroceryInstance> outdatedInstances = this.getOutOfDateInstances();
     double sum = 0;
 
-    for (GroceryInstance outdatedInstance : outdatedInstances) {
+    for (GroceryInstance outdatedInstance : this.getOutOfDateInstances()) {
       sum += outdatedInstance.getPrice();
     }
 
@@ -164,6 +165,11 @@ public class FoodStorage {
    * @return An ArrayList containing all instances of GroceryInstance.
    */
   public ArrayList<GroceryInstance> getAllGroceryInstances() {
+    // sorts the list of grocery instances based on what the best before date is, and then comparing
+    // the name alphabetically
+    this.groceryInstances.sort(Comparator.comparing(GroceryInstance::getBestBeforeDate)
+        .thenComparing(GroceryInstance::getName));
+
     return this.groceryInstances;
   }
 
