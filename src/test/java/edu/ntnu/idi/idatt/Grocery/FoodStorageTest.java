@@ -1,10 +1,7 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.Grocery;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.ntnu.idi.idatt.Grocery.FoodStorage;
-import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
-import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

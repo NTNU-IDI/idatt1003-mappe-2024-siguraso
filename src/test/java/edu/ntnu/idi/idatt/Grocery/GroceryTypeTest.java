@@ -1,8 +1,7 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.Grocery;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import org.junit.jupiter.api.Test;
 
 class GroceryTypeTest {
