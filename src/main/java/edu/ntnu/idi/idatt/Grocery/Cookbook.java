@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt.Grocery;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Cookbook {
 
@@ -17,8 +16,8 @@ public class Cookbook {
   }
 
   // get-methods
-  public Recipe getRecipe(int index) {
-    return this.recipes.get(index);
+  public Recipe getSpecificRecipe(int index) {
+    return this.recipes.get(index - 1);
   }
 
   public ArrayList<Recipe> getRecipes() {
@@ -38,7 +37,7 @@ public class Cookbook {
    * @return Boolean true or false weather or not you can make the recipe or not
    */
   public boolean canMakeRecipe(int index, FoodStorage foodStorage, boolean includeOutOfDate) {
-    Recipe recipe = this.getRecipe(index);
+    Recipe recipe = this.getSpecificRecipe(index);
 
     int counter = 0;
 
@@ -55,8 +54,8 @@ public class Cookbook {
         // also checks if it has the same measurement unit, since they can share names as well as
         // having different measurement units.
 
-        if (!instance.isOutOfDate() && ingredient.getMeasurementUnit()
-            .equals(instance.getMeasurementUnit())) {
+        if (!instance.isOutOfDate() &&
+            ingredient.getMeasurementUnit().equals(instance.getMeasurementUnit())) {
           totalAmount += instance.getAmount();
         }
 
@@ -94,8 +93,8 @@ public class Cookbook {
     ArrayList<Recipe> suggestions = new ArrayList<>();
 
     for (Recipe recipe : this.recipes) {
+      int counter = 0;
       for (GroceryInstance ingredient : recipe.getIngredients()) {
-        int counter = 0;
         for (GroceryInstance availableGrocery : foodStorage.getAllGroceryInstances()) {
           if (ingredient.getName().equals(availableGrocery.getName())
               && !availableGrocery.isOutOfDate()) {
@@ -106,9 +105,10 @@ public class Cookbook {
             counter += 1;
           }
         }
-        if (counter >= 3) {
-          suggestions.add(recipe);
-        }
+      }
+
+      if ((double) counter >= ((double) 1 / 2) * ((double) recipe.getIngredients().size())) {
+        suggestions.add(recipe);
       }
     }
 
