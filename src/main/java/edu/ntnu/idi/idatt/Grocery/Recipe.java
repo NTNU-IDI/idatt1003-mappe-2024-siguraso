@@ -22,6 +22,7 @@ public class Recipe {
   public Recipe(String name, String description, ArrayList<String> instructions,
       ArrayList<GroceryInstance> ingredients) {
     this.name = name;
+    this.description = description;
     this.instructions = instructions;
     this.ingredients = ingredients;
   }
@@ -47,4 +48,5 @@ public class Recipe {
   public void setName(String name) {
     this.name = name;
   }
+
 }
