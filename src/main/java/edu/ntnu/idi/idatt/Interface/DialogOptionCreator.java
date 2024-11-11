@@ -181,15 +181,14 @@ public class DialogOptionCreator {
    * Gives a dialog menu that takes the multiple user inputs to determine what GroceryInstances the
    * user wants to initiate.
    *
-   * @param sc            Scanner used for user input.
-   * @param foodStorage   Food Storage that contains the available GroceryInstances.
-   * @param tableCreator  Used to create a table to display all the available GroceryInstances.
-   * @param dialogMessage Dialog message that displays above the user input.
+   * @param sc           Scanner used for user input.
+   * @param foodStorage  Food Storage that contains the available GroceryInstances.
+   * @param tableCreator Used to create a table to display all the available GroceryInstances.
    * @return An ArrayList containing Integers of indexes of GroceryInstance that the user wants to
    * initiate.
    */
   public ArrayList<Integer> multipleValidGroceryInstanceIndex(Scanner sc, FoodStorage foodStorage,
-      TableCreator tableCreator, String dialogMessage) {
+      TableCreator tableCreator) {
     // is there arent any grocery instances in food Storage, throw an error.
     if (foodStorage.getAllGroceryInstances().isEmpty()) {
       throw new IllegalArgumentException(
@@ -350,7 +349,7 @@ public class DialogOptionCreator {
   }
 
   /**
-   * Gives a dialog tailor made to define a GroceryInstance's amount.
+   * Gives a dialog tailor-made to define a GroceryInstance's amount.
    *
    * @param sc            Scanner used for the user input.
    * @param dialogMessage Dialog message that displays above the user input.
@@ -415,4 +414,7 @@ public class DialogOptionCreator {
       }
     }
   }
+
+  // for cookbook:
+
 }

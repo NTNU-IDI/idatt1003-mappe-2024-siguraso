@@ -74,29 +74,6 @@ class CookbookTest {
   }
 
   @Test
-  void canMakeRecipe() {
-    ArrayList<GroceryInstance> ingredients2 = new ArrayList<>();
-
-    GroceryType apple = new GroceryType("Apple", "kg");
-    GroceryType potato = new GroceryType("Potato", "kg");
-    GroceryType butter = new GroceryType("Butter", "pcs.");
-
-    ingredients2.add(new GroceryInstance(butter, 1, 40, "12.10.2024"));
-    ingredients2.add(new GroceryInstance(butter, 1, 40, "12.10.2024"));
-    ingredients2.add(new GroceryInstance(apple, 2, 40, "24.12.2024"));
-    ingredients2.add(new GroceryInstance(potato, 2, 40, "24.12.2024"));
-
-    FoodStorage foodStorage = new FoodStorage(ingredients2);
-
-    assertTrue(cookbook().canMakeRecipe(2, foodStorage, true));
-    assertFalse(cookbook().canMakeRecipe(2, foodStorage, false));
-
-    assertFalse(cookbook().canMakeRecipe(1, foodStorage, true));
-    assertFalse(cookbook().canMakeRecipe(1, foodStorage, false));
-
-  }
-
-  @Test
   void recipeSuggestion() {
     ArrayList<GroceryInstance> ingredients2 = new ArrayList<>();
 

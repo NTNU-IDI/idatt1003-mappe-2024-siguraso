@@ -1,8 +1,10 @@
 package edu.ntnu.idi.idatt.Interface;
 
+import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
 import edu.ntnu.idi.idatt.Grocery.GroceryType;
 
+import edu.ntnu.idi.idatt.Grocery.Recipe;
 import java.util.ArrayList;
 
 public class TableCreator {
@@ -16,10 +18,10 @@ public class TableCreator {
   }
 
   /**
-   * Creates a table that's 24 characters long where it takes all the instances of GroceryType and
-   * prints them out in a table-format.
+   * Creates a table that's 45 characters long, where it takes an ArrayList of instances of
+   * GroceryType and prints them out in a table-format.
    *
-   * @param groceryTypes All instances of GroceryTypes.
+   * @param groceryTypes Instances of GroceryType in an ArrayList.
    */
   public void groceryTypeTable(ArrayList<GroceryType> groceryTypes) {
     if (groceryTypes.isEmpty()) {
@@ -47,6 +49,12 @@ public class TableCreator {
     }
   }
 
+  /**
+   * Creates a table that's 63 characters long, where it takes an ArrayList of instances of
+   * GroceryInstance and prints them out in a table-format.
+   *
+   * @param instances Instances of GroceryInstances in an ArrayList.
+   */
   public void groceryInstanceTable(ArrayList<GroceryInstance> instances) {
     if (instances.isEmpty()) {
       //tells the user that there is no items in food storage if there is none.
@@ -83,4 +91,54 @@ public class TableCreator {
     }
   }
 
+  /**
+   * Creates a table, where it takes an ArrayList of instances of Recipe, and prints them out in a
+   * table-format.
+   *
+   * @param recipes Instances of recipe in an ArrayList.
+   */
+  public void recipeTable(ArrayList<Recipe> recipes, FoodStorage foodStorage) {
+    if (recipes.isEmpty()) {
+      System.out.println("====NO RECIPES TO DISPLAY!====");
+    } else {
+      // creates the format for the table.
+      String tableFormat = "│ %-3d │ %-45s │ %-11d │ %-8s │ %-21s │%n";
+
+      // prints out the top of the table. (the header)
+      // character mapping: total: 40 chars: 3 chars num, 16 chars name, 16 chars measurement unit
+      System.out.format(
+          "+─────+───────────────RECIPES─────────────────────────+─────────────+──────────+───────────────────────+%n");
+      System.out.format(
+          "│ Num │ Name                                          │ Ingredients │ CanMake? │ CanMakeWithOutOfDate? │%n");
+      System.out.format(
+          "+─────+───────────────────────────────────────────────+─────────────+──────────+───────────────────────+%n");
+
+      for (int i = 0; i < recipes.size(); i++) {
+        String canMakeNoOutOfDate;
+        String canMakeWithOutOfDate;
+
+        // Checks weather or not the current recipe can be made or not without including out of date
+        // groceries.
+        if (recipes.get(i).canMakeRecipe(foodStorage, false)) {
+          canMakeNoOutOfDate = "Yes";
+        } else {
+          canMakeNoOutOfDate = "No";
+        }
+
+        // Checks weather or not the current recipe can be made while including out of date
+        // groceries.
+        if (recipes.get(i).canMakeRecipe(foodStorage, true)) {
+          canMakeWithOutOfDate = "Yes";
+        } else {
+          canMakeWithOutOfDate = "No";
+        }
+
+        System.out.format(tableFormat, i + 1, recipes.get(i).getName(),
+            recipes.get(i).getIngredients().size(), canMakeNoOutOfDate, canMakeWithOutOfDate);
+      }
+
+      System.out.format(
+          "+─────+───────────────────────────────────────────────+─────────────+──────────+───────────────────────+%n");
+    }
+  }
 }

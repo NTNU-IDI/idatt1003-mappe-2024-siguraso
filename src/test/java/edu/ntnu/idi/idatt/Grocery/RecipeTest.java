@@ -53,4 +53,23 @@ class RecipeTest {
     badCake.setName("Bad cake");
     assertEquals("Bad cake", badCake.getName());
   }
+
+  @Test
+  void canMakeRecipe() {
+    GroceryType cakeMix = new GroceryType("Cake Mix", "pcs.");
+    GroceryType egg = new GroceryType("Egg", "pcs.");
+
+    ArrayList<GroceryInstance> ingredients2 = new ArrayList<>();
+
+    ingredients2.add(new GroceryInstance(cakeMix, 0.5, 40, "10.10.2024"));
+    ingredients2.add(new GroceryInstance(cakeMix, 0.5, 40, "12.12.2024"));
+    ingredients2.add(new GroceryInstance(egg, 1, 40, "12.12.2024"));
+
+    FoodStorage foodStorage = new FoodStorage(ingredients2);
+
+    assertTrue(r().canMakeRecipe(foodStorage, true));
+
+    assertFalse(r().canMakeRecipe(foodStorage, false));
+
+  }
 }

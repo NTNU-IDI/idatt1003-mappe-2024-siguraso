@@ -347,9 +347,7 @@ public class Main {
         case 6 -> {
           try {
             ArrayList<Integer> indexes = dialogCreator.multipleValidGroceryInstanceIndex(sc,
-                foodStorage, tableCreator,
-                "Enter the number (num) of the groceries "
-                    + "you would like to find the combined value of.");
+                foodStorage, tableCreator);
 
             ArrayList<GroceryInstance> combinedValueInstances = new ArrayList<>();
 
@@ -478,6 +476,23 @@ public class Main {
 
 
     }
+  }
+
+  private static void manageCookbookMenu(Scanner sc, TableCreator tableCreator,
+      DialogOptionCreator dialogCreator) {
+    ChoiceWindow manageCookbookMenu = new ChoiceWindow();
+
+    manageCookbookMenu.addChoice("Add recipe.");
+    manageCookbookMenu.addChoice("Delete recipe.");
+    manageCookbookMenu.addChoice("View suggested recipes.");
+    manageCookbookMenu.addChoice("Return to main menu.");
+
+    cookbookLoop:
+    while (true) {
+      clearScreen();
+
+    }
+
   }
 
 
