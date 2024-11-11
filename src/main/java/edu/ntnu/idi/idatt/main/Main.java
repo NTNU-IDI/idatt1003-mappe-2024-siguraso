@@ -1,7 +1,9 @@
 package edu.ntnu.idi.idatt.main;
 
+import edu.ntnu.idi.idatt.Grocery.Cookbook;
 import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 import edu.ntnu.idi.idatt.Grocery.GroceryType;
+import edu.ntnu.idi.idatt.Grocery.Recipe;
 import edu.ntnu.idi.idatt.Interface.ChoiceWindow;
 import edu.ntnu.idi.idatt.Interface.DialogOptionCreator;
 import edu.ntnu.idi.idatt.Interface.TableCreator;
@@ -116,6 +118,7 @@ public class Main {
     ChoiceWindow mainMenu = new ChoiceWindow();
     mainMenu.addChoice("Manage food storage.");
     mainMenu.addChoice("Manage grocery types.");
+    mainMenu.addChoice("Manage cookbook.");
     mainMenu.addChoice("Exit program.");
 
     return mainMenu.choiceSequnce("What do you want to do? ", sc);
@@ -478,8 +481,8 @@ public class Main {
     }
   }
 
-  private static void manageCookbookMenu(Scanner sc, TableCreator tableCreator,
-      DialogOptionCreator dialogCreator) {
+  private static void manageCookbookMenu(Scanner sc, FoodStorage foodStorage,
+      TableCreator tableCreator, DialogOptionCreator dialogCreator, Cookbook cookBook) {
     ChoiceWindow manageCookbookMenu = new ChoiceWindow();
 
     manageCookbookMenu.addChoice("Add recipe.");
@@ -490,6 +493,23 @@ public class Main {
     cookbookLoop:
     while (true) {
       clearScreen();
+      tableCreator.recipeTable(cookBook.getRecipes(), foodStorage);
+
+      int cookbookMenuChoice = manageCookbookMenu.choiceSequnce(
+          "Manage cookbook recipes: ", sc);
+
+      switch (cookbookMenuChoice) {
+        case 1 -> {
+          
+        }
+        case 2 -> {
+        }
+        case 3 -> {
+        }
+        case 4 -> {
+          break cookbookLoop;
+        }
+      }
 
     }
 
@@ -505,8 +525,13 @@ public class Main {
     TableCreator tableCreator = new TableCreator();
     Scanner sc = new Scanner(System.in);
 
+    //declares food storage
     ArrayList<GroceryInstance> allGroceries = new ArrayList<>();
     FoodStorage foodStorage = new FoodStorage(allGroceries);
+
+    //declares cookbook
+    ArrayList<Recipe> allRecipes = new ArrayList<>();
+    Cookbook cookBook = new Cookbook(allRecipes);
 
     while (true) {
       // creates the main menu.
@@ -523,8 +548,13 @@ public class Main {
           manageGroceryTypeMenu(sc, foodStorage, tableCreator, dialogCreator);
           break;
 
-        // exits the program.
+        // sends the user to the 'manage cookbook' menu.
         case 3:
+          manageCookbookMenu(sc, foodStorage, tableCreator, dialogCreator, cookBook);
+          break;
+
+        // exits the program.
+        case 4:
           sc.close();
           System.exit(0);
       }

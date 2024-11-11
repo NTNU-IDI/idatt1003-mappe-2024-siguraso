@@ -3,8 +3,8 @@ package edu.ntnu.idi.idatt.Interface;
 import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
 import edu.ntnu.idi.idatt.Grocery.GroceryType;
-
 import edu.ntnu.idi.idatt.Grocery.Recipe;
+
 import java.util.ArrayList;
 
 public class TableCreator {
@@ -99,7 +99,8 @@ public class TableCreator {
    */
   public void recipeTable(ArrayList<Recipe> recipes, FoodStorage foodStorage) {
     if (recipes.isEmpty()) {
-      System.out.println("====NO RECIPES TO DISPLAY!====");
+      System.out.format(
+          "==========================================NO RECIPES TO DISPLAY!===========================================%n");
     } else {
       // creates the format for the table.
       String tableFormat = "│ %-3d │ %-45s │ %-11d │ %-8s │ %-21s │%n";
