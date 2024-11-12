@@ -76,6 +76,121 @@ public class DialogOptionCreator {
     }
   }
 
+  //more universal dialog options:
+
+  /**
+   * Gives a dialog message that lets the user pick a double in between a set of parameters.
+   *
+   * @param sc            Scanner used for user input.
+   * @param dialogMessage Dialog string that displays above the user input.
+   * @param start         Start parameter
+   * @param end           end parameter.
+   * @return a double between start and end.
+   */
+  public double validDoubleOption(Scanner sc, String dialogMessage, double start, double end) {
+    while (true) {
+      clearScreen();
+      System.out.println(dialogMessage + " (" + start + " - " + end + ").");
+
+      try {
+        double amount = sc.nextDouble();
+
+        // if it is a valid input (meaning not a negative number or a number above 999)
+        // it breaks the loop and continues.
+        if (amount > start && amount <= end) {
+          return amount;
+        }
+        // if it isnt a valid input, restart the loop, and encourage the user
+        // to input a valid number.
+        else {
+          clearScreen();
+          System.out.println("Please enter a price" + start + " - " + end + "\n\n");
+          sc.nextLine();
+        }
+
+      } catch (Exception e) {
+        // if the user inputs something other than an integer,
+        // restart the loop and en encourage the user again.
+        clearScreen();
+        System.out.println("Please enter a price" + start + " - " + end + "\n\n");
+        sc.nextLine();
+
+      }
+    }
+  }
+
+  /**
+   * Gives a dialog message that lets the user enter a string within a given character limit.
+   *
+   * @param sc            Scanner used for user input.
+   * @param dialogMessage Message that is displayed above the character limit.
+   * @param maxChars      the maximum amount of characters.
+   * @return a valid string within the max amount character limit.
+   */
+  public String validCharLimit(Scanner sc, String dialogMessage, int maxChars) {
+    while (true) {
+      clearScreen();
+      System.out.println(dialogMessage + " (max " + maxChars + " characters).");
+
+      try {
+        String typeName = sc.nextLine();
+
+        // if the name given is 17 characters or shorter, it is valid.
+        if (typeName.length() <= maxChars) {
+          clearScreen();
+          return typeName;
+        } else {
+          clearScreen();
+          System.out.println("Please enter a type that's max " + maxChars + " characters!\n\n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+        System.out.println("Please enter a type that's max " + maxChars + " characters!\n\n");
+      }
+    }
+  }
+
+  /**
+   * Gives a dialog message that lets the user pick an integer in between a set of parameters.
+   *
+   * @param sc            Scanner used for user input.
+   * @param dialogMessage Dialog string that displays above the user input.
+   * @param start         Start parameter
+   * @param end           end parameter.
+   * @return a double between start and end.
+   */
+  public int validIntOption(Scanner sc, String dialogMessage, int start, int end) {
+    while (true) {
+      clearScreen();
+      System.out.println(dialogMessage + " (" + start + " - " + end + ").");
+
+      try {
+        int amount = sc.nextInt();
+
+        // if it is a valid input (meaning not a negative number or a number above end)
+        // it breaks the loop and continues.
+        if (amount > start && amount <= end) {
+          return amount;
+        }
+        // if it isnt a valid input, restart the loop, and encourage the user
+        // to input a valid number.
+        else {
+          clearScreen();
+          System.out.println("Please enter a price" + start + " - " + end + "\n\n");
+          sc.nextLine();
+        }
+
+      } catch (Exception e) {
+        // if the user inputs something other than an integer,
+        // restart the loop and en encourage the user again.
+        clearScreen();
+        System.out.println("Please enter a price" + start + " - " + end + "\n\n");
+        sc.nextLine();
+
+      }
+    }
+  }
+
   // methods to select different indexes
 
   /**
@@ -245,70 +360,6 @@ public class DialogOptionCreator {
   }
 
   // methods for adding specific values for GroceryInstance and GroceryTypes:
-
-  // for Grocery Types:
-
-  /**
-   * Gives a dialog tailor made for defining a GroceryType's measurement unit.
-   *
-   * @param sc            Scanner used for user input.
-   * @param dialogMessage Dialog message that displays above the user input.
-   * @return a String containing the measurement unit defined by the user.
-   */
-  public String validMeasurementUnitOption(Scanner sc, String dialogMessage) {
-    while (true) {
-      System.out.println(dialogMessage + " (enter a measurement unit, e.g. 'kg', 'pcs.', etc., "
-          + "max 9 characters.).");
-
-      try {
-        String unitName = sc.nextLine();
-
-        // if the measurement unit is 9 characters or less it is valid.
-        if (unitName.length() <= 9) {
-          clearScreen();
-          return unitName;
-        } else {
-          clearScreen();
-          System.out.println("Please enter a measurement unit that's max 9 characters!\n\n");
-        }
-      } catch (Exception e) {
-        clearScreen();
-        System.out.println("Please enter a measurement unit that's max 9 characters!\n\n");
-      }
-
-    }
-  }
-
-  /**
-   * Gives a dialog tailor-made for defining a GroceryType's name.
-   *
-   * @param sc            Scanner used for the user input.
-   * @param dialogMessage Dialog message that displays above the user input
-   * @return a string tha contains the name of the GroceryType.
-   */
-  public String validTypeNameOption(Scanner sc, String dialogMessage) {
-    while (true) {
-      clearScreen();
-      System.out.println(dialogMessage + " (max 17 characters)?");
-
-      try {
-        String typeName = sc.nextLine();
-
-        // if the name given is 17 characters or shorter, it is valid.
-        if (typeName.length() <= 17) {
-          clearScreen();
-          return typeName;
-        } else {
-          clearScreen();
-          System.out.println("Please enter a type that's max 17 characters!\n\n");
-        }
-      } catch (Exception e) {
-        clearScreen();
-        System.out.println("Please enter a type that's max 17 characters!\n\n");
-      }
-    }
-  }
-
   // for GroceryInstances:
 
   /**
@@ -335,49 +386,6 @@ public class DialogOptionCreator {
       } catch (Exception e) {
         clearScreen();
         System.out.println("Please enter a valid best before date! (DD.MM.YYY)\n");
-      }
-    }
-  }
-
-  // universal dialog windows:
-
-  /**
-   * Gives a dialog message that lets the user pick a double inbetween a set of parameters.
-   *
-   * @param sc            Scanner used for user input.
-   * @param dialogMessage Dialog string that displays above the user input.
-   * @param start         Start parameter
-   * @param end           end parameter.
-   * @return a double between start and end.
-   */
-  public double validDoubleOption(Scanner sc, String dialogMessage, double start, double end) {
-    while (true) {
-      clearScreen();
-      System.out.println(dialogMessage + " (" + start + " - " + end + ").");
-
-      try {
-        double amount = sc.nextDouble();
-
-        // if it is a valid input (meaning not a negative number or a number above 999)
-        // it breaks the loop and continues.
-        if (amount > start && amount <= end) {
-          return amount;
-        }
-        // if it isnt a valid input, restart the loop, and encourage the user
-        // to input a valid number.
-        else {
-          clearScreen();
-          System.out.println("Please enter a price" + start + " - " + end + "\n\n");
-          sc.nextLine();
-        }
-
-      } catch (Exception e) {
-        // if the user inputs something other than an integer,
-        // restart the loop and en encourage the user again.
-        clearScreen();
-        System.out.println("Please enter a price" + start + " - " + end + "\n\n");
-        sc.nextLine();
-
       }
     }
   }

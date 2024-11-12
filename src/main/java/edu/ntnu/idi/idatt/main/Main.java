@@ -36,13 +36,14 @@ public class Main {
       FoodStorage foodStorage, DialogOptionCreator dialogCreator) {
     clearScreen();
 
-    String TypeName = dialogCreator.validTypeNameOption(sc,
-        "Enter the name of the type of grocery you would like to add");
+    String TypeName = dialogCreator.validCharLimit(sc,
+        "Please enter the name of the grocery.", 17);
 
     clearScreen();
 
-    String UnitName = dialogCreator.validMeasurementUnitOption(sc,
-        "Enter the measurement unit most used when measuring this type of grocery");
+    String UnitName = dialogCreator.validCharLimit(sc,
+        "Please enter the measurement unit most often used when measuring '"
+            + TypeName + "'.", 9);
 
     clearScreen();
 
@@ -67,7 +68,7 @@ public class Main {
    * @param sc              Scanner used for user input.
    * @param foodStorage     Food storage to append the new GroceryInstance and to fetch Available
    *                        GroceryTypes.
-   * @param thisGroceryType the grocery type the new grocery instance is based on.
+   * @param thisGroceryType The grocery type the new grocery instance is based on.
    * @param dialogCreator   Used to create dialog windows.
    */
   public static void addGroceryInstance(Scanner sc, FoodStorage foodStorage,
@@ -118,10 +119,78 @@ public class Main {
    * @param foodStorage   Used to fetch grocery types.
    * @param cookBook      Used to add to recipe list.
    * @param dialogCreator Used to create dialog windows.
+   * @param tableCreator  Used to create relevant tables when needed.
    */
   public static void addRecipe(Scanner sc, FoodStorage foodStorage, Cookbook cookBook,
-      DialogOptionCreator dialogCreator) {
+      DialogOptionCreator dialogCreator, TableCreator tableCreator) {
+    ArrayList<GroceryInstance> ingredients = new ArrayList<>();
+    ArrayList<String> approximations = new ArrayList<>();
+    ArrayList<String> instructions = new ArrayList<>();
 
+    String recipeName = dialogCreator.validCharLimit(sc,
+        "What is the name of this recipe?", 45);
+
+    String description = dialogCreator.validCharLimit(sc,
+        "Please enter a short description of the recipe", 45);
+
+    int amountOfIngredients = dialogCreator.validIntOption(sc,
+        "How many Ingredients are in this recipe?", 0, 999);
+
+    clearScreen();
+
+    for (int i = 0; i < amountOfIngredients; i++) {
+      int thisTypeIndex = dialogCreator.validGroceryTypeIndex(sc, foodStorage, tableCreator,
+          "(Ingredient " + (i + 1) + ") "
+              + "Please select which ingredient you would like you add");
+
+      double thisAmount = dialogCreator.validDoubleOption(sc,
+          "How much of '" + foodStorage.getSpecificType(thisTypeIndex).getName() +
+              "' (in " + foodStorage.getSpecificType(thisTypeIndex).getMeasurementUnit() +
+              ") would you like to add?", 0, 99999.9);
+
+      sc.nextLine();
+      String thisApproximation = dialogCreator.validCharLimit(sc,
+          "Add an approximaion "
+              + "(e.g. 1 tablespoon, 1 cup etc., makes the recipe more readable, "
+              + "leave empty if there is no need for one)\n", 20);
+
+      // adds the ingredient using new Grocery Instance. Here the price per unit and best before
+      // date go unused, so we just enter 0 and null for them respectively.
+      ingredients.add(
+          new GroceryInstance(foodStorage.getSpecificType(thisTypeIndex), thisAmount, 0,
+              null));
+
+      approximations.add(thisApproximation);
+    }
+
+    int amountOfSteps = dialogCreator.validIntOption(sc,
+        "How many steps are there in the instructions?", 0, 999);
+    sc.nextLine();
+
+    for (int i = 0; i < amountOfSteps; i++) {
+      clearScreen();
+      System.out.println(
+          "Please enter step " + (i + 1) + " of the recipe (try to keep it as short as possible):");
+
+      String thisStep = sc.nextLine();
+
+      instructions.add(thisStep);
+    }
+
+    clearScreen();
+
+    tableCreator.ingredientsTable(ingredients, approximations);
+
+    instructions.forEach(instruction ->
+        System.out.println((instructions.indexOf(instruction) + 1) + ": " + instruction));
+
+    String yesNoSc = dialogCreator.yesNoOption(sc, "Is this OK (Y/N)?");
+
+    // if yes, add recipe to cookbook, if not, return to the previous menu.
+    if (yesNoSc.equals("y")) {
+      cookBook.addRecipe(
+          new Recipe(recipeName, description, instructions, ingredients, approximations));
+    }
   }
 
   // menu-methods:
@@ -322,12 +391,12 @@ public class Main {
             editInstanceIndex = dialogCreator.validGroceryInstanceIndex(sc, foodStorage,
                 tableCreator, "Which grocery would you like to edit?");
 
-            double newAmount = dialogCreator.validAmountOption(sc,
-                "Enter the updated amount of " +
+            double newAmount = dialogCreator.validDoubleOption(sc, "Enter the updated amount of " +
                     foodStorage.getSpecificInstance(editInstanceIndex).getName()
                     + " (Changing from: " +
                     foodStorage.getSpecificInstance(editInstanceIndex).getAmount() + " " +
-                    foodStorage.getSpecificInstance(editInstanceIndex).getMeasurementUnit() + ".)");
+                    foodStorage.getSpecificInstance(editInstanceIndex).getMeasurementUnit() + ".)"
+                , 0, 999.9);
 
             sc.nextLine();
 
@@ -336,13 +405,13 @@ public class Main {
                     + foodStorage.getSpecificInstance(editInstanceIndex).getBestBeforeString()
                     + ")");
 
-            double newPricePerUnit = dialogCreator.validPricePerUnitOption(sc,
+            double newPricePerUnit = dialogCreator.validDoubleOption(sc,
                 "Enter the updated price per unit for " + foodStorage.getSpecificInstance(
                     editInstanceIndex).getName() +
                     " (Changing from " + foodStorage.getSpecificInstance(
                     editInstanceIndex).getPricePerUnit() +
                     " per " + foodStorage.getSpecificInstance(
-                    editInstanceIndex).getMeasurementUnit() + ")");
+                    editInstanceIndex).getMeasurementUnit() + ")", 0, 99999.9);
 
             //sets the new values.
             foodStorage.getSpecificInstance(editInstanceIndex).setAmount(newAmount);
@@ -427,13 +496,13 @@ public class Main {
               "Which grocery do you wish to edit?");
 
           sc.nextLine();
-          String newName = dialogCreator.validTypeNameOption(sc,
+          String newName = dialogCreator.validCharLimit(sc,
               "Enter a new name for '" + foodStorage.getSpecificType(typeIndex).getName()
-                  + "' (Leave empty if you dont want to change it)");
+                  + "' (Leave empty if you dont want to change it)", 17);
 
-          String newUnit = dialogCreator.validMeasurementUnitOption(sc,
+          String newUnit = dialogCreator.validCharLimit(sc,
               "Enter a new unit (Change from '" + foodStorage.getSpecificType(typeIndex)
-                  .getMeasurementUnit() + "', leave empty if you dont want to change it). \n");
+                  .getMeasurementUnit() + "', leave empty if you dont want to change it). \n", 9);
 
           if (!newName.isEmpty()) {
             foodStorage.getSpecificType(typeIndex).setName(newName);
@@ -497,7 +566,8 @@ public class Main {
       TableCreator tableCreator, DialogOptionCreator dialogCreator, Cookbook cookBook) {
     ChoiceWindow manageCookbookMenu = new ChoiceWindow();
 
-    manageCookbookMenu.addChoice("Add recipe.");
+    manageCookbookMenu.addChoice(
+        "Add recipe (!Make sure to add the relevant grocery types in the grocery type menu!).");
     manageCookbookMenu.addChoice("Delete recipe.");
     manageCookbookMenu.addChoice("View suggested recipes.");
     manageCookbookMenu.addChoice("Return to main menu.");
@@ -512,7 +582,8 @@ public class Main {
 
       switch (cookbookMenuChoice) {
         case 1 -> {
-
+          sc.nextLine();
+          addRecipe(sc, foodStorage, cookBook, dialogCreator, tableCreator);
         }
         case 2 -> {
         }

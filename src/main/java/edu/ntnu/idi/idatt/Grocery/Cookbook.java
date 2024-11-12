@@ -26,6 +26,9 @@ public class Cookbook {
 
   //other methods
 
+  public void addRecipe(Recipe recipe) {
+    this.recipes.add(recipe);
+  }
 
   /**
    * Gives recommendations for recipes based on what food is stored in the food storage. If there
