@@ -74,15 +74,15 @@ public class Main {
       GroceryType thisGroceryType, DialogOptionCreator dialogCreator) {
     clearScreen();
 
-    double instanceAmount = dialogCreator.validAmountOption(sc,
-        "How many " + thisGroceryType.getMeasurementUnit() + " of " +
-            thisGroceryType.getName() + " you would like to add?");
+    double instanceAmount = dialogCreator.validDoubleOption(sc,
+        "Enter the amount of " + thisGroceryType.getName() + " (in "
+            + thisGroceryType.getMeasurementUnit() + ") you would like to add", 0, 999.9);
 
     clearScreen();
 
-    double pricePerUnit = dialogCreator.validPricePerUnitOption(sc,
-        "How much does it cost for 1 " + thisGroceryType.getMeasurementUnit() + " of "
-            + thisGroceryType.getName());
+    double pricePerUnit = dialogCreator.validDoubleOption(sc,
+        "Enter the cost per " + thisGroceryType.getMeasurementUnit() + ".",
+        0, 99999.9);
 
     clearScreen();
 
@@ -111,7 +111,17 @@ public class Main {
     }
   }
 
-  public static void addRecipe(Scanner sc, FoodStorage foodStorage, Cookbook cookBook) {
+  /**
+   * Creates a new recipe, and adds it to the cookbook.
+   *
+   * @param sc            Used for user input.
+   * @param foodStorage   Used to fetch grocery types.
+   * @param cookBook      Used to add to recipe list.
+   * @param dialogCreator Used to create dialog windows.
+   */
+  public static void addRecipe(Scanner sc, FoodStorage foodStorage, Cookbook cookBook,
+      DialogOptionCreator dialogCreator) {
+
   }
 
   // menu-methods:

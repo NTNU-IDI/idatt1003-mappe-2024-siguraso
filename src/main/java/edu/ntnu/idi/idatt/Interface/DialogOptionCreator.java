@@ -312,82 +312,6 @@ public class DialogOptionCreator {
   // for GroceryInstances:
 
   /**
-   * Gives a dialog window that returns a double that is in the given character limit determined by
-   * the GroceryInstance table.
-   *
-   * @param sc            Scanner used for user input.
-   * @param dialogMessage Dialog message that displays above the user input.
-   * @return A valid double for price per unit.
-   */
-  public double validPricePerUnitOption(Scanner sc, String dialogMessage) {
-    while (true) {
-      clearScreen();
-      try {
-        System.out.println(dialogMessage + " (0 - 99999)?");
-
-        double pricePerUnit = sc.nextDouble();
-
-        // if it is a valid input (meaning not a negative number or a number above 999999)
-        // it breaks the loop and continues.
-        if (pricePerUnit > 0 && pricePerUnit < 100000) {
-          return pricePerUnit;
-        }
-        // if it isnt a valid input, restart the loop, and encourage the user
-        // to input a valid number.
-        else {
-          clearScreen();
-          System.out.println("Please enter a price 0 - 99999\n\n");
-        }
-
-      } catch (Exception e) {
-        // if the user inputs something other than an integer,
-        // restart the loop and encourage the user again.
-        clearScreen();
-        System.out.println("Please enter a price 0 - 99999\n\n");
-      }
-    }
-  }
-
-  /**
-   * Gives a dialog tailor-made to define a GroceryInstance's amount.
-   *
-   * @param sc            Scanner used for the user input.
-   * @param dialogMessage Dialog message that displays above the user input.
-   * @return a double that defines the amount of a GroceryInstance
-   */
-  public double validAmountOption(Scanner sc, String dialogMessage) {
-    while (true) {
-      clearScreen();
-      System.out.println(dialogMessage + " (0 - 999)?");
-
-      try {
-        double amount = sc.nextDouble();
-
-        // if it is a valid input (meaning not a negative number or a number above 999)
-        // it breaks the loop and continues.
-        if (amount > 0 && amount <= 999) {
-          return amount;
-        }
-        // if it isnt a valid input, restart the loop, and encourage the user
-        // to input a valid number.
-        else {
-          clearScreen();
-          System.out.println("Please enter a price 0 - 999\n\n");
-          sc.nextLine();
-        }
-
-      } catch (Exception e) {
-        // if the user inputs something other than an integer,
-        // restart the loop and en encourage the user again.
-        clearScreen();
-        System.out.println("Please enter a price 0 - 999\n\n");
-        sc.nextLine();
-
-      }
-    }
-  }
-
-  /**
    * Gives a dialog tailor-made for a GroceryInstance's best before date.
    *
    * @param sc            Scanner used for user input.
@@ -415,6 +339,48 @@ public class DialogOptionCreator {
     }
   }
 
-  // for cookbook:
+  // universal dialog windows:
+
+  /**
+   * Gives a dialog message that lets the user pick a double inbetween a set of parameters.
+   *
+   * @param sc            Scanner used for user input.
+   * @param dialogMessage Dialog string that displays above the user input.
+   * @param start         Start parameter
+   * @param end           end parameter.
+   * @return a double between start and end.
+   */
+  public double validDoubleOption(Scanner sc, String dialogMessage, double start, double end) {
+    while (true) {
+      clearScreen();
+      System.out.println(dialogMessage + " (" + start + " - " + end + ").");
+
+      try {
+        double amount = sc.nextDouble();
+
+        // if it is a valid input (meaning not a negative number or a number above 999)
+        // it breaks the loop and continues.
+        if (amount > start && amount <= end) {
+          return amount;
+        }
+        // if it isnt a valid input, restart the loop, and encourage the user
+        // to input a valid number.
+        else {
+          clearScreen();
+          System.out.println("Please enter a price" + start + " - " + end + "\n\n");
+          sc.nextLine();
+        }
+
+      } catch (Exception e) {
+        // if the user inputs something other than an integer,
+        // restart the loop and en encourage the user again.
+        clearScreen();
+        System.out.println("Please enter a price" + start + " - " + end + "\n\n");
+        sc.nextLine();
+
+      }
+    }
+  }
+
 
 }
