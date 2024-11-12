@@ -22,7 +22,7 @@ class RecipeTest {
     instructions.add("make your cake");
     instructions.add("eat it too");
 
-    return new Recipe("cake", "mmmm, cake", instructions, ingredients);
+    return new Recipe("cake", "mmmm, cake", instructions, ingredients, null);
   }
 
   @Test

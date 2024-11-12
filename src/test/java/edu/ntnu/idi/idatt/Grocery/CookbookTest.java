@@ -28,7 +28,7 @@ class CookbookTest {
     instructions1.add("eat it");
 
     Recipe scuffedTomatoSoup = new Recipe("Tomato Soup",
-        "very dubious looking tomato soup", instructions1, ingredients1);
+        "very dubious looking tomato soup", instructions1, ingredients1, null);
 
     ArrayList<GroceryInstance> ingredients2 = new ArrayList<>();
 
@@ -45,7 +45,7 @@ class CookbookTest {
 
     Recipe momsHomemadeCaserole = new Recipe("Mom's classic homemade caserole",
         "Caserole, the way our mothers always used to cook (if they abolutely hated us)",
-        instructions2, ingredients2);
+        instructions2, ingredients2, null);
 
     ArrayList<Recipe> recipes = new ArrayList<>();
     recipes.add(scuffedTomatoSoup);

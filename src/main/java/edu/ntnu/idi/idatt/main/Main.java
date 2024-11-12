@@ -23,7 +23,7 @@ public class Main {
     System.out.flush();
   }
 
-  // add groceryType/groceryInstance
+  // add groceryType/groceryInstance/recipe
 
   /**
    * Creates a new instance of GroceryType, and adds it to food storage.
@@ -111,6 +111,8 @@ public class Main {
     }
   }
 
+  public static void addRecipe(Scanner sc, FoodStorage foodStorage, Cookbook cookBook) {
+  }
 
   // menu-methods:
   // main menu
@@ -500,7 +502,7 @@ public class Main {
 
       switch (cookbookMenuChoice) {
         case 1 -> {
-          
+
         }
         case 2 -> {
         }

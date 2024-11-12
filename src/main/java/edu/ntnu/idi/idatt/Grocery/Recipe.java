@@ -8,23 +8,29 @@ public class Recipe {
   String description;
   ArrayList<String> instructions;
   ArrayList<GroceryInstance> ingredients;
+  ArrayList<String> approximations;
 
   /**
    * A food recipe, complete with a name, a short description, instructions, and ingredients.
    *
-   * @param name         Name of the recipe.
-   * @param description  A short description of the end product.
-   * @param instructions An ArrayList that explains the steps in the process of making this recipe.
-   *                     The steps are in the same order as they are appended in the ArrayList.
-   * @param ingredients  An ArrayList that contains instances of GroceryInstance that explain which
-   *                     ingredients are needed and how much is needed.
+   * @param name           Name of the recipe.
+   * @param description    A short description of the end product.
+   * @param instructions   An ArrayList that explains the steps in the process of making this
+   *                       recipe. The steps are in the same order as they are appended in the
+   *                       ArrayList.
+   * @param ingredients    An ArrayList that contains instances of GroceryInstance that explain
+   *                       which ingredients are needed and how much is needed.
+   * @param approximations An ArrayList that contains strings with corresponding indexes with
+   *                       ingredients which can give approximations of how much of what ingredient
+   *                       to use (for example one tablespoon instead of using an SI unit).
    */
   public Recipe(String name, String description, ArrayList<String> instructions,
-      ArrayList<GroceryInstance> ingredients) {
+      ArrayList<GroceryInstance> ingredients, ArrayList<String> approximations) {
     this.name = name;
     this.description = description;
     this.instructions = instructions;
     this.ingredients = ingredients;
+    this.approximations = approximations;
   }
 
   // get-methods
@@ -42,6 +48,10 @@ public class Recipe {
 
   public ArrayList<String> getInstructions() {
     return this.instructions;
+  }
+
+  public ArrayList<String> getApproximations() {
+    return this.approximations;
   }
 
   // set-methods

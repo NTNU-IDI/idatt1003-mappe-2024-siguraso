@@ -68,10 +68,10 @@ public class TableCreator {
 
       // prints out the top of the table. (the header)
 
-      // character mapping: total: 67 chars: 3 chars num, 17 chars name, 9 chars amount, 9 Chars unit,
+      // character mapping: total: 93 chars: 3 chars num, 17 chars name, 9 chars amount, 9 Chars unit,
       //                                     7 chars Price, 10 chars Price/unit DD.MM.YYYY
       System.out.format(
-          "+─────+───────────────────+────────+──GROCERY INSTANCES───────────+────────────+────────────+%n");
+          "+─────+───────────────────+───────────GROCERY INSTANCES───────────+────────────+────────────+%n");
       System.out.format(
           "│ Num │ Name              │ Amount    │ Unit      │ Total Price   │ Price/Unit │ BestBefore │%n");
       System.out.format(
@@ -106,9 +106,11 @@ public class TableCreator {
       String tableFormat = "│ %-3d │ %-45s │ %-11d │ %-8s │ %-21s │%n";
 
       // prints out the top of the table. (the header)
-      // character mapping: total: 40 chars: 3 chars num, 16 chars name, 16 chars measurement unit
+      // character mapping: total: 104 chars: 3 chars num, 45 chars name, 11 chars amount of
+      // ingredients, 8 chars can make it without using out of date food, 21 chars kan make it with
+      // out of date food.
       System.out.format(
-          "+─────+───────────────RECIPES─────────────────────────+─────────────+──────────+───────────────────────+%n");
+          "+─────+──────────────────────────────────────────RECIPES────────────+──────────+───────────────────────+%n");
       System.out.format(
           "│ Num │ Name                                          │ Ingredients │ CanMake? │ CanMakeWithOutOfDate? │%n");
       System.out.format(
@@ -142,4 +144,28 @@ public class TableCreator {
           "+─────+───────────────────────────────────────────────+─────────────+──────────+───────────────────────+%n");
     }
   }
+
+  public void ingredientsTable(ArrayList<GroceryInstance> instances,
+      ArrayList<String> approximations) {
+    // num, name, amount, measurement unit, appproximation (if needed)
+    String format = "│ %-3d │ %-17s │ %,-9.1f │ %-9s │ ~ %-20s │ %n";
+
+    //prints out top of table:
+    System.out.format(
+        "+─────+───────────────────+──────INGREDIENTS──────+────────────────────────+%n");
+    System.out.format(
+        "│ Num │ Name              │ Amount    │ Unit      │ Approximation          │%n");
+    System.out.format(
+        "+─────+───────────────────+───────────+───────────+────────────────────────+%n");
+
+    for (int i = 0; i < instances.size(); i++) {
+      System.out.format(format, i + 1, instances.get(i).getName(), instances.get(i).getAmount(),
+          instances.get(i).getMeasurementUnit(), approximations.get(i));
+    }
+
+    //prints out bottom of the table.
+    System.out.format(
+        "+─────+───────────────────+───────────+───────────+────────────────────────+%n");
+  }
+
 }
