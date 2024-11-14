@@ -4,17 +4,23 @@ import edu.ntnu.idi.idatt.Grocery.Cookbook;
 import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import edu.ntnu.idi.idatt.Grocery.Recipe;
-
 import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
 
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 
+/**
+ * Class that is used to create the different type of menus that the user can access.
+ */
 public class MenuCreator {
 
   // methods
   // misc. methods:
+
+  /**
+   * Used to clear the terminal window. Makes for a cleaner user experience.
+   */
   private static void clearScreen() {
     System.out.print("\033[H\033[2J");
     System.out.flush();
@@ -192,7 +198,18 @@ public class MenuCreator {
 
   // menu-methods:
   // main menu
-  private static void mainMenu(Scanner sc, FoodStorage foodStorage, TableCreator tableCreator,
+
+  /**
+   * The main menu that leads to the other sub-menus.
+   *
+   * @param sc            Scanner used for user-input.
+   * @param foodStorage   The food storage that the program will be based around.
+   * @param tableCreator  Used to create different types of tables.
+   * @param dialogCreator Used to create various dialog messages so that the user inputs valid
+   *                      values.
+   * @param cookBook      Cookbook used to display and manage recipes
+   */
+  public void mainMenu(Scanner sc, FoodStorage foodStorage, TableCreator tableCreator,
       DialogOptionCreator dialogCreator, Cookbook cookBook) {
 
     clearScreen();
@@ -233,6 +250,20 @@ public class MenuCreator {
   }
 
   // menu to manage the food storage.
+
+  /**
+   * Sub-menu that allows the user to manage the food storage. In this menu the user can either
+   * Display the out of date food, search for GroceryInstances in the foodStorage, add a
+   * GroceryInstance to the food storage, remove a GroceryInstance from the food storage, edit a
+   * specific GroceryInstance or check the value of multiple different groceries.
+   *
+   * @param sc            Scanner used for user input.
+   * @param foodStorage   Instance of FoodStorage which contains the basis for which items are in
+   *                      the food storage.
+   * @param tableCreator  Used to create tables.
+   * @param dialogCreator Used to give the user various dialog options, and makes sure the user
+   *                      inputs a valid input.
+   */
   private static void manageFoodStorageMenu(Scanner sc, FoodStorage foodStorage,
       TableCreator tableCreator, DialogOptionCreator dialogCreator) {
     // sets a decimal format similar to the ones used in the tables.
@@ -494,7 +525,19 @@ public class MenuCreator {
     }
   }
 
-  // menu to manage grocery types
+  // menu to manage grocery type
+
+  /**
+   * Sub-menu that allows the user to manage the different grocery types in the food storage. In
+   * this menu the user can either add an instance of GroceryType, edit an instance of GroceryType
+   * or delete an instance of GroceryType.
+   *
+   * @param sc            Scanner used for user input.
+   * @param foodStorage   FoodStorage that contains the available GroceryTypes.
+   * @param tableCreator  Used to create different types of tables.
+   * @param dialogCreator Used to give the user various dialog options, and makes sure the user
+   *                      inputs a valid input.
+   */
   private static void manageGroceryTypeMenu(Scanner sc, FoodStorage foodStorage,
       TableCreator tableCreator, DialogOptionCreator dialogCreator) {
     ChoiceWindow manageGroceryTypeMenu = new ChoiceWindow();
@@ -591,6 +634,18 @@ public class MenuCreator {
   }
 
   // menu to manage the cookbook (recipes and dat)
+
+  /**
+   * Sub-menu that allows the user to manage the different recipes in the cookbook. In this menu the
+   * user can add a recipe, delete a recipe from the cookbook and view suggested recipes based on
+   * what GroceryInstances are in the food storage..
+   *
+   * @param sc            Scanner used for user input.
+   * @param foodStorage   FoodStorage used to check what types of food the user has stored.
+   * @param tableCreator  used to create different types of tables.
+   * @param dialogCreator used to create various dialog windows so that the user inputs valid
+   *                      values.
+   */
   private static void manageCookbookMenu(Scanner sc, FoodStorage foodStorage,
       TableCreator tableCreator, DialogOptionCreator dialogCreator, Cookbook cookBook) {
     ChoiceWindow manageCookbookMenu = new ChoiceWindow();

@@ -5,8 +5,9 @@ import java.util.Comparator;
 
 public class FoodStorage {
 
+  // variables
   ArrayList<GroceryInstance> groceryInstances;
-  ArrayList<GroceryType> groceryTypes = new ArrayList<>();
+  ArrayList<GroceryType> groceryTypes;
 
 
   /**
@@ -15,8 +16,10 @@ public class FoodStorage {
    *
    * @param groceryInstances An ArrayList that takes instances of the GroceryInstance datatype.
    */
-  public FoodStorage(ArrayList<GroceryInstance> groceryInstances) {
+  public FoodStorage(ArrayList<GroceryInstance> groceryInstances,
+      ArrayList<GroceryType> groceryTypes) {
     this.groceryInstances = groceryInstances;
+    this.groceryTypes = groceryTypes;
   }
 
   // Get-methods
@@ -60,11 +63,20 @@ public class FoodStorage {
 
   /**
    * Removes an instance of GroceryInstance from the food storage, based on the index given.
+   *
+   * @param index the index of the instance of GroceryÍnstance that the user wants to remove.
    */
   public void removeInstance(int index) {
+    //here, index - 1 is used so that the lists displayed go from 1 - (n + 1), and not 0 - n
+    //which is less user-friendly.
     this.groceryInstances.remove(index - 1);
   }
 
+  /**
+   * removes an instance of GroceryType from the food storage, based on the index given.
+   *
+   * @param index the index of the intance of GroceryType that the user wants to remove.
+   */
   public void removeType(int index) {
     this.groceryTypes.remove(index - 1);
   }
@@ -76,6 +88,9 @@ public class FoodStorage {
     this.groceryInstances.add(grocery);
   }
 
+  /**
+   * Adds an instance of GroceryType to the food storage.
+   */
   public void addType(GroceryType groceryType) {
     this.groceryTypes.add(groceryType);
   }

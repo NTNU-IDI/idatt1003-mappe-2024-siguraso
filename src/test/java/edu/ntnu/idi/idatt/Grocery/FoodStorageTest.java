@@ -28,7 +28,7 @@ class FoodStorageTest {
     items.add(chicken01);
     items.add(kiwi01);
 
-    FoodStorage foodStorage = new FoodStorage(items);
+    FoodStorage foodStorage = new FoodStorage(items, null);
 
     assertEquals(foodStorage.getSpecificInstance(1).getName(), "Tomato");
     assertEquals(foodStorage.getSpecificInstance(2).getName(), "Mushroom");
@@ -55,7 +55,7 @@ class FoodStorageTest {
     items.add(chicken01);
     items.add(kiwi01);
 
-    FoodStorage foodStorage = new FoodStorage(items);
+    FoodStorage foodStorage = new FoodStorage(items, null);
 
     ArrayList<GroceryInstance> tomatoSearch = foodStorage.groceryInstanceSearch("tom");
 
@@ -84,7 +84,7 @@ class FoodStorageTest {
     items.add(chicken01);
     items.add(kiwi01);
 
-    FoodStorage foodStorage = new FoodStorage(items);
+    FoodStorage foodStorage = new FoodStorage(items, null);
 
     foodStorage.removeInstance(1);
 
@@ -112,7 +112,7 @@ class FoodStorageTest {
     items.add(chicken01);
     items.add(kiwi01);
 
-    FoodStorage foodStorage = new FoodStorage(items);
+    FoodStorage foodStorage = new FoodStorage(items, null);
 
     foodStorage.removeInstanceAmount(1, 0.2);
 
@@ -140,7 +140,7 @@ class FoodStorageTest {
     items.add(chicken01);
     items.add(kiwi01);
 
-    FoodStorage foodStorage = new FoodStorage(items);
+    FoodStorage foodStorage = new FoodStorage(items, null);
 
     int[] testValues = new int[]{1, 2};
 
@@ -168,7 +168,7 @@ class FoodStorageTest {
     items.add(chicken01);
     items.add(kiwi01);
 
-    FoodStorage foodStorage = new FoodStorage(items);
+    FoodStorage foodStorage = new FoodStorage(items, null);
 
     assertEquals((0.4 * 10) + (2 * 23) + (0.7 * 10) + (1 * 103) + (4 * 13),
         foodStorage.getTotalValue());
@@ -194,7 +194,7 @@ class FoodStorageTest {
     items.add(chicken01);
     items.add(kiwi01);
 
-    FoodStorage foodStorage = new FoodStorage(items);
+    FoodStorage foodStorage = new FoodStorage(items, null);
 
     // manually add the elements that are out of date
     ArrayList<GroceryInstance> outOfDate = new ArrayList<>();
@@ -237,7 +237,7 @@ class FoodStorageTest {
     items.add(chicken01);
     items.add(kiwi01);
 
-    FoodStorage foodStorage = new FoodStorage(items);
+    FoodStorage foodStorage = new FoodStorage(items, null);
 
     assertEquals((2 * 23) + (4 * 13), foodStorage.getOutOfDateValue());
   }

@@ -65,7 +65,7 @@ class RecipeTest {
     ingredients2.add(new GroceryInstance(cakeMix, 0.5, 40, "12.12.2024"));
     ingredients2.add(new GroceryInstance(egg, 1, 40, "12.12.2024"));
 
-    FoodStorage foodStorage = new FoodStorage(ingredients2);
+    FoodStorage foodStorage = new FoodStorage(ingredients2, null);
 
     assertTrue(r().canMakeRecipe(foodStorage, true));
 

@@ -84,7 +84,7 @@ class CookbookTest {
 
     ingredients2.add(new GroceryInstance(milk, 2, 40, "12.12.2024"));
 
-    FoodStorage foodStorage = new FoodStorage(ingredients2);
+    FoodStorage foodStorage = new FoodStorage(ingredients2, null);
 
     ArrayList<Recipe> suggestions = cookbook().recipeSuggestion(foodStorage, true);
 
