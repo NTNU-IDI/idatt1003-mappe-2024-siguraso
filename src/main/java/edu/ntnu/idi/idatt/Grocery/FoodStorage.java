@@ -17,15 +17,6 @@ public class FoodStorage {
    */
   public FoodStorage(ArrayList<GroceryInstance> groceryInstances) {
     this.groceryInstances = groceryInstances;
-
-    // adds a bunch of basic and common GroceryTypes, so that the user doesn't have to.
-    this.groceryTypes.add(new GroceryType("Tomato", "kg"));
-    this.groceryTypes.add(new GroceryType("Milk", "L"));
-    this.groceryTypes.add(new GroceryType("Bread", "pcs."));
-    this.groceryTypes.add(new GroceryType("Apple", "kg"));
-    this.groceryTypes.add(new GroceryType("Potato", "kg"));
-    this.groceryTypes.add(new GroceryType("Butter", "pcs."));
-    this.groceryTypes.add(new GroceryType("Cucumber", "pcs."));
   }
 
   // Get-methods
