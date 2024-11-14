@@ -72,7 +72,7 @@ public class ChoiceWindow {
    * @param sc            Scanner that will be used as the user's form of input.
    * @return The integer given by the user.
    */
-  public int choiceSequnce(String dialogMessage, Scanner sc) {
+  public int choiceSequence(String dialogMessage, Scanner sc) {
     // a while loop, so that if the program catches an error, the user is allowed to try again.
     while (true) {
       try {

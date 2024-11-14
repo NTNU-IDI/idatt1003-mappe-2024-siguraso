@@ -35,7 +35,7 @@ public class Cookbook {
    * are three (or more) groceries in the food storage that are also ingredients in a recipe, it is
    * suggested.
    *
-   * @param foodStorage      Food storage that contains all of the available groceries.
+   * @param foodStorage      Food storage that contains all the available groceries.
    * @param includeOutOfDate boolean true or false which lets the user decide weather or not to
    *                         include out of date food.
    * @return an ArrayList consisting of recipes that are suggested.

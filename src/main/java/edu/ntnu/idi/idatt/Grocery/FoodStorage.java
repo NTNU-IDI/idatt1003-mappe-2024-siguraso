@@ -2,7 +2,6 @@ package edu.ntnu.idi.idatt.Grocery;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Collection;
 
 public class FoodStorage {
 

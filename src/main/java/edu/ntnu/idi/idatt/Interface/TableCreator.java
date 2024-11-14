@@ -7,6 +7,10 @@ import edu.ntnu.idi.idatt.Grocery.Recipe;
 
 import java.util.ArrayList;
 
+/**
+ * Class of object that creates different types of tables based on different types of classes using
+ * void methods.
+ */
 public class TableCreator {
 
   // constuctor

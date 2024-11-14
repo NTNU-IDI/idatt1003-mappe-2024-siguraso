@@ -1,12 +1,9 @@
-package edu.ntnu.idi.idatt.main;
+package edu.ntnu.idi.idatt.Interface;
 
 import edu.ntnu.idi.idatt.Grocery.Cookbook;
 import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import edu.ntnu.idi.idatt.Grocery.Recipe;
-import edu.ntnu.idi.idatt.Interface.ChoiceWindow;
-import edu.ntnu.idi.idatt.Interface.DialogOptionCreator;
-import edu.ntnu.idi.idatt.Interface.TableCreator;
 
 import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
 
@@ -14,7 +11,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 
-public class Main {
+public class MenuCreator {
 
   // methods
   // misc. methods:
@@ -195,14 +192,44 @@ public class Main {
 
   // menu-methods:
   // main menu
-  private static int mainMenu(Scanner sc) {
+  private static void mainMenu(Scanner sc, FoodStorage foodStorage, TableCreator tableCreator,
+      DialogOptionCreator dialogCreator, Cookbook cookBook) {
+
+    clearScreen();
+
     ChoiceWindow mainMenu = new ChoiceWindow();
     mainMenu.addChoice("Manage food storage.");
     mainMenu.addChoice("Manage grocery types.");
     mainMenu.addChoice("Manage cookbook.");
     mainMenu.addChoice("Exit program.");
 
-    return mainMenu.choiceSequnce("What do you want to do? ", sc);
+    boolean isFinished = false;
+
+    while (!isFinished) {
+      // creates the main menu.
+      int mainMenuChoice = mainMenu.choiceSequence("What do you want to do?", sc);
+
+      switch (mainMenuChoice) {
+        // sends the user to the 'manage food storage menu'
+        case 1:
+          manageFoodStorageMenu(sc, foodStorage, tableCreator, dialogCreator);
+          break;
+
+        // sends the user to the 'manage grocery types' menu.
+        case 2:
+          manageGroceryTypeMenu(sc, foodStorage, tableCreator, dialogCreator);
+          break;
+
+        // sends the user to the 'manage cookbook' menu.
+        case 3:
+          manageCookbookMenu(sc, foodStorage, tableCreator, dialogCreator, cookBook);
+          break;
+
+        // exits the program.
+        case 4:
+          isFinished = true;
+      }
+    }
   }
 
   // menu to manage the food storage.
@@ -229,7 +256,7 @@ public class Main {
 
       System.out.println("\nTotal Value: " + df.format(foodStorage.getTotalValue()) + "\n\n");
 
-      int manageFoodStorageChoice = manageFoodStorageMenu.choiceSequnce(
+      int manageFoodStorageChoice = manageFoodStorageMenu.choiceSequence(
           "Manage food storage: ", sc);
 
       sc.nextLine();
@@ -467,6 +494,7 @@ public class Main {
     }
   }
 
+  // menu to manage grocery types
   private static void manageGroceryTypeMenu(Scanner sc, FoodStorage foodStorage,
       TableCreator tableCreator, DialogOptionCreator dialogCreator) {
     ChoiceWindow manageGroceryTypeMenu = new ChoiceWindow();
@@ -480,7 +508,7 @@ public class Main {
     while (true) {
       clearScreen();
       tableCreator.groceryTypeTable(foodStorage.getAllGroceryTypes());
-      int choice = manageGroceryTypeMenu.choiceSequnce("Manage grocery types: ", sc);
+      int choice = manageGroceryTypeMenu.choiceSequence("Manage grocery types: ", sc);
       switch (choice) {
         // add type
         case 1 -> {
@@ -562,6 +590,7 @@ public class Main {
     }
   }
 
+  // menu to manage the cookbook (recipes and dat)
   private static void manageCookbookMenu(Scanner sc, FoodStorage foodStorage,
       TableCreator tableCreator, DialogOptionCreator dialogCreator, Cookbook cookBook) {
     ChoiceWindow manageCookbookMenu = new ChoiceWindow();
@@ -577,7 +606,7 @@ public class Main {
       clearScreen();
       tableCreator.recipeTable(cookBook.getRecipes(), foodStorage);
 
-      int cookbookMenuChoice = manageCookbookMenu.choiceSequnce(
+      int cookbookMenuChoice = manageCookbookMenu.choiceSequence(
           "Manage cookbook recipes: ", sc);
 
       switch (cookbookMenuChoice) {
@@ -599,48 +628,5 @@ public class Main {
   }
 
 
-  // main method
-  public static void main(String[] args) {
-    clearScreen();
-
-    //declares instances of scanner and table creator:
-    DialogOptionCreator dialogCreator = new DialogOptionCreator();
-    TableCreator tableCreator = new TableCreator();
-    Scanner sc = new Scanner(System.in);
-
-    //declares food storage
-    ArrayList<GroceryInstance> allGroceries = new ArrayList<>();
-    FoodStorage foodStorage = new FoodStorage(allGroceries);
-
-    //declares cookbook
-    ArrayList<Recipe> allRecipes = new ArrayList<>();
-    Cookbook cookBook = new Cookbook(allRecipes);
-
-    while (true) {
-      // creates the main menu.
-      int mainMenuChoice = mainMenu(sc);
-
-      switch (mainMenuChoice) {
-        // sends the user to the 'manage food storage menu'
-        case 1:
-          manageFoodStorageMenu(sc, foodStorage, tableCreator, dialogCreator);
-          break;
-
-        // sends the user to the 'manage grocery types' menu.
-        case 2:
-          manageGroceryTypeMenu(sc, foodStorage, tableCreator, dialogCreator);
-          break;
-
-        // sends the user to the 'manage cookbook' menu.
-        case 3:
-          manageCookbookMenu(sc, foodStorage, tableCreator, dialogCreator, cookBook);
-          break;
-
-        // exits the program.
-        case 4:
-          sc.close();
-          System.exit(0);
-      }
-    }
-  }
 }
+
