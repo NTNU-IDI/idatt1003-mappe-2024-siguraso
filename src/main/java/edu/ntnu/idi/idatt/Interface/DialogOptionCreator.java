@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.Interface;
 
 import edu.ntnu.idi.idatt.Grocery.FoodStorage;
+import edu.ntnu.idi.idatt.Grocery.Cookbook;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -305,6 +306,54 @@ public class DialogOptionCreator {
       }
 
     }
+  }
+
+  /**
+   * Gives a dialog menu that takes the user input to determine what recipe the user wants to access
+   * and makes sure it is a valid index based on the amount of recipes in a given cookbook.
+   *
+   * @param sc           Scanner used for user input.
+   * @param tableCreator used to show a table of the available recipes.
+   * @param cookBook     used to access the stored recipes.
+   * @param foodStorage  used in correlation to table creation. (Checks weather or not a recipe can
+   *                     be made with the available food in food storage)
+   */
+  public int validRecipeIndex(Scanner sc, TableCreator tableCreator, Cookbook cookBook,
+      FoodStorage foodStorage,
+      String dialogMessage) {
+    // if there are no recipes in the cookbook, throw an illegalargumentexception
+    if (cookBook.getRecipes().isEmpty()) {
+      System.out.println();
+      throw new IllegalArgumentException(
+          "Can't fetch recipes, since there currently are none in the cookbook.");
+    }
+
+    while (true) {
+      try {
+        tableCreator.recipeTable(cookBook.getRecipes(), foodStorage);
+
+        System.out.println(
+            "\n" + dialogMessage + " (1 - " + cookBook.getRecipes().size() + "):");
+
+        int recipeIndex = sc.nextInt();
+
+        // if it is a valid index, return the usr input.
+        if (recipeIndex > 0 && recipeIndex <= cookBook.getRecipes().size()) {
+          return recipeIndex;
+        } else {
+          clearScreen();
+
+          System.out.println(
+              "Please enter an integer (1 - " + cookBook.getRecipes().size() + "). \n\n");
+        }
+      } catch (Exception e) {
+        clearScreen();
+
+        System.out.println(
+            "Please enter an integer (1 - " + cookBook.getRecipes().size() + ").\n\n");
+      }
+    }
+
   }
 
   /**

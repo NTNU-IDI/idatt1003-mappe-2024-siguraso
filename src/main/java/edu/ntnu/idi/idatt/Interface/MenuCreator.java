@@ -26,16 +26,41 @@ public class MenuCreator {
     System.out.flush();
   }
 
-  // add groceryType/groceryInstance/recipe
+  // various methods to print stuff
 
   /**
-   * Creates a new instance of GroceryType, and adds it to food storage.
+   * Used to print out a recipe's name, description, steps and ingredients.
+   *
+   * @param tableCreator Used to print out a table of the ingredients in the given recipe.
+   * @param recipe       The recipe that we are looking to print.
+   */
+  private static void showRecipe(TableCreator tableCreator, Recipe recipe) {
+    clearScreen();
+
+    System.out.println("Name: '" + recipe.getName() + "'\n");
+
+    System.out.println("Description: '" + recipe.getDescription() + "'\n");
+
+    tableCreator.ingredientsTable(recipe.getIngredients(), recipe.getApproximations());
+
+    System.out.println("\nInstructions:");
+    recipe.getInstructions().forEach(instruction ->
+        System.out.println(
+            (recipe.getInstructions().indexOf(instruction) + 1) + ": " + instruction));
+
+    System.out.println("\n");
+  }
+
+  // add groceryType/groceryInstance/recipe under-menus
+
+  /**
+   * Creates a new instance of GroceryType, and adds it to food storage based on the users input.
    *
    * @param sc            Scanner used for user input.
    * @param foodStorage   Used to append the new grocery type to food storage.
    * @param dialogCreator Creates the dialog option windows.
    */
-  public static void addGroceryType(Scanner sc,
+  private static void addGroceryType(Scanner sc,
       FoodStorage foodStorage, DialogOptionCreator dialogCreator) {
     clearScreen();
 
@@ -66,7 +91,7 @@ public class MenuCreator {
   }
 
   /**
-   * Adds a GroceryType to a given FoodStorage instance.
+   * Adds a GroceryType to a given FoodStorage instance based on the users input.
    *
    * @param sc              Scanner used for user input.
    * @param foodStorage     Food storage to append the new GroceryInstance and to fetch Available
@@ -74,7 +99,7 @@ public class MenuCreator {
    * @param thisGroceryType The grocery type the new grocery instance is based on.
    * @param dialogCreator   Used to create dialog windows.
    */
-  public static void addGroceryInstance(Scanner sc, FoodStorage foodStorage,
+  private static void addGroceryInstance(Scanner sc, FoodStorage foodStorage,
       GroceryType thisGroceryType, DialogOptionCreator dialogCreator) {
     clearScreen();
 
@@ -116,7 +141,7 @@ public class MenuCreator {
   }
 
   /**
-   * Creates a new recipe, and adds it to the cookbook.
+   * Creates a new recipe, and adds it to the cookbook based on the users input.
    *
    * @param sc            Used for user input.
    * @param foodStorage   Used to fetch grocery types.
@@ -124,7 +149,7 @@ public class MenuCreator {
    * @param dialogCreator Used to create dialog windows.
    * @param tableCreator  Used to create relevant tables when needed.
    */
-  public static void addRecipe(Scanner sc, FoodStorage foodStorage, Cookbook cookBook,
+  private static void addRecipe(Scanner sc, FoodStorage foodStorage, Cookbook cookBook,
       DialogOptionCreator dialogCreator, TableCreator tableCreator) {
     ArrayList<GroceryInstance> ingredients = new ArrayList<>();
     ArrayList<String> approximations = new ArrayList<>();
@@ -180,12 +205,8 @@ public class MenuCreator {
       instructions.add(thisStep);
     }
 
-    clearScreen();
-
-    tableCreator.ingredientsTable(ingredients, approximations);
-
-    instructions.forEach(instruction ->
-        System.out.println((instructions.indexOf(instruction) + 1) + ": " + instruction));
+    showRecipe(tableCreator,
+        new Recipe(recipeName, description, instructions, ingredients, approximations));
 
     String yesNoSc = dialogCreator.yesNoOption(sc, "Is this OK (Y/N)?");
 
@@ -197,7 +218,7 @@ public class MenuCreator {
   }
 
   // menu-methods:
-  // main menu
+  // main menu, and sub-menus.
 
   /**
    * The main menu that leads to the other sub-menus.
@@ -650,6 +671,7 @@ public class MenuCreator {
       TableCreator tableCreator, DialogOptionCreator dialogCreator, Cookbook cookBook) {
     ChoiceWindow manageCookbookMenu = new ChoiceWindow();
 
+    manageCookbookMenu.addChoice("View recipe.");
     manageCookbookMenu.addChoice(
         "Add recipe (!Make sure to add the relevant grocery types in the grocery type menu!).");
     manageCookbookMenu.addChoice("Delete recipe.");
@@ -665,23 +687,83 @@ public class MenuCreator {
           "Manage cookbook recipes: ", sc);
 
       switch (cookbookMenuChoice) {
+        // view recipe
         case 1 -> {
+          sc.nextLine();
+          int recipeIndex;
+          try {
+            recipeIndex = dialogCreator.validRecipeIndex(sc, tableCreator, cookBook, foodStorage,
+                "Which recipe would you like to view?");
+
+            showRecipe(tableCreator, cookBook.getSpecificRecipe(recipeIndex));
+
+            System.out.println("Press ENTER to continue...");
+            sc.nextLine();
+            sc.nextLine();
+
+          } catch (Exception e) {
+            System.out.println(e.getMessage() + "\nPress Enter to continue.");
+            sc.nextLine();
+          }
+        }
+
+        // add recipe
+        case 2 -> {
           sc.nextLine();
           addRecipe(sc, foodStorage, cookBook, dialogCreator, tableCreator);
         }
-        case 2 -> {
-        }
+
+        // Delete recipe
         case 3 -> {
+          sc.nextLine();
+          String yesNoSc = dialogCreator.yesNoOption(sc,
+              "Do you really wish to remove a recipe from the cookbook? (Y/N)");
+
+          if (yesNoSc.equals("y")) {
+            try {
+              int removeIndex = dialogCreator.validRecipeIndex(sc, tableCreator, cookBook,
+                  foodStorage, "Which recipe would you like to remove?");
+
+              cookBook.removeRecipe(removeIndex);
+            } catch (Exception e) {
+              clearScreen();
+              System.out.println(e.getMessage() + "\nPress Enter to continue.");
+              sc.nextLine();
+            }
+          }
         }
+
+        // view recipe suggestions.
         case 4 -> {
+          sc.nextLine();
+
+          String yesNoSc = dialogCreator.yesNoOption(sc,
+              "Would you like to include out-of-date food to the consideration on which "
+                  + "recipes to recommend? (Y/N)");
+
+          boolean includeOutOfDate = yesNoSc.equals("y");
+
+          ArrayList<Recipe> suggestions = cookBook.recipeSuggestion(foodStorage, includeOutOfDate);
+
+          System.out.println("Here are your reccomendations: \n");
+
+          try {
+            tableCreator.recipeTable(suggestions, foodStorage);
+
+            System.out.println("\nPress ENTER to continue...");
+            sc.nextLine();
+
+          } catch (Exception e) {
+            System.out.println(e.getMessage() + "\nPress Enter to continue.");
+          }
+        }
+
+        // return to the main menu.
+        case 5 -> {
           break cookbookLoop;
         }
       }
-
     }
-
   }
-
-
 }
 

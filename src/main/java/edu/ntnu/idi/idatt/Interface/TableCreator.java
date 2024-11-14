@@ -99,7 +99,9 @@ public class TableCreator {
    * Creates a table, where it takes an ArrayList of instances of Recipe, and prints them out in a
    * table-format.
    *
-   * @param recipes Instances of recipe in an ArrayList.
+   * @param recipes     Instances of recipe in an ArrayList.
+   * @param foodStorage FoodStorage, here used to check if the user can make the recipe with the
+   *                    available GroceryInstances in the food storage.
    */
   public void recipeTable(ArrayList<Recipe> recipes, FoodStorage foodStorage) {
     if (recipes.isEmpty()) {
