@@ -5,19 +5,34 @@ import edu.ntnu.idi.idatt.Grocery.FoodStorage;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+/**
+ * A class that is used to create different dialog windows that check weather or not the user input
+ * is a valid input.
+ */
 public class DialogOptionCreator {
 
   // constructor
+
+  /**
+   * A class that is used to create different dialog windows that check weather or not the user
+   * input is a valid input.
+   */
   public DialogOptionCreator() {
   }
 
   // general methods:
+
+  /**
+   * Clears the terminal window. Makes for a smoother user experience.
+   */
   private static void clearScreen() {
     System.out.print("\033[H\033[2J");
     System.out.flush();
   }
 
-  // checks if a date is valid based on the date format used throughout the script.
+  /**
+   * Checks if a date is valid based on the date format used throughout the script.
+   */
   private static boolean isValidDate(String dateString) {
     String[] dateParts = dateString.split("\\.");
 

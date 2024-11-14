@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class TableCreator {
 
-  // constuctor
+  // constructor
 
   /**
    * Create different types of tables for different types of classes.
@@ -149,6 +149,16 @@ public class TableCreator {
     }
   }
 
+  /**
+   * Creates a table, where it takes an ArrayList of instances of GroceryInstance and an ArrayList
+   * of strings that contain approximations of the size of the above GroceryInstances, and prints
+   * them out in a table-format.
+   *
+   * @param instances      the ArrayList of GroceryInstances that, here, are used as ingredients in
+   *                       a recipe.
+   * @param approximations the ArrayList of Strings which contain approximations of how much of each
+   *                       of the above ingredients are in the
+   */
   public void ingredientsTable(ArrayList<GroceryInstance> instances,
       ArrayList<String> approximations) {
     // num, name, amount, measurement unit, appproximation (if needed)
