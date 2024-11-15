@@ -3,6 +3,11 @@ package edu.ntnu.idi.idatt.Grocery;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * an instance of FoodStorage contains both GroceryInstances and GroceryTypes that are both
+ * pre-defined and defined by the user. FoodStorage object's main goals are to more or less manage
+ * these objects.
+ */
 public class FoodStorage {
 
   // variables
@@ -57,7 +62,8 @@ public class FoodStorage {
       }
     }
 
-    return searchResults;
+    return new ArrayList<>(this.groceryInstances.stream()
+        .filter(GI -> GI.getName().toLowerCase().contains(searchTerm.toLowerCase())).toList());
   }
 
 

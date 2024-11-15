@@ -245,7 +245,7 @@ public class MenuCreator {
 
     while (!isFinished) {
       // creates the main menu.
-      int mainMenuChoice = mainMenu.choiceSequence("What do you want to do?", sc);
+      int mainMenuChoice = mainMenu.choiceSequence("What do you want to do? ", sc);
 
       switch (mainMenuChoice) {
         // sends the user to the 'manage food storage menu'
@@ -766,4 +766,3 @@ public class MenuCreator {
     }
   }
 }
-

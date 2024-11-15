@@ -4,6 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Unlike GroceryTypes, which here are more or less viewed as a 'class' of a grocery, a
+ * GroceryInstance is viewed as a product of a GroceryType, or in other words we view
+ * GroceryInstances as the products themselves, while GroceryTypes are the product class. For
+ * example the product class tomato can have many different products, and each product have their
+ * own prices, best-before dates, etc.. Grocery instances define exactly these product-specific
+ * variables based on a 'product clas', or in other words, a GroceryType.
+ **/
 public class GroceryInstance {
 
   // Object variables
@@ -36,6 +44,12 @@ public class GroceryInstance {
   }
 
   // Get-methods
+
+  /**
+   * Gets the name of the grocery
+   *
+   * @return String contaoining the name of the grocery
+   */
   public String getName() {
     return this.groceryType.getName();
   }
@@ -44,6 +58,9 @@ public class GroceryInstance {
     return this.groceryType.getMeasurementUnit();
   }
 
+  /**
+   * @return
+   */
   public double getAmount() {
     return this.amount;
   }
