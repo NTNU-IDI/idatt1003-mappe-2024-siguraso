@@ -156,6 +156,15 @@ public class GroceryInstance {
     this.amount -= amount;
   }
 
+  /**
+   * Adds a certain amount of this GroceryInstance.
+   *
+   * @param amount a double of the amount that is to be added.
+   */
+  public void addAmount(double amount) {
+    this.amount += amount;
+  }
+
   // Boolean methods
 
   /**
