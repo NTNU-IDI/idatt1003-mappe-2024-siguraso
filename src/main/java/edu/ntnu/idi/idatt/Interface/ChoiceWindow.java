@@ -3,6 +3,14 @@ package edu.ntnu.idi.idatt.Interface;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * An instance of the ChoiceWindow class' main goal is to return an integer that corresponds to
+ * different actions and functions in the program. The integer is used to define what the user wants
+ * to do with a given set of options. Once the instance initiates the 'choiceSequence()' method, it
+ * creates a user-friendly choice window that avoids any kind of error message so that the user can
+ * safely operate the program without having to worry about running into any errors when deciding
+ * what to do.
+ */
 public class ChoiceWindow {
 
   // variables

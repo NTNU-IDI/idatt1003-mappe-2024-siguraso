@@ -1,7 +1,14 @@
 package edu.ntnu.idi.idatt.Grocery;
 
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * An instance of recipe more or less explains how to make a certain type of food. There are many An
+ * instance of the recipe object is complete with ingredients, instructions, a description as well
+ * as including approximations for the amounts of the different ingredients to make it easier to
+ * actually make the recipes.
+ */
 public class Recipe {
 
   String name;
@@ -34,29 +41,59 @@ public class Recipe {
   }
 
   // get-methods
+
+  /**
+   * Gets the name of the recipe. (e.g. cheesecake, tomato soup, etc.)
+   *
+   * @return a String that contains the name of the recipe.
+   */
   public String getName() {
     return this.name;
   }
 
+  /**
+   * Returns the ArrayList containing the ingredients in the form of instances of GroceryInstance.
+   */
   public ArrayList<GroceryInstance> getIngredients() {
     return this.ingredients;
   }
 
+  /**
+   * Gets the description of the recipe.
+   *
+   * @return a String containing the description of the recipe.
+   */
   public String getDescription() {
     return this.description;
   }
 
+  /**
+   * Gets the instructions for the recipe.
+   *
+   * @return an ArrayList containing String of the instructions.
+   */
   public ArrayList<String> getInstructions() {
     return this.instructions;
   }
 
+  /**
+   * Gets the approximations for the corresponding ingredients.
+   *
+   * @return an ArrayList of String containing the approximations.
+   */
   public ArrayList<String> getApproximations() {
     return this.approximations;
   }
 
   // set-methods
-  public void setName(String name) {
-    this.name = name;
+
+  /**
+   * Sets the name of the recipe
+   *
+   * @param newName the new name of the recipe.
+   */
+  public void setName(String newName) {
+    this.name = newName;
   }
   // other methods
 
@@ -74,7 +111,7 @@ public class Recipe {
 
     for (GroceryInstance ingredient : this.getIngredients()) {
       //does a search to find is there are any matching elements
-      ArrayList<GroceryInstance> matchingElements = foodStorage.groceryInstanceSearch(
+      List<GroceryInstance> matchingElements = foodStorage.groceryInstanceSearch(
           ingredient.getName());
 
       double totalAmount = 0;

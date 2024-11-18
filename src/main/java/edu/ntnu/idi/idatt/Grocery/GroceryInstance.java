@@ -54,12 +54,19 @@ public class GroceryInstance {
     return this.groceryType.getName();
   }
 
+  /**
+   * gets the measurement unit most often associated to this type of grocery.
+   *
+   * @return A string containing the measurement unit.
+   */
   public String getMeasurementUnit() {
     return this.groceryType.getMeasurementUnit();
   }
 
   /**
-   * @return
+   * Gets the amount of the grocery defined in the GroceryInstance.
+   *
+   * @return a double containing the amount.
    */
   public double getAmount() {
     return this.amount;
@@ -91,28 +98,60 @@ public class GroceryInstance {
     }
   }
 
+  /**
+   * Gets the price per unit for this GroceryInstance.
+   *
+   * @return a double containing the price per unit
+   */
   public double getPricePerUnit() {
     return this.pricePerUnit;
   }
 
+  /**
+   * Gets the total price of this GroceryInstance
+   *
+   * @return a double containing the total price of this GroceryInstance.
+   */
   public double getPrice() {
     return this.amount * this.pricePerUnit;
   }
 
   // Set-methods
-  public void setAmount(double amount) {
-    this.amount = amount;
+
+  /**
+   * Sets the amount of the GroceryInstance.
+   *
+   * @param newAmount a double containing the new Amount.
+   */
+  public void setAmount(double newAmount) {
+    this.amount = newAmount;
   }
 
-  public void setPricePerUnit(double pricePerUnit) {
-    this.pricePerUnit = pricePerUnit;
+  /**
+   * Sets the price per unit
+   *
+   * @param newPricePerUnit a double containing the new price per unit.
+   */
+  public void setPricePerUnit(double newPricePerUnit) {
+    this.pricePerUnit = newPricePerUnit;
   }
 
+  /**
+   * Sets the best before date.
+   *
+   * @param newBestBefore the new best before date in the format DD.MM.YYYY
+   */
   public void setBestBeforeDate(String newBestBefore) {
     this.bestBefore = newBestBefore;
   }
 
   // Other void-methods.
+
+  /**
+   * Removes a certain amount of this GroceryInstance.
+   *
+   * @param amount a double containing the amount you would like to remove.
+   */
   public void removeAmount(double amount) {
     this.amount -= amount;
   }
@@ -120,7 +159,7 @@ public class GroceryInstance {
   // Boolean methods
 
   /**
-   * Checks weather or not theis GroceryInstance is out of date.
+   * Checks weather or not this GroceryInstance is out of date.
    */
   public boolean isOutOfDate() {
     Date today = new Date();

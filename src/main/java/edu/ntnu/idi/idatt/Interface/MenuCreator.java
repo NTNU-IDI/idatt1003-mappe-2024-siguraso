@@ -6,6 +6,7 @@ import edu.ntnu.idi.idatt.Grocery.GroceryType;
 import edu.ntnu.idi.idatt.Grocery.Recipe;
 import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
@@ -336,7 +337,7 @@ public class MenuCreator {
 
             String searchTerm = sc.nextLine();
 
-            ArrayList<GroceryInstance> searchResults = foodStorage.groceryInstanceSearch(
+            List<GroceryInstance> searchResults = foodStorage.groceryInstanceSearch(
                 searchTerm);
 
             if (searchResults.isEmpty()) {
@@ -360,7 +361,8 @@ public class MenuCreator {
               // if the search arraylist isn't empty, it prints out the search items in a table.
               clearScreen();
               System.out.println("Search results:");
-              tableCreator.groceryInstanceTable(foodStorage.groceryInstanceSearch(searchTerm));
+              tableCreator.groceryInstanceTable(
+                  new ArrayList<>(foodStorage.groceryInstanceSearch(searchTerm)));
 
               System.out.println("Press ENTER to continue.");
               sc.nextLine();

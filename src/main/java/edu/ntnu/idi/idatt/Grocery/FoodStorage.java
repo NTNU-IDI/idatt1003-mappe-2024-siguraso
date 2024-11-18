@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt.Grocery;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * an instance of FoodStorage contains both GroceryInstances and GroceryTypes that are both
@@ -51,21 +52,11 @@ public class FoodStorage {
    * @param searchTerm The search term specified by the user.
    * @return Returns an ArrayList of all the items that matched the users search term.
    */
-  public ArrayList<GroceryInstance> groceryInstanceSearch(String searchTerm) {
-    ArrayList<GroceryInstance> searchResults = new ArrayList<>();
+  public List<GroceryInstance> groceryInstanceSearch(String searchTerm) {
 
-    // for-loop to check if any of the instances of GroceryInstance contains the search term string.
-    for (GroceryInstance grocery : this.groceryInstances) {
-      // if the name of grocery of the index i contains the search term, add it to the results list.
-      if (grocery.getName().toLowerCase().contains(searchTerm.toLowerCase())) {
-        searchResults.add(grocery);
-      }
-    }
-
-    return new ArrayList<>(this.groceryInstances.stream()
-        .filter(GI -> GI.getName().toLowerCase().contains(searchTerm.toLowerCase())).toList());
+    return this.groceryInstances.stream()
+        .filter(GI -> GI.getName().toLowerCase().contains(searchTerm.toLowerCase())).toList();
   }
-
 
   /**
    * Removes an instance of GroceryInstance from the food storage, based on the index given.
