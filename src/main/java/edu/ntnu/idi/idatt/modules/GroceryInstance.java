@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Grocery;
+package edu.ntnu.idi.idatt.modules;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,8 +9,8 @@ import java.util.Date;
  * GroceryInstance is viewed as a product of a GroceryType, or in other words we view
  * GroceryInstances as the products themselves, while GroceryTypes are the product class. For
  * example the product class tomato can have many different products, and each product have their
- * own prices, best-before dates, etc.. Grocery instances define exactly these product-specific
- * variables based on a 'product clas', or in other words, a GroceryType.
+ * own prices, best-before dates, etc.. GroceryInstances define exactly these product-specific
+ * variables based on a 'product class', or in other words, a GroceryType.
  **/
 public class GroceryInstance {
 
@@ -25,12 +25,13 @@ public class GroceryInstance {
   /**
    * Creates an "Instance" of a given GroceryType object, and adds information that can differ based
    * on for example date of purchase (e.g. different best before dates) and the place of purchase
-   * (e.g. different prices per unit),
+   * (e.g. different prices per unit).
    *
-   * @param groceryType  Instance of the GroceryType class, which grocery ware is it?
+   * @param groceryType  Instance of the GroceryType class, which "class of grocery" (e.g. tomato,
+   *                     potato butter) is it?
    * @param amount       The amount of this GroceryType (based on the given unit measurement in this
    *                     GroceryType instance).
-   * @param pricePerUnit The cost per unit (based on the give unit measurement given in this
+   * @param pricePerUnit The cost per unit (based on the given unit measurement given in this
    *                     GroceryType instance).
    * @param bestBefore   The best before date (given as an instance of String in the format
    *                     "DD.MM.YYYY").

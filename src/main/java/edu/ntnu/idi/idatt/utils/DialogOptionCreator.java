@@ -1,7 +1,7 @@
-package edu.ntnu.idi.idatt.Interface;
+package edu.ntnu.idi.idatt.utils;
 
-import edu.ntnu.idi.idatt.Grocery.FoodStorage;
-import edu.ntnu.idi.idatt.Grocery.Cookbook;
+import edu.ntnu.idi.idatt.modules.FoodStorage;
+import edu.ntnu.idi.idatt.modules.Cookbook;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ public class DialogOptionCreator {
    * input is a valid input.
    */
   public DialogOptionCreator() {
+
   }
 
   // general methods:

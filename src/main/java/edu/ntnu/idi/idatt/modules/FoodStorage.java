@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Grocery;
+package edu.ntnu.idi.idatt.modules;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -113,7 +113,7 @@ public class FoodStorage {
     this.groceryInstances.sort(Comparator.comparing(GroceryInstance::getName)
         .thenComparing(GroceryInstance::getBestBeforeDate));
 
-    this.removeZeros();
+    this.removeEmptyInstances();
 
     return this.groceryInstances;
   }
@@ -158,7 +158,7 @@ public class FoodStorage {
   /**
    * removes an instance of GroceryType from the food storage, based on the index given.
    *
-   * @param index the index of the intance of GroceryType that the user wants to remove.
+   * @param index the index of the instance of GroceryType that the user wants to remove.
    */
   public void removeType(int index) {
     this.groceryTypes.remove(index - 1);
@@ -173,7 +173,7 @@ public class FoodStorage {
       // instance.
       if (this.isSameInstance(GI, grocery)) {
         GI.addAmount(grocery.getAmount());
-        // set it to 0, so that it isnt added later on.
+        // set it to 0, so that it isn't added later on.
         grocery.setAmount(0);
       }
     });
@@ -205,7 +205,7 @@ public class FoodStorage {
   /**
    * Removes all elements from the groceries ArrayList that are equal to zero.
    */
-  public void removeZeros() {
+  public void removeEmptyInstances() {
     this.groceryInstances.forEach(GI -> {
       if (GI.getAmount() == 0) {
         this.groceryInstances.remove(GI);

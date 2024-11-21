@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Grocery;
+package edu.ntnu.idi.idatt.modules;
 
 /**
  * An instance of the GroceryType class explains a "general class" of a grocery (e.g. tomato,

@@ -1,9 +1,9 @@
-package edu.ntnu.idi.idatt.Interface;
+package edu.ntnu.idi.idatt.utils;
 
-import edu.ntnu.idi.idatt.Grocery.FoodStorage;
-import edu.ntnu.idi.idatt.Grocery.GroceryInstance;
-import edu.ntnu.idi.idatt.Grocery.GroceryType;
-import edu.ntnu.idi.idatt.Grocery.Recipe;
+import edu.ntnu.idi.idatt.modules.FoodStorage;
+import edu.ntnu.idi.idatt.modules.GroceryInstance;
+import edu.ntnu.idi.idatt.modules.GroceryType;
+import edu.ntnu.idi.idatt.modules.Recipe;
 
 import java.util.ArrayList;
 

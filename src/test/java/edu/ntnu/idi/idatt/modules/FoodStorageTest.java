@@ -1,7 +1,8 @@
-package edu.ntnu.idi.idatt.Grocery;
+package edu.ntnu.idi.idatt.modules;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ class FoodStorageTest {
 
     FoodStorage foodStorage = new FoodStorage(items, null);
 
-    ArrayList<GroceryInstance> tomatoSearch = foodStorage.groceryInstanceSearch("tom");
+    List<GroceryInstance> tomatoSearch = foodStorage.groceryInstanceSearch("tom");
 
     assertEquals("Tomato", tomatoSearch.get(0).getName());
     assertEquals("Tomato", tomatoSearch.get(1).getName());

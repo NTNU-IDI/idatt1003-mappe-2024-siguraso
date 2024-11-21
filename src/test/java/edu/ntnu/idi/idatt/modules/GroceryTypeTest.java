@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.Grocery;
+package edu.ntnu.idi.idatt.modules;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,12 +1,12 @@
 package edu.ntnu.idi.idatt.main;
 
-import edu.ntnu.idi.idatt.Grocery.FoodStorage;
-import edu.ntnu.idi.idatt.Grocery.GroceryType;
-import edu.ntnu.idi.idatt.Grocery.Cookbook;
-import edu.ntnu.idi.idatt.Grocery.Recipe;
-import edu.ntnu.idi.idatt.Interface.DialogOptionCreator;
-import edu.ntnu.idi.idatt.Interface.TableCreator;
-import edu.ntnu.idi.idatt.Interface.MenuCreator;
+import edu.ntnu.idi.idatt.modules.FoodStorage;
+import edu.ntnu.idi.idatt.modules.GroceryType;
+import edu.ntnu.idi.idatt.modules.Cookbook;
+import edu.ntnu.idi.idatt.modules.Recipe;
+import edu.ntnu.idi.idatt.utils.DialogOptionCreator;
+import edu.ntnu.idi.idatt.utils.TableCreator;
+import edu.ntnu.idi.idatt.utils.MenuCreator;
 
 import java.util.ArrayList;
 import java.util.Scanner;
