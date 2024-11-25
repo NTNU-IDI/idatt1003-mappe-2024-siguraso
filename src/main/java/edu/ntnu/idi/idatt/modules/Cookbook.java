@@ -7,15 +7,12 @@ import java.util.ArrayList;
  */
 public class Cookbook {
 
-  ArrayList<Recipe> recipes;
+  ArrayList<Recipe> recipes = new ArrayList<>();
 
   /**
    * A collection of recipes.
-   *
-   * @param recipes An ArrayList containing instances of the Recipe class.
    */
-  public Cookbook(ArrayList<Recipe> recipes) {
-    this.recipes = recipes;
+  public Cookbook() {
   }
 
   // get-methods

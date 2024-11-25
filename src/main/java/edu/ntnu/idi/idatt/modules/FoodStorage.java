@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt.modules;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -12,20 +13,15 @@ import java.util.List;
 public class FoodStorage {
 
   // variables
-  ArrayList<GroceryInstance> groceryInstances;
-  ArrayList<GroceryType> groceryTypes;
+  ArrayList<GroceryInstance> groceryInstances = new ArrayList<>();
+  ArrayList<GroceryType> groceryTypes = new ArrayList<>();
 
 
   /**
-   * A class that stores multiple instances of the GroceryInstance class. Used to view how much of
-   * each grocery the user has.
-   *
-   * @param groceryInstances An ArrayList that takes instances of the GroceryInstance datatype.
+   * A class that stores multiple instances of the {@link GroceryInstance} class. Used to view how
+   * much of each grocery the user has.
    */
-  public FoodStorage(ArrayList<GroceryInstance> groceryInstances,
-      ArrayList<GroceryType> groceryTypes) {
-    this.groceryInstances = groceryInstances;
-    this.groceryTypes = groceryTypes;
+  public FoodStorage() {
   }
 
   // Get-methods
