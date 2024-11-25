@@ -162,22 +162,22 @@ public class TUI {
       return "=========NO GROCERY TYPES TO DISPLAY!========";
     } else {
       // creates the format for the table.
-      String tableFormat = "│ %-3d │ %-16s │ %-16s │";
+      String tableFormat = "│ %-3d │ %-30s │ %-16s │";
 
       ArrayList<String> rows = new ArrayList<>();
 
       // appends the header of the table to the string
       // character mapping: total: 40 chars: 3 chars num, 16 chars name, 16 chars measurement unit
-      rows.add("+─────+─────────GROCERY TYPES───────────────+");
-      rows.add("│ Num │ Name             │ Measurement Unit │");
-      rows.add("+─────+──────────────────+──────────────────+");
+      rows.add("+─────+────────────────GROCERY TYPES───+──────────────────+");
+      rows.add("│ Num │ Name                           │ Measurement Unit │");
+      rows.add("+─────+────────────────────────────────+──────────────────+");
 
       groceryTypes.forEach(type -> rows.add(
           String.format(tableFormat, (groceryTypes.indexOf(type) + 1), type.getName(),
               type.getMeasurementUnit())));
 
       //prints out bottom of table
-      rows.add("+─────+──────────────────+──────────────────+");
+      rows.add("+─────+────────────────────────────────+──────────────────+");
 
       return String.join("\n", rows);
     }
