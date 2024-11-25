@@ -1,9 +1,13 @@
 package edu.ntnu.idi.idatt.utils;
 
+import edu.ntnu.idi.idatt.modules.FoodStorage;
+import edu.ntnu.idi.idatt.modules.GroceryInstance;
+import edu.ntnu.idi.idatt.modules.GroceryType;
+import edu.ntnu.idi.idatt.modules.Recipe;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /**
  * Text-User-Interface class that manages the different dialog options that are needed to create the
@@ -19,6 +23,8 @@ public class TUI {
    */
   public TUI() {
   }
+
+  // user input:
 
   /**
    * Used to get the user input. All inputs are returned as an instance of {@link String}, and have
@@ -44,6 +50,8 @@ public class TUI {
     sc.close();
   }
 
+  // misc. utilities:
+
   /**
    * Clears the terminal window.
    */
@@ -51,6 +59,8 @@ public class TUI {
     System.out.print("\033[H\033[2J");
     System.out.flush();
   }
+
+  // dialog options
 
   /**
    * Gives a dialog window that checks if the user enters an input containing an integer (the
@@ -110,14 +120,15 @@ public class TUI {
       choicesList.set(currentIndex, "[" + (currentIndex + 1) + "] " + choice);
     });
 
-    String choicesString = message + "\n\n" + choicesList.stream()
-        .map(Object::toString)
-        .collect(Collectors.joining("\n")) + "\n";
+    String choicesString =
+        message + " (Please enter an integer 1 - " + choices.length + ")\n\n" + String.join("\n",
+            choicesList);
 
     boolean hasEnteredValidInteger = false;
     int input = 0;
 
     do {
+      System.out.println(choicesString);
       try {
         input = Integer.parseInt(this.getInput());
         if (input >= 1 && input <= choicesList.size()) {
@@ -128,11 +139,178 @@ public class TUI {
         }
       } catch (NumberFormatException e) {
         this.clearScreen();
-        System.out.println(e.getMessage());
+        System.out.println("Please enter a valid integer!");
       }
     } while (!hasEnteredValidInteger);
 
     return input;
+  }
+
+  // tables:
+
+  /**
+   * Creates a table that's 45 characters long, where it takes an ArrayList of instances of
+   * GroceryType and prints them out in a table-format. The table displays the name of the grocery
+   * class, and the measurement unit associated with the grocery class.
+   *
+   * @param groceryTypes Instances of GroceryType in an ArrayList.
+   * @return String that contains a table that displays a list of GroceryTypes.
+   */
+  public String groceryTypeTable(ArrayList<GroceryType> groceryTypes) {
+    if (groceryTypes.isEmpty()) {
+      // if there are no grocery types to display, return a string saying exactly that.
+      return "=========NO GROCERY TYPES TO DISPLAY!========";
+    } else {
+      // creates the format for the table.
+      String tableFormat = "│ %-3d │ %-16s │ %-16s │";
+
+      ArrayList<String> rows = new ArrayList<>();
+
+      // appends the header of the table to the string
+      // character mapping: total: 40 chars: 3 chars num, 16 chars name, 16 chars measurement unit
+      rows.add("+─────+─────────GROCERY TYPES───────────────+");
+      rows.add("│ Num │ Name             │ Measurement Unit │");
+      rows.add("+─────+──────────────────+──────────────────+");
+
+      groceryTypes.forEach(type -> rows.add(
+          String.format(tableFormat, (groceryTypes.indexOf(type) + 1), type.getName(),
+              type.getMeasurementUnit())));
+
+      //prints out bottom of table
+      rows.add("+─────+──────────────────+──────────────────+");
+
+      return String.join("\n", rows);
+    }
+  }
+
+  /**
+   * Creates a table that's 63 characters long, where it takes an ArrayList of instances of
+   * GroceryInstance and prints them out in a table-format. The table displays the name of the
+   * grocery, the amount of the grocery available, the measurement unit associated with the grocery,
+   * the total price of the grocery, how much it costs per measurement unit, and its best before
+   * date.
+   *
+   * @param groceryInstances Instances of GroceryInstances in an ArrayList.
+   * @return a {@link String} that contains a table of GroceryInstances.
+   */
+  public String foodStorageTable(ArrayList<GroceryInstance> groceryInstances) {
+    if (groceryInstances.isEmpty()) {
+      //tells the user that there is no items in food storage if there is none.
+      return "=============================NOTHING TO DISPLAY IN FOOD STORAGE!=============================";
+    } else {
+      // creates the format for the table.
+      String tableFormat = "│ %-3d │ %-17s │ %,-9.1f │ %-9s │ %,-13.2f │ %,-10.2f │ %-10s │";
+
+      ArrayList<String> rows = new ArrayList<>();
+
+      // adds the top of the table (the header) to the rows ArrayList
+
+      // character mapping: total: 93 chars: 3 chars num, 17 chars name, 9 chars amount, 9 Chars unit,
+      //                                     7 chars Price, 10 chars Price/unit DD.MM.YYYY
+      rows.add(
+          "+─────+───────────────────+───────────GROCERY INSTANCES───────────+────────────+────────────+");
+      rows.add(
+          "│ Num │ Name              │ Amount    │ Unit      │ Total Price   │ Price/Unit │ BestBefore │");
+      rows.add(
+          "+─────+───────────────────+───────────+───────────+───────────────+────────────+────────────+");
+
+      groceryInstances.forEach(instance -> rows.add(String.format(tableFormat,
+          groceryInstances.indexOf(instance) + 1, instance.getName(), instance.getAmount(),
+          instance.getMeasurementUnit(), instance.getPrice(), instance.getPricePerUnit(),
+          instance.getBestBeforeString())));
+
+      // prints out bottom of table
+      rows.add(
+          "+─────+───────────────────+───────────+───────────+───────────────+────────────+────────────+");
+
+      return String.join("\n", rows);
+    }
+  }
+
+  /**
+   * Creates a table, where it takes an ArrayList of instances of Recipe, and prints them out in a
+   * table-format. The table displays the name of a given recipe, how many ingredients there are,
+   * weather the user can make the given recipe based on the food in the food storage with and
+   * without including out of date food.
+   *
+   * @param recipes     Instances of recipe in an ArrayList.
+   * @param foodStorage FoodStorage, here used to check if the user can make the recipe with the
+   *                    available GroceryInstances in the food storage.
+   * @return a {@link String} that contains ta table of
+   */
+  public String cookbookTable(ArrayList<Recipe> recipes, FoodStorage foodStorage) {
+    if (recipes.isEmpty()) {
+      return
+          "==========================================NO RECIPES TO DISPLAY!===========================================";
+    } else {
+      // creates the format for the table.
+      String tableFormat = "│ %-3d │ %-45s │ %-11d │ %-8s │ %-21s │";
+
+      ArrayList<String> rows = new ArrayList<>();
+
+      // adds the top of the table (the header) to the list of rows
+      // character mapping: total: 104 chars: 3 chars num, 45 chars name, 11 chars amount of
+      // ingredients, 8 chars can make it without using out of date food, 21 chars can make it with
+      // out of date food.
+      rows.add(
+          "+─────+──────────────────────────────────────────RECIPES────────────+──────────+───────────────────────+");
+      rows.add(
+          "│ Num │ Name                                          │ Ingredients │ CanMake? │ CanMakeInclOutOfDate? │");
+      rows.add(
+          "+─────+───────────────────────────────────────────────+─────────────+──────────+───────────────────────+");
+
+      recipes.forEach(recipe -> rows.add(
+          String.format(tableFormat, recipes.indexOf(recipe) + 1, recipe.getName(),
+              recipe.getIngredients().size(), recipe.canMakeRecipe(foodStorage, false),
+              recipe.canMakeRecipe(foodStorage, true))));
+
+      rows.add(
+          "+─────+───────────────────────────────────────────────+─────────────+──────────+───────────────────────+");
+
+      return String.join("\n", rows);
+    }
+  }
+
+  /**
+   * Creates a table, where it takes an ArrayList of instances of GroceryInstance and an ArrayList
+   * of strings that contain approximations of the size of the above GroceryInstances, and prints
+   * them out in a table-format.
+   *
+   * @param ingredients    the {@link ArrayList} of GroceryInstances that, here, are used as
+   *                       ingredients in a recipe.
+   * @param approximations the ArrayList of Strings which contain approximations of how much of each
+   *                       of the above ingredients are in the
+   * @return A {@link String} that contains the table.
+   */
+  public String ingredientsTable(ArrayList<GroceryInstance> ingredients,
+      ArrayList<String> approximations) {
+    if (ingredients.isEmpty()) {
+      return "=========================NO INGREDIENTS TO DISPLAY!=========================";
+    } else {
+
+      // num, name, amount, measurement unit, appproximation (if needed)
+      String tableFormat = "│ %-3d │ %-17s │ %,-9.1f │ %-9s │ ~ %-20s │";
+
+      ArrayList<String> rows = new ArrayList<>();
+
+      //adds the header to the list of rows.
+      rows.add(
+          "+─────+───────────────────+──────INGREDIENTS──────+────────────────────────+");
+      rows.add(
+          "│ Num │ Name              │ Amount    │ Unit      │ Approximation          │");
+      rows.add(
+          "+─────+───────────────────+───────────+───────────+────────────────────────+");
+
+      ingredients.forEach(ingredient -> rows.add(String.format(tableFormat,
+          ingredients.indexOf(ingredient), ingredient.getName(), ingredient.getAmount(),
+          ingredient.getMeasurementUnit(), approximations.get(ingredients.indexOf(ingredient)))));
+
+      //prints out bottom of the table.
+      rows.add(
+          "+─────+───────────────────+───────────+───────────+────────────────────────+");
+
+      return String.join("\n", rows);
+    }
   }
 
 

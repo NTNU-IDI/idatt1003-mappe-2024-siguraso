@@ -293,13 +293,13 @@ public class MenuCreator {
 
     ChoiceWindow manageFoodStorageMenu = new ChoiceWindow();
 
-    manageFoodStorageMenu.addChoice("Display out-of-date food only.");
-    manageFoodStorageMenu.addChoice("Search in food storage.");
-    manageFoodStorageMenu.addChoice("Add grocery to storage.");
-    manageFoodStorageMenu.addChoice("Remove grocery from storage.");
+    manageFoodStorageMenu.addChoice("Display out-of-date food only.*");
+    manageFoodStorageMenu.addChoice("Search in food storage.*");
+    manageFoodStorageMenu.addChoice("Add grocery to storage.*");
+    manageFoodStorageMenu.addChoice("Remove grocery from storage.*");
     manageFoodStorageMenu.addChoice(
-        "Edit specific grocery (e.g. edit amount, best before date and price per unit)");
-    manageFoodStorageMenu.addChoice("Check the value of multiple groceries.");
+        "Edit specific grocery (e.g. edit amount, best before date and price per unit).*");
+    manageFoodStorageMenu.addChoice("Check the value of multiple groceries.*");
     manageFoodStorageMenu.addChoice("Return to main menu.");
 
     foodStorageLoop:
