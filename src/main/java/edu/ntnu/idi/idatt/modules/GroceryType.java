@@ -48,21 +48,35 @@ public class GroceryType {
   // Set-methods
 
   /**
-   * Sets the name of the grocery type to one defined by the user.
+   * Sets the name of the {@link GroceryType} to one defined by the user.
    *
    * @param newName the new user-specified name.
+   * @throws IllegalArgumentException if the name is longer than the character limit of 30
+   *                                  characters.
    */
-  public void setName(String newName) {
-    this.name = newName;
+  public void setName(String newName) throws IllegalArgumentException {
+    if (newName.length() > 30) {
+      throw new IllegalArgumentException(
+          "Name of grocery class cannot be longer than 30 characters!");
+    } else {
+      this.name = newName;
+    }
   }
 
   /**
    * Sets the measurement unit of the grocery type to one defined by the user.
    *
    * @param newMeasurementUnit a String containing the new user-defined measurement unit
+   * @throws IllegalArgumentException if a given measurement unit is longer than the character limit
+   *                                  of 16 characters.
    */
-  public void setMeasurementUnit(String newMeasurementUnit) {
-    this.measurementUnit = newMeasurementUnit;
+  public void setMeasurementUnit(String newMeasurementUnit) throws IllegalArgumentException {
+    if (newMeasurementUnit.length() > 16) {
+      throw new IllegalArgumentException(
+          "Measurement unit of a grocery class cannot be longer than 16 characters!");
+    } else {
+      this.measurementUnit = newMeasurementUnit;
+    }
   }
 
 }

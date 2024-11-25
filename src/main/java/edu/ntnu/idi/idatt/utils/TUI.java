@@ -68,8 +68,10 @@ public class TUI {
    *
    * @param message The dialog message that will be displayed.
    * @return a user-defined valid integer (the primitive type "int").
+   * @throws NumberFormatException if the {@link String} from the given input cannot be parsed to an
+   *                               integer (of the primitive type "int").
    */
-  public int integerOption(String message) {
+  public int integerOption(String message) throws NumberFormatException {
 
     System.out.println(message);
 
@@ -85,14 +87,35 @@ public class TUI {
    *
    * @param message dialog message that appears above the
    * @return a valid double (primitive type) defined by the user.
+   * @throws NumberFormatException if the the {@link String} given from the input cannot be parsed
+   *                               to a double (of the primitive type).
    */
-  public double doubleOption(String message) {
+  public double doubleOption(String message) throws NumberFormatException {
     System.out.println(message);
 
     try {
       return Double.parseDouble(this.getInput());
     } catch (NumberFormatException e) {
       throw new NumberFormatException("Please enter a valid decimal number!");
+    }
+  }
+
+  /**
+   * Gives a dialog window where the user enters an input that's either Y or N (ignores case),
+   * letting the program know no or yes.
+   *
+   * @param message message displayed above the user input (given as a {@link String}.
+   * @return a {@link String} containing either "y" or "n"
+   * @throws IllegalArgumentException if the user enters anything other than y or n (ignores case).
+   */
+  public String yesNoOption(String message) throws IllegalArgumentException {
+    System.out.println(message);
+
+    String yesNoChoice = getInput();
+    if (yesNoChoice.equalsIgnoreCase("y") || yesNoChoice.equalsIgnoreCase("n")) {
+      return yesNoChoice.toLowerCase();
+    } else {
+      throw new IllegalArgumentException("Please input y/Y if yes, or n/N if no.");
     }
   }
 
@@ -199,7 +222,7 @@ public class TUI {
       return "=============================NOTHING TO DISPLAY IN FOOD STORAGE!=============================";
     } else {
       // creates the format for the table.
-      String tableFormat = "│ %-3d │ %-17s │ %,-9.1f │ %-9s │ %,-13.2f │ %,-10.2f │ %-10s │";
+      String tableFormat = "│ %-3d │ %-30s │ %,-9.1f │ %-9s │ %,-13.2f │ %,-10.2f │ %-10s │";
 
       ArrayList<String> rows = new ArrayList<>();
 
@@ -208,11 +231,11 @@ public class TUI {
       // character mapping: total: 93 chars: 3 chars num, 17 chars name, 9 chars amount, 9 Chars unit,
       //                                     7 chars Price, 10 chars Price/unit DD.MM.YYYY
       rows.add(
-          "+─────+───────────────────+───────────GROCERY INSTANCES───────────+────────────+────────────+");
+          "+─────+────────────────────────────────+───────────GROCERY INSTANCES───────────+────────────+────────────+");
       rows.add(
-          "│ Num │ Name              │ Amount    │ Unit      │ Total Price   │ Price/Unit │ BestBefore │");
+          "│ Num │ Name                           │ Amount    │ Unit      │ Total Price   │ Price/Unit │ BestBefore │");
       rows.add(
-          "+─────+───────────────────+───────────+───────────+───────────────+────────────+────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+───────────────+────────────+────────────+");
 
       groceryInstances.forEach(instance -> rows.add(String.format(tableFormat,
           groceryInstances.indexOf(instance) + 1, instance.getName(), instance.getAmount(),
@@ -221,7 +244,7 @@ public class TUI {
 
       // prints out bottom of table
       rows.add(
-          "+─────+───────────────────+───────────+───────────+───────────────+────────────+────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+───────────────+────────────+────────────+");
 
       return String.join("\n", rows);
     }

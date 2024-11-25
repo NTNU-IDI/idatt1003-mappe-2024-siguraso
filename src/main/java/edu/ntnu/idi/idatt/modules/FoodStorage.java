@@ -104,14 +104,21 @@ public class FoodStorage {
    * @return An ArrayList containing all instances of GroceryInstance.
    */
   public ArrayList<GroceryInstance> getAllGroceryInstances() {
+    this.removeEmptyInstances();
+
+    return this.groceryInstances;
+  }
+
+  /**
+   * Sorts the {@link ArrayList} of {@link GroceryInstance} alphabetically, then based on best
+   * before date.
+   */
+  public void sortGroceryInstances() {
     // sorts the list of grocery instances based on what the best before date is, and then comparing
     // the name alphabetically
     this.groceryInstances.sort(Comparator.comparing(GroceryInstance::getName)
         .thenComparing(GroceryInstance::getBestBeforeDate));
 
-    this.removeEmptyInstances();
-
-    return this.groceryInstances;
   }
 
   /**
@@ -121,6 +128,13 @@ public class FoodStorage {
    */
   public ArrayList<GroceryType> getAllGroceryTypes() {
     return this.groceryTypes;
+  }
+
+  /**
+   * Sorts the {@link ArrayList} of {@link GroceryType} alphabetically.
+   */
+  public void sortGroceryTypes() {
+    this.groceryTypes.sort(Comparator.comparing(GroceryType::getName));
   }
 
   // other methods

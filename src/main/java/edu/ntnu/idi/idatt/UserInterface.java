@@ -167,14 +167,13 @@ public class UserInterface {
   // menus that take the initiation values, and does the action.
 
   /**
-   * Takes the user input for what sub-menu the user wants to access.
+   * Takes the user input for what sub-menu the user wants to access, and initiates the given menu.
    */
   private void mainMenu() {
-    utils.clearScreen();
-
     boolean quitProgram = false;
 
     do {
+      utils.clearScreen();
       int mainMenuChoice = initiateMainMenuAction();
       switch (mainMenuChoice) {
         case 1 -> foodStorageMenu();
@@ -191,14 +190,16 @@ public class UserInterface {
    * initiates and  does the action in a user friendly way.
    */
   private void foodStorageMenu() {
-    utils.clearScreen();
-
     boolean returnToMainMenu = false;
+
     do {
+      utils.clearScreen();
       int foodStorageChoice = initiateFoodStorageAction();
 
       switch (foodStorageChoice) {
+        // add grocery
         case 1 -> {
+
         }
         case 2 -> {
         }
@@ -222,19 +223,42 @@ public class UserInterface {
    * and actually initiates and does the action in a user friendly way..
    */
   private void groceryTypeMenu() {
-    utils.clearScreen();
-
     boolean returnToMainMenu = false;
 
     do {
+      utils.clearScreen();
+
       int groceryTypeChoice = initiateGroceryTypeAction();
       switch (groceryTypeChoice) {
-        case 1 -> {
-        }
+        // add grocery type
+        case 1 -> addGroceryType();
+
+        // remove grocery type
         case 2 -> {
+          utils.clearScreen();
+          boolean hasEnteredYOrN = false;
+          String removeConfirmation = "";
+
+          while (!hasEnteredYOrN) {
+            try {
+              removeConfirmation = utils.yesNoOption(
+                  "Do you really wish to remove a grocery class? (Y/n)");
+              hasEnteredYOrN = true;
+            } catch (IllegalArgumentException e) {
+              System.out.println(e.getMessage() + "\n\n");
+            }
+          }
+
+          if (removeConfirmation.equals("y")) {
+            removeGroceryType();
+          }
+
         }
-        case 3 -> {
-        }
+
+        // edit grocery type
+        case 3 -> editGroceryType();
+
+        //return to main menu.
         case 4 -> returnToMainMenu = true;
       }
     } while (!returnToMainMenu);
@@ -245,10 +269,11 @@ public class UserInterface {
    * it by initializing different actions in a user-friendly way.
    */
   private void cookbookMenu() {
-    utils.clearScreen();
 
     boolean returnToMainMenu = false;
     do {
+      utils.clearScreen();
+
       int cookbookChoice = initiateCookbookAction();
       switch (cookbookChoice) {
         case 1 -> {
@@ -264,5 +289,180 @@ public class UserInterface {
     } while (!returnToMainMenu);
   }
 
+  // methods for adding and removing the different types of objects to the food storage/cookbook.
 
+  /**
+   * This method takes a series of user inputs, and puts them into a single {@link GroceryType},
+   * which is promptly added to the {@link FoodStorage}.
+   */
+  private void addGroceryType() {
+    utils.clearScreen();
+
+    boolean hasEnteredValidName = false;
+
+    foodStorage.addType(new GroceryType(null, null));
+
+    while (!hasEnteredValidName) {
+      try {
+        System.out.println(
+            "What is the name of the grocery class you would like to add? (max 30 characters)");
+        String TypeName = utils.getInput();
+        foodStorage.getAllGroceryTypes().getLast().setName(TypeName);
+
+        hasEnteredValidName = true;
+      } catch (IllegalArgumentException e) {
+        utils.clearScreen();
+        System.out.println(e.getMessage() + "\n\n");
+      }
+    }
+
+    boolean hasEnteredValidUnit = false;
+
+    utils.clearScreen();
+
+    while (!hasEnteredValidUnit) {
+      try {
+        System.out.println(
+            "What is the measurement unit most associated with '" + foodStorage.getAllGroceryTypes()
+                .getLast().getName() + "' (e.g. kg, pcs., L, etc.)?");
+        String UnitName = utils.getInput();
+        foodStorage.getAllGroceryTypes().getLast().setMeasurementUnit(UnitName);
+
+        hasEnteredValidUnit = true;
+      } catch (IllegalArgumentException e) {
+        utils.clearScreen();
+        System.out.println(e.getMessage() + "\n\n");
+      }
+    }
+
+    utils.clearScreen();
+
+    // returns either y or n.
+
+    boolean hasEnteredYOrN = false;
+    String keepCurrentType = "";
+
+    while (!hasEnteredYOrN) {
+      try {
+        keepCurrentType = utils.yesNoOption(
+            "Is this ok? \n\nName: " + foodStorage.getAllGroceryTypes().getLast().getName() +
+                "\nUnit: " + foodStorage.getAllGroceryTypes().getLast().getMeasurementUnit());
+
+        hasEnteredYOrN = true;
+      } catch (IllegalArgumentException e) {
+        System.out.println(e.getMessage() + "\n\n");
+      }
+    }
+
+    if (keepCurrentType.equals("n")) {
+      //if the user doesnt want to keep it, remove it from the list.
+      foodStorage.getAllGroceryTypes().removeLast();
+    }
+
+    foodStorage.sortGroceryTypes();
+  }
+
+  /**
+   * This method takes a user input that decides which {@link GroceryType} to remove from the
+   * {@link FoodStorage} based on a given index.
+   */
+  private void removeGroceryType() {
+    utils.clearScreen();
+
+    boolean hasEnteredValidIndex = false;
+    int removeIndex = 0;
+
+    while (!hasEnteredValidIndex) {
+      try {
+        removeIndex = utils.integerOption(utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
+            "\n\nPlease enter the number of the grocery class you wish to remove "
+            + "(see 'Num' on the above table).");
+
+        if (removeIndex < 1 || removeIndex > foodStorage.getAllGroceryTypes().size()) {
+          utils.clearScreen();
+          System.out.println(
+              "Please enter an integer 1 - " + foodStorage.getAllGroceryTypes().size() + ".\n");
+        } else {
+          hasEnteredValidIndex = true;
+        }
+      } catch (IllegalArgumentException e) {
+        utils.clearScreen();
+        System.out.println(e.getMessage() + "\n");
+      }
+    }
+    utils.clearScreen();
+
+    foodStorage.removeType(removeIndex);
+  }
+
+  /**
+   * This method takes a series of user inputs that decides how to edit a given
+   * {@link GroceryType}.
+   */
+  private void editGroceryType() {
+    utils.clearScreen();
+
+    boolean hasEnteredValidIndex = false;
+    int editIndex = 0;
+
+    while (!hasEnteredValidIndex) {
+      try {
+        editIndex = utils.integerOption(utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
+            "\n\nPlease enter the number of the grocery class you wish to edit "
+            + "(see 'Num' on the above table).");
+
+        if (editIndex < 1 || editIndex > foodStorage.getAllGroceryTypes().size()) {
+          utils.clearScreen();
+          System.out.println(
+              "Please enter an integer 1 - " + foodStorage.getAllGroceryTypes().size() + ".\n");
+        } else {
+          hasEnteredValidIndex = true;
+        }
+      } catch (IllegalArgumentException e) {
+        utils.clearScreen();
+        System.out.println(e.getMessage() + "\n");
+      }
+    }
+
+    boolean hasEnteredValidName = false;
+
+    while (!hasEnteredValidName) {
+      try {
+        System.out.println(
+            "What do you wish to change the name to? (from '" + foodStorage.getSpecificType(
+                    editIndex)
+                .getName() + "') (leave empty if you want it unchanged.) (max 30 characters)");
+
+        String newName = utils.getInput();
+
+        if (!newName.isEmpty()) {
+          foodStorage.getSpecificType(editIndex).setName(newName);
+        }
+        hasEnteredValidName = true;
+      } catch (IllegalArgumentException e) {
+        utils.clearScreen();
+        System.out.println(e.getMessage() + "\n\n");
+      }
+    }
+
+    boolean hasEnteredValidUnit = false;
+
+    while (!hasEnteredValidUnit) {
+      try {
+        System.out.println("What do you wish to change the measurement unit to? (from '"
+            + foodStorage.getSpecificType(editIndex).getMeasurementUnit()
+            + "') (leave empty if you want it unchanged.) (max 30 characters)");
+
+        String newUnit = utils.getInput();
+
+        if (!newUnit.isEmpty()) {
+          foodStorage.getSpecificType(editIndex).setMeasurementUnit(newUnit);
+        }
+        hasEnteredValidUnit = true;
+      } catch (IllegalArgumentException e) {
+        utils.clearScreen();
+        System.out.println(e.getMessage() + "\n\n");
+      }
+    }
+  }
 }
