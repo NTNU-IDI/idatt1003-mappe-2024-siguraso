@@ -196,19 +196,34 @@ public class UserInterface {
       utils.clearScreen();
       int foodStorageChoice = initiateFoodStorageAction();
 
+      utils.clearScreen();
       switch (foodStorageChoice) {
         // add grocery
         case 1 -> {
+          addGroceryInstance();
+          foodStorage.sortGroceryTypes();
+        }
 
-        }
+        // remove grocery
         case 2 -> {
+          String removeConfirmation = uiYesNoOption(
+              "Do you really wish to remove a grocery from the food storage? (Y/n)");
+
+          if (removeConfirmation.equals("y")) {
+            removeGroceryInstance();
+          }
         }
-        case 3 -> {
-        }
-        case 4 -> {
-        }
+
+        // search groceries
+        case 3 -> searchInFoodStorage();
+
+        // display out of date food
+        case 4 -> displayOutOfDate();
+
+        // edit grocery
         case 5 -> {
         }
+
         case 6 -> {
         }
         case 7 -> {
@@ -231,23 +246,16 @@ public class UserInterface {
       int groceryTypeChoice = initiateGroceryTypeAction();
       switch (groceryTypeChoice) {
         // add grocery type
-        case 1 -> addGroceryType();
+        case 1 -> {
+          addGroceryType();
+          foodStorage.sortGroceryTypes();
+        }
 
         // remove grocery type
         case 2 -> {
           utils.clearScreen();
-          boolean hasEnteredYOrN = false;
-          String removeConfirmation = "";
-
-          while (!hasEnteredYOrN) {
-            try {
-              removeConfirmation = utils.yesNoOption(
-                  "Do you really wish to remove a grocery class? (Y/n)");
-              hasEnteredYOrN = true;
-            } catch (IllegalArgumentException e) {
-              System.out.println(e.getMessage() + "\n\n");
-            }
-          }
+          String removeConfirmation = uiYesNoOption(
+              "Do you really wish to remove a grocery class? (Y/n");
 
           if (removeConfirmation.equals("y")) {
             removeGroceryType();
@@ -289,7 +297,8 @@ public class UserInterface {
     } while (!returnToMainMenu);
   }
 
-  // methods for adding and removing the different types of objects to the food storage/cookbook.
+  // methods for adding, removing and editing the different types of objects to the
+  // food storage/cookbook.
 
   /**
    * This method takes a series of user inputs, and puts them into a single {@link GroceryType},
@@ -339,27 +348,14 @@ public class UserInterface {
 
     // returns either y or n.
 
-    boolean hasEnteredYOrN = false;
-    String keepCurrentType = "";
-
-    while (!hasEnteredYOrN) {
-      try {
-        keepCurrentType = utils.yesNoOption(
-            "Is this ok? \n\nName: " + foodStorage.getAllGroceryTypes().getLast().getName() +
-                "\nUnit: " + foodStorage.getAllGroceryTypes().getLast().getMeasurementUnit());
-
-        hasEnteredYOrN = true;
-      } catch (IllegalArgumentException e) {
-        System.out.println(e.getMessage() + "\n\n");
-      }
-    }
+    String keepCurrentType = uiYesNoOption("Is this ok? (Y/n) \n\nName: " + foodStorage
+        .getAllGroceryTypes().getLast().getName() + "\nUnit: " + foodStorage.getAllGroceryTypes()
+        .getLast().getMeasurementUnit());
 
     if (keepCurrentType.equals("n")) {
       //if the user doesnt want to keep it, remove it from the list.
       foodStorage.getAllGroceryTypes().removeLast();
     }
-
-    foodStorage.sortGroceryTypes();
   }
 
   /**
@@ -369,30 +365,26 @@ public class UserInterface {
   private void removeGroceryType() {
     utils.clearScreen();
 
-    boolean hasEnteredValidIndex = false;
-    int removeIndex = 0;
+    try {
+      int removeIndex = chooseValidListIndex(
+          utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+              + "\nPlease enter the number of the grocery type you would like to remove "
+              + "(See Num on the above table).", foodStorage.getAllGroceryTypes().size());
 
-    while (!hasEnteredValidIndex) {
-      try {
-        removeIndex = utils.integerOption(utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
-            "\n\nPlease enter the number of the grocery class you wish to remove "
-            + "(see 'Num' on the above table).");
+      utils.clearScreen();
 
-        if (removeIndex < 1 || removeIndex > foodStorage.getAllGroceryTypes().size()) {
-          utils.clearScreen();
-          System.out.println(
-              "Please enter an integer 1 - " + foodStorage.getAllGroceryTypes().size() + ".\n");
-        } else {
-          hasEnteredValidIndex = true;
-        }
-      } catch (IllegalArgumentException e) {
-        utils.clearScreen();
-        System.out.println(e.getMessage() + "\n");
-      }
+      String curRemoved = foodStorage.getAllGroceryTypes().get(removeIndex).getName();
+
+      foodStorage.removeType(removeIndex);
+
+      System.out.println("Successfully removed grocery type: " + curRemoved + "."
+          + "\n\nPress ENTER to continue.");
+
+      utils.getInput();
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+      utils.getInput();
     }
-    utils.clearScreen();
-
-    foodStorage.removeType(removeIndex);
   }
 
   /**
@@ -402,67 +394,320 @@ public class UserInterface {
   private void editGroceryType() {
     utils.clearScreen();
 
-    boolean hasEnteredValidIndex = false;
-    int editIndex = 0;
+    try {
+      int editIndex = chooseValidListIndex(
+          utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+              + "\nPlease enter the number of the grocery type you would like to edit "
+              + "(See Num on the above table).", foodStorage.getAllGroceryTypes().size());
 
-    while (!hasEnteredValidIndex) {
+      utils.clearScreen();
+
+      boolean hasEnteredValidName = false;
+
+      while (!hasEnteredValidName) {
+        try {
+          System.out.println(
+              "What do you wish to change the name to? (from '" + foodStorage.getSpecificType(
+                      editIndex)
+                  .getName() + "') (leave empty if you want it unchanged.) \n(max 30 characters).");
+
+          String newName = utils.getInput();
+
+          if (!newName.isEmpty()) {
+            foodStorage.getSpecificType(editIndex).setName(newName);
+          }
+          hasEnteredValidName = true;
+        } catch (IllegalArgumentException e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n\n");
+        }
+      }
+
+      utils.clearScreen();
+
+      boolean hasEnteredValidUnit = false;
+
+      while (!hasEnteredValidUnit) {
+        try {
+          System.out.println("What do you wish to change the measurement unit to? (from '"
+              + foodStorage.getSpecificType(editIndex).getMeasurementUnit()
+              + "') (leave empty if you want it unchanged.) (max 16 characters)");
+
+          String newUnit = utils.getInput();
+
+          if (!newUnit.isEmpty()) {
+            foodStorage.getSpecificType(editIndex).setMeasurementUnit(newUnit);
+          }
+          hasEnteredValidUnit = true;
+        } catch (IllegalArgumentException e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n\n");
+        }
+      }
+
+      foodStorage.sortGroceryTypes();
+    } catch (IllegalArgumentException e) {
+      utils.clearScreen();
+      System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+
+      utils.getInput();
+    }
+  }
+
+  /**
+   * This method takes a series of inputs that lets the user define a new instance of
+   * {@link GroceryInstance} to add to the {@link FoodStorage}
+   */
+  private void addGroceryInstance() {
+    try {
+      int typeIndex;
+
+      String makeNewType = uiYesNoOption(utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+          + "\nWould you like to add a grocery based on an existing grocery class? (Y/n)");
+
+      if (makeNewType.equals("n")) {
+        utils.clearScreen();
+        addGroceryType();
+        // gets the size of the arraylist, so that it always gets the last element (the newest one).
+        typeIndex = foodStorage.getAllGroceryTypes().size();
+      } else {
+        utils.clearScreen();
+        typeIndex = chooseValidListIndex(utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+                + "\nPlease enter the number of the grocery class you wish to select (See Num in the above table)",
+            foodStorage.getAllGroceryTypes().size());
+      }
+
+      foodStorage.addInstance(new GroceryInstance(foodStorage.getSpecificType(typeIndex), 0.1,
+          0.1, null));
+
+      boolean hasEnteredValidAmount = false;
+
+      while (!hasEnteredValidAmount) {
+        try {
+          utils.clearScreen();
+
+          double amount = utils.doubleOption("Please enter the amount of '" +
+              foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '" +
+              foodStorage.getSpecificType(typeIndex).getName() +
+              "' that you would like to add to the food storage. (0.0 - 999.9)");
+
+          foodStorage.getAllGroceryInstances().getLast().setAmount(amount);
+
+          hasEnteredValidAmount = true;
+        } catch (Exception e) {
+          System.out.println(e.getMessage() + "\n\n");
+        }
+      }
+
+      boolean hasEnteredValidPrice = false;
+
+      while (!hasEnteredValidPrice) {
+        try {
+          double pricePerUnit = utils.doubleOption("Please enter the price per '" + foodStorage
+              .getSpecificType(typeIndex).getMeasurementUnit() +
+              "' (enter a decimal number 0.0 - 99999.9).");
+
+          foodStorage.getAllGroceryInstances().getLast().setPricePerUnit(pricePerUnit);
+
+          hasEnteredValidPrice = true;
+        } catch (Exception e) {
+          System.out.println(e.getMessage() + "\n\n");
+        }
+      }
+
+      boolean hasEnteredValidBestBefore = false;
+
+      while (!hasEnteredValidBestBefore) {
+        System.out.println("Please enter the best before date of the grocery (DD.MM.YYYY)");
+
+        String bestBefore = utils.getInput();
+
+        try {
+          foodStorage.getAllGroceryInstances().getLast().setBestBeforeDate(bestBefore);
+          hasEnteredValidBestBefore = true;
+
+        } catch (IllegalArgumentException e) {
+          System.out.println(e.getMessage() + "\n\n");
+        }
+      }
+      utils.clearScreen();
+
+      String isInstanceOK = uiYesNoOption(
+          "Name: " + foodStorage.getSpecificType(typeIndex).getName() +
+              "\nMeasurement Unit: " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() +
+              "\nAmount: " + foodStorage.getAllGroceryInstances().getLast().getAmount() + " "
+              + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() +
+              "\nPrice per " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + ": "
+              + foodStorage.getAllGroceryInstances().getLast().getPricePerUnit() +
+              "\nBest before: " + foodStorage.getAllGroceryInstances().getLast()
+              .getBestBeforeString() + "\n\nIs this OK? (Y/n)");
+
+      if (isInstanceOK.equals("n")) {
+        foodStorage.getAllGroceryInstances().removeLast();
+      }
+
+      foodStorage.sortGroceryTypes();
+    } catch (IllegalArgumentException e) {
+
+      utils.clearScreen();
+      System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+      utils.getInput();
+    }
+  }
+
+  /**
+   * This method takes a user input that decides which {@link GroceryInstance} to remove from the
+   * food storage.
+   */
+  private void removeGroceryInstance() {
+    utils.clearScreen();
+
+    try {
+      int removeIndex = chooseValidListIndex(
+          utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+              + "\nPlease enter the number of the grocery type you would like to remove "
+              + "(See Num on the above table).", foodStorage.getAllGroceryInstances().size());
+
+      utils.clearScreen();
+
+      foodStorage.removeInstance(removeIndex);
+    } catch (Exception e) {
+      utils.clearScreen();
+
+      System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+      utils.getInput();
+    }
+  }
+
+  /**
+   * This method takes a user input that defines a search term, which then gets searched for, which
+   * then displays a {@link TUI} table that displays the search results.
+   */
+  private void searchInFoodStorage() {
+    System.out.println("Please enter your search term below:");
+    String searchTerm = utils.getInput();
+
+    utils.clearScreen();
+
+    System.out.println(
+        "Search restults for the term '" + searchTerm + "': \n\n" + utils.foodStorageTable(
+            new ArrayList<>(foodStorage.groceryInstanceSearch(searchTerm)))
+            + "\n\nPress ENTER to continue...");
+
+    utils.getInput();
+  }
+
+  /**
+   * Method that more or less prints out all of the out of date food in the food storage, as well as
+   * the cumulative value of said groceries.
+   */
+  private void displayOutOfDate() {
+    System.out.println(
+        "All out of date food:\n\n" + utils.foodStorageTable(foodStorage.getOutOfDateInstances())
+            + "\n\nTotal Value: " + foodStorage.getOutOfDateValue()
+            + "\n\nPress ENTER to continue...");
+
+    utils.getInput();
+  }
+
+  // methods entering specific elements
+
+  /**
+   * This method creates a menu that makes sure the user picks an integer within a given lists
+   * index.
+   *
+   * @param message      dialog message as a {@link String} that displays above the user input.
+   * @param lengthOfList the length of a given list.
+   * @return the index of the given {@link GroceryType} that the user wants to initiate.
+   * @throws IllegalArgumentException id the given list length is empty.
+   */
+  private int chooseValidListIndex(String message, int lengthOfList)
+      throws IllegalArgumentException {
+    if (lengthOfList == 0) {
+      throw new IllegalArgumentException(
+          "Cannot fetch any groceries, since there are none!");
+    } else {
+      boolean hasEnteredValidIndex = false;
+      int index = 0;
+
+      while (!hasEnteredValidIndex) {
+        try {
+          index = utils.integerOption(message);
+
+          if (index < 1 || index > lengthOfList) {
+            utils.clearScreen();
+            System.out.println(
+                "Please enter an integer 1 - " + lengthOfList + ".\n");
+          } else {
+            hasEnteredValidIndex = true;
+          }
+        } catch (NumberFormatException e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n");
+        }
+      }
+      utils.clearScreen();
+
+      return index;
+    }
+  }
+
+  /**
+   * This method is used to display a dialog option that lets the user pick a double within a given
+   * intervall. If the given double is outside of this interval, the user gets instructed to try
+   * again until they enter a valid double.
+   *
+   * @param message dialog message given as a {@link String} that is shown above the user input.
+   * @param start   start of the interval (the lowest value the user can input) (given as an int).
+   * @param end     end of the interval (the highest value the user can input) (given as an int).
+   * @return a valid double defined by the user.
+   */
+  private double doubleOptionParameter(String message, double start, double end) {
+    boolean hasEnteredValidDouble = false;
+    double value = 0;
+    while (!hasEnteredValidDouble) {
       try {
-        editIndex = utils.integerOption(utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
-            "\n\nPlease enter the number of the grocery class you wish to edit "
-            + "(see 'Num' on the above table).");
+        value = utils.doubleOption(message +
+            "(Please enter a decimal number " + start + " - " + end + ".");
 
-        if (editIndex < 1 || editIndex > foodStorage.getAllGroceryTypes().size()) {
+        if (value >= start && value <= end) {
+          hasEnteredValidDouble = true;
+        } else {
           utils.clearScreen();
           System.out.println(
-              "Please enter an integer 1 - " + foodStorage.getAllGroceryTypes().size() + ".\n");
-        } else {
-          hasEnteredValidIndex = true;
+              "Please enter a decimal number between " + start + " and " + end + ".\n");
         }
-      } catch (IllegalArgumentException e) {
+      } catch (NumberFormatException e) {
         utils.clearScreen();
         System.out.println(e.getMessage() + "\n");
       }
     }
 
-    boolean hasEnteredValidName = false;
-
-    while (!hasEnteredValidName) {
-      try {
-        System.out.println(
-            "What do you wish to change the name to? (from '" + foodStorage.getSpecificType(
-                    editIndex)
-                .getName() + "') (leave empty if you want it unchanged.) (max 30 characters)");
-
-        String newName = utils.getInput();
-
-        if (!newName.isEmpty()) {
-          foodStorage.getSpecificType(editIndex).setName(newName);
-        }
-        hasEnteredValidName = true;
-      } catch (IllegalArgumentException e) {
-        utils.clearScreen();
-        System.out.println(e.getMessage() + "\n\n");
-      }
-    }
-
-    boolean hasEnteredValidUnit = false;
-
-    while (!hasEnteredValidUnit) {
-      try {
-        System.out.println("What do you wish to change the measurement unit to? (from '"
-            + foodStorage.getSpecificType(editIndex).getMeasurementUnit()
-            + "') (leave empty if you want it unchanged.) (max 30 characters)");
-
-        String newUnit = utils.getInput();
-
-        if (!newUnit.isEmpty()) {
-          foodStorage.getSpecificType(editIndex).setMeasurementUnit(newUnit);
-        }
-        hasEnteredValidUnit = true;
-      } catch (IllegalArgumentException e) {
-        utils.clearScreen();
-        System.out.println(e.getMessage() + "\n\n");
-      }
-    }
+    return value;
   }
+
+  /**
+   * This method is a UI method that uses the {@link TUI} method yesNoOption, and makes it more user
+   * friendly by, for instance, catching the errors that method throws.
+   *
+   * @param message dialog message given as a {@link String} that displays above the user input.
+   * @return a string containing either "y" or "n" (lowercase) that indicates yes or no from the
+   * user.
+   */
+  private String uiYesNoOption(String message) {
+    boolean hasEnteredYOrN = false;
+    String yesNoChoice = "";
+
+    while (!hasEnteredYOrN) {
+      try {
+        yesNoChoice = utils.yesNoOption(message);
+        hasEnteredYOrN = true;
+      } catch (IllegalArgumentException e) {
+        System.out.println(e.getMessage() + "\n\n");
+      }
+    }
+
+    return yesNoChoice;
+  }
+
 }

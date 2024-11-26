@@ -120,30 +120,50 @@ public class GroceryInstance {
   // Set-methods
 
   /**
-   * Sets the amount of the GroceryInstance.
+   * Sets the amount of the {@link GroceryInstance}.
    *
    * @param newAmount a double containing the new Amount.
+   * @throws IllegalArgumentException if the given amount is less than 0, or more than 99999.9
    */
-  public void setAmount(double newAmount) {
-    this.amount = newAmount;
+  public void setAmount(double newAmount) throws IllegalArgumentException {
+    if (newAmount > 0 && newAmount < 999.9) {
+      this.amount = newAmount;
+    } else {
+      throw new IllegalArgumentException("The grocery amount must be between 0 and 999.9!");
+    }
   }
 
   /**
    * Sets the price per unit
    *
    * @param newPricePerUnit a double containing the new price per unit.
+   * @throws IllegalArgumentException if the given price per unit is less than 0 or more than
+   *                                  99999.9.
    */
-  public void setPricePerUnit(double newPricePerUnit) {
-    this.pricePerUnit = newPricePerUnit;
+  public void setPricePerUnit(double newPricePerUnit) throws IllegalArgumentException {
+    if (newPricePerUnit > 0 && newPricePerUnit < 99999.9) {
+      this.pricePerUnit = newPricePerUnit;
+    } else {
+      throw new IllegalArgumentException(
+          "The grocery price per unit must be between 0 and 99999.9!");
+    }
+
   }
 
   /**
    * Sets the best before date.
    *
-   * @param newBestBefore the new best before date in the format DD.MM.YYYY
+   * @param newBestBefore the new best before date as a {@link String} in the format DD.MM.YYYY.
+   * @throws IllegalArgumentException if the given date is invalid (e.g. has an invalid month, day
+   *                                  or year, or a wrong date format.
    */
-  public void setBestBeforeDate(String newBestBefore) {
-    this.bestBefore = newBestBefore;
+  public void setBestBeforeDate(String newBestBefore) throws IllegalArgumentException {
+    if (isValidDate(newBestBefore)) {
+      this.bestBefore = newBestBefore;
+    } else {
+      throw new IllegalArgumentException("Please enter a valid date in the format DD.MM.YYYY");
+    }
+
   }
 
   // Other void-methods.
@@ -169,12 +189,40 @@ public class GroceryInstance {
   // Boolean methods
 
   /**
-   * Checks weather or not this GroceryInstance is out of date.
+   * Checks weather or not this {@link GroceryInstance} is out of date.
    */
   public boolean isOutOfDate() {
     Date today = new Date();
 
     return this.getBestBeforeDate().before(today);
+  }
+
+  /**
+   * Checks weather or not an entered date is a valid date.
+   *
+   * @param dateString the date given as a {@link String} in the format DD.MM.YYYY
+   * @return {@link Boolean} true or false that checks if the date is valid.
+   */
+  private boolean isValidDate(String dateString) {
+    String[] dateParts = dateString.split("\\.");
+
+    try {
+      int day = Integer.parseInt(dateParts[0]);
+      int month = Integer.parseInt(dateParts[1]);
+      int year = Integer.parseInt(dateParts[2]);
+
+      // if the different parts are as long as they should be and are in an amount that is
+      // valid when it comes to date, it is a valid date.
+      return
+          (dateParts[0].length() == 2 && dateParts[1].length() == 2 && dateParts[2].length() == 4)
+              &&
+              (day > 0 && day <= 31 && month > 0 && month <= 12 && year > 0 && year < 9999);
+
+    } catch (NumberFormatException e) {
+      // if it runs into an error when parsing the day, month and year, it isnt a valid date
+      // because it probably contains a different datatype than integer.
+      return false;
+    }
   }
 
 }

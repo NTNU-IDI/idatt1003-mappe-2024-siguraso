@@ -219,7 +219,7 @@ public class TUI {
   public String foodStorageTable(ArrayList<GroceryInstance> groceryInstances) {
     if (groceryInstances.isEmpty()) {
       //tells the user that there is no items in food storage if there is none.
-      return "=============================NOTHING TO DISPLAY IN FOOD STORAGE!=============================";
+      return "======================================NO GROCERIES TO DISPLAY!=========================================";
     } else {
       // creates the format for the table.
       String tableFormat = "│ %-3d │ %-30s │ %,-9.1f │ %-9s │ %,-13.2f │ %,-10.2f │ %-10s │";
@@ -231,7 +231,7 @@ public class TUI {
       // character mapping: total: 93 chars: 3 chars num, 17 chars name, 9 chars amount, 9 Chars unit,
       //                                     7 chars Price, 10 chars Price/unit DD.MM.YYYY
       rows.add(
-          "+─────+────────────────────────────────+───────────GROCERY INSTANCES───────────+────────────+────────────+");
+          "+─────+────────────────────────────────+────────GROCERIES──────────────────────+────────────+────────────+");
       rows.add(
           "│ Num │ Name                           │ Amount    │ Unit      │ Total Price   │ Price/Unit │ BestBefore │");
       rows.add(
