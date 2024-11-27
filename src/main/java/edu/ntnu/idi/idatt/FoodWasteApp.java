@@ -1,5 +1,7 @@
 package edu.ntnu.idi.idatt;
 
+import edu.ntnu.idi.idatt.view.UserInterface;
+
 public class FoodWasteApp {
 
   public static void main(String[] args) {
