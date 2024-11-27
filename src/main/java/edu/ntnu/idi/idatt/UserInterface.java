@@ -7,6 +7,7 @@ import edu.ntnu.idi.idatt.modules.GroceryType;
 import edu.ntnu.idi.idatt.modules.Recipe;
 import edu.ntnu.idi.idatt.utils.TUI;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Class that creates the menus of the program, and handles the user input for what the user wants
@@ -177,8 +178,11 @@ public class UserInterface {
       int mainMenuChoice = initiateMainMenuAction();
       switch (mainMenuChoice) {
         case 1 -> foodStorageMenu();
+
         case 2 -> groceryTypeMenu();
+
         case 3 -> cookbookMenu();
+
         case 4 -> quitProgram = true;
       }
     } while (!quitProgram);
@@ -221,13 +225,15 @@ public class UserInterface {
         case 4 -> displayOutOfDate();
 
         // edit grocery
-        case 5 -> {
-        }
+        case 5 -> editGroceryInstance();
 
-        case 6 -> {
-        }
-        case 7 -> {
-        }
+        // find cumulatice value of many groceries.
+        case 6 -> valueOfMultipleGroceries();
+
+        // remove amount from specific grocery
+        case 7 -> removeAmountFromSpecificGrocery();
+
+        //return to main menu
         case 8 -> returnToMainMenu = true;
       }
     } while (!returnToMainMenu);
@@ -284,10 +290,28 @@ public class UserInterface {
 
       int cookbookChoice = initiateCookbookAction();
       switch (cookbookChoice) {
+        // view recipe
         case 1 -> {
+          try {
+            int viewIndex = chooseValidListIndex(
+                utils.cookbookTable(cookBook.getRecipes(), foodStorage) +
+                    "\nEnter the number of the recipe you would like to view (See Num on the above table).",
+                cookBook.getRecipes().size());
+
+            viewRecipe(viewIndex);
+          } catch (Exception e) {
+            utils.clearScreen();
+            System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+
+            utils.getInput();
+          }
         }
+
+        // create recipe
         case 2 -> {
+
         }
+
         case 3 -> {
         }
         case 4 -> {
@@ -299,6 +323,8 @@ public class UserInterface {
 
   // methods for adding, removing and editing the different types of objects to the
   // food storage/cookbook.
+
+  // grocery class menu
 
   /**
    * This method takes a series of user inputs, and puts them into a single {@link GroceryType},
@@ -454,6 +480,8 @@ public class UserInterface {
     }
   }
 
+  //grocerey instance menu
+
   /**
    * This method takes a series of inputs that lets the user define a new instance of
    * {@link GroceryInstance} to add to the {@link FoodStorage}
@@ -482,10 +510,10 @@ public class UserInterface {
 
       boolean hasEnteredValidAmount = false;
 
+      utils.clearScreen();
+
       while (!hasEnteredValidAmount) {
         try {
-          utils.clearScreen();
-
           double amount = utils.doubleOption("Please enter the amount of '" +
               foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '" +
               foodStorage.getSpecificType(typeIndex).getName() +
@@ -495,6 +523,7 @@ public class UserInterface {
 
           hasEnteredValidAmount = true;
         } catch (Exception e) {
+          utils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
         }
       }
@@ -527,6 +556,7 @@ public class UserInterface {
           hasEnteredValidBestBefore = true;
 
         } catch (IllegalArgumentException e) {
+          utils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
         }
       }
@@ -564,7 +594,7 @@ public class UserInterface {
 
     try {
       int removeIndex = chooseValidListIndex(
-          utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+          utils.foodStorageTable(foodStorage.getAllGroceryInstances())
               + "\nPlease enter the number of the grocery type you would like to remove "
               + "(See Num on the above table).", foodStorage.getAllGroceryInstances().size());
 
@@ -610,6 +640,194 @@ public class UserInterface {
     utils.getInput();
   }
 
+  /**
+   * Method that lets the user edit a {@link GroceryInstance} by showing a user-friendly ui.
+   */
+  private void editGroceryInstance() {
+    try {
+      int editIndex = chooseValidListIndex(
+          utils.foodStorageTable(foodStorage.getAllGroceryInstances())
+              + "\nPlease enter the number of the grocery you would like to edit. "
+              + "(See Num on the above table).", foodStorage.getAllGroceryInstances().size());
+
+      boolean hasEnteredValidAmount = false;
+
+      utils.clearScreen();
+
+      while (!hasEnteredValidAmount) {
+        try {
+          double amount = utils.doubleOption(
+              "Please enter the new amount you would like to change to. (Changing from "
+                  + foodStorage.getSpecificInstance(editIndex).getAmount()
+                  + " " + foodStorage.getSpecificInstance(editIndex).getMeasurementUnit()
+                  + ".) (Enter a decimal number 0.0 - 999.9.) "
+                  + "\n(Enter '0' if you don't want to change it.)");
+
+          // Since the set method for the grocery instance class doesn't allow for an amount to be 0
+          // we make the user input 0 if they don't want to change the value.
+          if (amount == 0) {
+            hasEnteredValidAmount = true;
+          } else {
+            foodStorage.getSpecificInstance(editIndex).setAmount(amount);
+            hasEnteredValidAmount = true;
+          }
+
+        } catch (Exception e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n");
+        }
+      }
+
+      utils.clearScreen();
+      boolean hasEnteredValidPrice = false;
+
+      while (!hasEnteredValidPrice) {
+        try {
+          double pricePerUnit = utils.doubleOption("Please enter the price per '" + foodStorage
+              .getSpecificInstance(editIndex).getMeasurementUnit() +
+              "' you would like to change to. (Changing from " + foodStorage.getSpecificInstance(
+              editIndex).getPricePerUnit() + ".) (enter a decimal number 0.0 - 99999.9.)"
+              + "\n(Enter '0' if you dont want to change it.)");
+
+          // Since the set method for the grocery instance class doesn't allow for an amount to be 0
+          // we make the user input 0 if they don't want to change the value.
+          if (pricePerUnit == 0) {
+            hasEnteredValidPrice = true;
+          } else {
+            foodStorage.getSpecificInstance(editIndex).setPricePerUnit(pricePerUnit);
+            hasEnteredValidPrice = true;
+          }
+
+        } catch (Exception e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n");
+        }
+      }
+
+      utils.clearScreen();
+      boolean hasEnteredValidBestBefore = false;
+
+      while (!hasEnteredValidBestBefore) {
+        System.out.println(
+            "Please the best before date you would like to change to (DD.MM.YYYY). (Changing from "
+                + foodStorage.getSpecificInstance(editIndex).getBestBeforeString() + ".)"
+                + "\n(Leave empty is you don't want to change it.)");
+
+        String bestBefore = utils.getInput();
+
+        try {
+          if (bestBefore.isEmpty()) {
+            hasEnteredValidBestBefore = true;
+          } else {
+            foodStorage.getSpecificInstance(editIndex).setBestBeforeDate(bestBefore);
+            hasEnteredValidBestBefore = true;
+          }
+        } catch (IllegalArgumentException e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n");
+        }
+      }
+      utils.clearScreen();
+
+    } catch (Exception e) {
+      System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+    }
+  }
+
+  /**
+   * Method that lets the user pick numerous {@link GroceryInstance} and find the combined price of
+   * said instances.
+   */
+  private void valueOfMultipleGroceries() {
+    try {
+      int[] indexes = chooseMultipleValidListIndex(
+          utils.foodStorageTable(foodStorage.getAllGroceryInstances())
+              + "\n(See Num on the above table)", foodStorage.getAllGroceryInstances().size());
+
+      ArrayList<GroceryInstance> combinedValueInstances = new ArrayList<>();
+
+      Arrays.stream(indexes)
+          .forEach(index -> combinedValueInstances.add(foodStorage.getSpecificInstance(index)));
+
+      double cumulativeValue = combinedValueInstances.stream()
+          .mapToDouble(GroceryInstance::getPrice).sum();
+
+      utils.clearScreen();
+
+      System.out.println(
+          utils.foodStorageTable(combinedValueInstances) + "\nCumulative value: " + cumulativeValue
+              + "\n\nPress ENTER to continue...");
+
+      utils.getInput();
+
+    } catch (Exception e) {
+      utils.clearScreen();
+      System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+    }
+  }
+
+  /**
+   * Method that lets the user pick a {@link GroceryInstance} to remove a certain amount from.
+   */
+  private void removeAmountFromSpecificGrocery() {
+    int removeAmountIndex = chooseValidListIndex(
+        utils.foodStorageTable(foodStorage.getAllGroceryInstances())
+            + "\n\nFrom which grocery do you wish to remove?",
+        foodStorage.getAllGroceryInstances().size());
+
+    double amountToRemove = doubleOptionParameter("How many '" + foodStorage.getSpecificInstance(
+            removeAmountIndex).getMeasurementUnit() + "' of '" + foodStorage.getSpecificInstance(
+            removeAmountIndex).getName() + "' do you wish to remove?", 0.0,
+        foodStorage.getSpecificInstance(removeAmountIndex).getAmount());
+
+    double oldAmount = foodStorage.getSpecificInstance(removeAmountIndex).getAmount();
+    double newAmount = oldAmount - amountToRemove;
+
+    utils.clearScreen();
+    String yesNoChoice = uiYesNoOption(
+        "From old amount: " + oldAmount + "\nTo new amount: " + newAmount
+            + "\n\nIs this OK? (Y/n)");
+
+    if (yesNoChoice.equalsIgnoreCase("y")) {
+      foodStorage.getSpecificInstance(removeAmountIndex).setAmount(newAmount);
+    }
+  }
+
+  // recipe menu
+
+  /**
+   * Method that lets the user view a recipe of their choice.
+   *
+   * @param viewIndex the index of the recipe that the user would like to view.
+   */
+  private void viewRecipe(int viewIndex) {
+    Recipe thisRecipe = cookBook.getSpecificRecipe(viewIndex);
+    ArrayList<String> instructions = thisRecipe.getInstructions();
+
+    instructions.forEach(instruction -> {
+      int thisIndex = instructions.indexOf(instruction);
+
+      instructions.set(thisIndex, (thisIndex + 1) + ": " + instruction);
+    });
+
+    System.out.println("Name: " + thisRecipe.getName() + "\nDescription: "
+        + thisRecipe.getDescription() + "\n" + utils.ingredientsTable(thisRecipe.getIngredients(),
+        thisRecipe.getApproximations()) + "\nInstructions: " + String.join("\n", instructions));
+
+    System.out.println("\n\nPress ENTER to continue...");
+
+    utils.getInput();
+  }
+
+  /**
+   * Method that lets the user create an instance of {@link Recipe} by defining its characteristics
+   */
+  private void createRecipe() {
+    System.out.println("What is the name of the recipe?");
+  }
+
+  // cookbook menu
+
   // methods entering specific elements
 
   /**
@@ -625,7 +843,7 @@ public class UserInterface {
       throws IllegalArgumentException {
     if (lengthOfList == 0) {
       throw new IllegalArgumentException(
-          "Cannot fetch any groceries, since there are none!");
+          "Cannot fetch any groceries, grocery classes/ or recipes, since there are none!");
     } else {
       boolean hasEnteredValidIndex = false;
       int index = 0;
@@ -668,7 +886,7 @@ public class UserInterface {
     while (!hasEnteredValidDouble) {
       try {
         value = utils.doubleOption(message +
-            "(Please enter a decimal number " + start + " - " + end + ".");
+            " (Please enter a decimal number " + start + " - " + end + ")");
 
         if (value >= start && value <= end) {
           hasEnteredValidDouble = true;
@@ -684,6 +902,70 @@ public class UserInterface {
     }
 
     return value;
+  }
+
+
+  /**
+   * This method is used to create a dialog menu that lets the user choose multiple different
+   * indexes from a given list.
+   *
+   * @param message      the dialog message that will display over the user input.
+   * @param lengthOfList the length of the given list.
+   * @return an array of integers containing all indexes the user wants to access.
+   * @throws IllegalArgumentException if the given list is empty.
+   */
+  private int[] chooseMultipleValidListIndex(String message, int lengthOfList)
+      throws IllegalArgumentException {
+    if (lengthOfList == 0) {
+      throw new IllegalArgumentException(
+          "Can't fetch grocery instances, since there are none stored in "
+              + "food storage!");
+    }
+
+    ArrayList<Integer> indexes = new ArrayList<>();
+
+    boolean hasQuit = false;
+
+    while (!hasQuit) {
+      try {
+        utils.clearScreen();
+
+        System.out.println(message);
+
+        System.out.println("\nCurrent added values: " + indexes);
+
+        System.out.println(
+            "Enter another value: (1 - " + lengthOfList + ").");
+
+        int currentIndex = utils.integerOption("");
+
+        if (currentIndex > 0 && currentIndex <= lengthOfList && !indexes.contains(currentIndex)) {
+          indexes.add(currentIndex);
+        } else {
+          utils.clearScreen();
+          System.out.println("Please enter an integer (1 - " +
+              foodStorage.getAllGroceryInstances().size()
+              + "), that you haven't already added! \n");
+        }
+      } catch (Exception e) {
+        utils.clearScreen();
+        System.out.println("Please enter an integer (1 - " +
+            foodStorage.getAllGroceryInstances().size() + "), that you haven't already added!\n");
+      }
+
+      utils.clearScreen();
+
+      System.out.println(message);
+
+      System.out.println("\nCurrent added values: " + indexes);
+
+      String continueAddingIndexes = uiYesNoOption("\nWould you like to add more values? (Y/n)");
+
+      if (continueAddingIndexes.equals("n")) {
+        hasQuit = true;
+      }
+    }
+    return indexes.stream().mapToInt(i -> i).toArray();
   }
 
   /**

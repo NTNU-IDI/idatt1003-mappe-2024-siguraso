@@ -218,7 +218,7 @@ public class GroceryInstance {
               &&
               (day > 0 && day <= 31 && month > 0 && month <= 12 && year > 0 && year < 9999);
 
-    } catch (NumberFormatException e) {
+    } catch (Exception e) {
       // if it runs into an error when parsing the day, month and year, it isnt a valid date
       // because it probably contains a different datatype than integer.
       return false;
