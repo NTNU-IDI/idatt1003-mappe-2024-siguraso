@@ -292,6 +292,7 @@ public class UserInterface {
       switch (cookbookChoice) {
         // view recipe
         case 1 -> {
+          utils.clearScreen();
           try {
             int viewIndex = chooseValidListIndex(
                 utils.cookbookTable(cookBook.getRecipes(), foodStorage) +
@@ -308,14 +309,22 @@ public class UserInterface {
         }
 
         // create recipe
-        case 2 -> {
+        case 2 -> createRecipe();
 
-        }
-
+        // remove recipe
         case 3 -> {
+          String removeConfirmation = uiYesNoOption(
+              "Are you sure you wish to remove a recipe from the cookbook? (Y/n)");
+
+          if (removeConfirmation.equals("y")) {
+            removeRecipe();
+          }
         }
-        case 4 -> {
-        }
+
+        // view suggested recipes
+        case 4 -> viewSuggestedRecipes();
+
+        // return to main menu.
         case 5 -> returnToMainMenu = true;
       }
     } while (!returnToMainMenu);
@@ -665,12 +674,10 @@ public class UserInterface {
 
           // Since the set method for the grocery instance class doesn't allow for an amount to be 0
           // we make the user input 0 if they don't want to change the value.
-          if (amount == 0) {
-            hasEnteredValidAmount = true;
-          } else {
+          if (amount != 0) {
             foodStorage.getSpecificInstance(editIndex).setAmount(amount);
-            hasEnteredValidAmount = true;
           }
+          hasEnteredValidAmount = true;
 
         } catch (Exception e) {
           utils.clearScreen();
@@ -691,12 +698,10 @@ public class UserInterface {
 
           // Since the set method for the grocery instance class doesn't allow for an amount to be 0
           // we make the user input 0 if they don't want to change the value.
-          if (pricePerUnit == 0) {
-            hasEnteredValidPrice = true;
-          } else {
+          if (pricePerUnit != 0) {
             foodStorage.getSpecificInstance(editIndex).setPricePerUnit(pricePerUnit);
-            hasEnteredValidPrice = true;
           }
+          hasEnteredValidPrice = true;
 
         } catch (Exception e) {
           utils.clearScreen();
@@ -716,12 +721,10 @@ public class UserInterface {
         String bestBefore = utils.getInput();
 
         try {
-          if (bestBefore.isEmpty()) {
-            hasEnteredValidBestBefore = true;
-          } else {
+          if (!bestBefore.isEmpty()) {
             foodStorage.getSpecificInstance(editIndex).setBestBeforeDate(bestBefore);
-            hasEnteredValidBestBefore = true;
           }
+          hasEnteredValidBestBefore = true;
         } catch (IllegalArgumentException e) {
           utils.clearScreen();
           System.out.println(e.getMessage() + "\n");
@@ -793,7 +796,7 @@ public class UserInterface {
     }
   }
 
-  // recipe menu
+  // cookbook menu
 
   /**
    * Method that lets the user view a recipe of their choice.
@@ -802,7 +805,9 @@ public class UserInterface {
    */
   private void viewRecipe(int viewIndex) {
     Recipe thisRecipe = cookBook.getSpecificRecipe(viewIndex);
-    ArrayList<String> instructions = thisRecipe.getInstructions();
+
+    // create a deep copy so that it wont change the properties of the arraylist in the object
+    ArrayList<String> instructions = new ArrayList<>(thisRecipe.getInstructions());
 
     instructions.forEach(instruction -> {
       int thisIndex = instructions.indexOf(instruction);
@@ -812,9 +817,9 @@ public class UserInterface {
 
     System.out.println("Name: " + thisRecipe.getName() + "\nDescription: "
         + thisRecipe.getDescription() + "\n" + utils.ingredientsTable(thisRecipe.getIngredients(),
-        thisRecipe.getApproximations()) + "\nInstructions: " + String.join("\n", instructions));
+        thisRecipe.getApproximations()) + "\n\nInstructions:\n" + String.join("\n", instructions));
 
-    System.out.println("\n\nPress ENTER to continue...");
+    System.out.println("\n\nPress ENTER to to go back...");
 
     utils.getInput();
   }
@@ -823,10 +828,206 @@ public class UserInterface {
    * Method that lets the user create an instance of {@link Recipe} by defining its characteristics
    */
   private void createRecipe() {
-    System.out.println("What is the name of the recipe?");
+    // placeholder recipe to make it set-able, so that it can throw the errors at the right time.
+    Recipe newRecipe = new Recipe("", "", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+
+    boolean hasEnteredValidName = false;
+
+    while (!hasEnteredValidName) {
+      utils.clearScreen();
+
+      System.out.println("What is the name of the recipe? (max 45 characters)");
+      String name = utils.getInput();
+      try {
+        newRecipe.setName(name);
+
+        hasEnteredValidName = true;
+      } catch (IllegalArgumentException e) {
+        utils.clearScreen();
+
+        System.out.println(e.getMessage() + "\n");
+      }
+    }
+
+    // no need to try the description, since it has no character limit.
+    utils.clearScreen();
+    System.out.println("Enter a short description for this recipe.");
+    String description = utils.getInput();
+    newRecipe.setDescription(description);
+
+    boolean hasEnteredValidInteger = false;
+
+    int amountOfIngredients = 0;
+
+    while (!hasEnteredValidInteger) {
+      utils.clearScreen();
+
+      try {
+        amountOfIngredients = utils.integerOption("How many ingredients are there in this recipe?");
+
+        hasEnteredValidInteger = true;
+      } catch (Exception e) {
+        utils.clearScreen();
+
+        System.out.println(e.getMessage() + "\n");
+      }
+    }
+
+    utils.clearScreen();
+
+    for (int i = 0; i < amountOfIngredients; i++) {
+      int typeIndex = 0;
+      try {
+        typeIndex = chooseValidListIndex("Ingredient " + (i + 1) + "\n\n" +
+                utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
+                "\nPlease choose which ingredient to add. (Enter the number 'Num' of the ingredient you would like to add.)",
+            foodStorage.getAllGroceryTypes().size());
+        utils.clearScreen();
+      } catch (IllegalArgumentException e) {
+        utils.clearScreen();
+        System.out.println(e.getMessage() + "\n");
+
+      }
+
+      boolean hasEnteredValidAmount = false;
+
+      // placeholder ingredient to add to the recipe so that it throws the exceptions in the right
+      // places.
+      GroceryInstance newIngredient = new GroceryInstance(foodStorage.getSpecificType(typeIndex),
+          0.1, 0.1, null);
+
+      while (!hasEnteredValidAmount) {
+        try {
+          double ingredientAmount = utils.doubleOption(
+              "How many '" + newIngredient.getMeasurementUnit() + "' of '" + newIngredient.getName()
+                  + "' is used in this recipe?");
+
+          newIngredient.setAmount(ingredientAmount);
+
+          utils.clearScreen();
+          hasEnteredValidAmount = true;
+        } catch (Exception e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n");
+        }
+      }
+
+      newRecipe.addIngredient(newIngredient);
+
+      utils.clearScreen();
+
+      boolean hasEnteredValidApproximation = false;
+
+      while (!hasEnteredValidApproximation) {
+
+        System.out.println("What is an approximation for " + newIngredient.getAmount() + " "
+            + newIngredient.getMeasurementUnit() + " of " + newIngredient.getName()
+            + "? (e.g. 1 tablespoon, 1 teaspoon, cup, etc.)");
+
+        String approximation = utils.getInput();
+
+        utils.clearScreen();
+
+        try {
+          newRecipe.addApproximation(approximation);
+          hasEnteredValidApproximation = true;
+        } catch (IllegalArgumentException e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n");
+        }
+      }
+    }
+
+    hasEnteredValidInteger = false;
+
+    int amountOfInstructions = 0;
+
+    utils.clearScreen();
+
+    while (!hasEnteredValidInteger) {
+      try {
+        amountOfInstructions = utils.integerOption(
+            "How many steps are there in the instructions to this recipe?");
+
+        hasEnteredValidInteger = true;
+
+        utils.clearScreen();
+      } catch (Exception e) {
+        utils.clearScreen();
+
+        System.out.println(e.getMessage() + "\n");
+      }
+    }
+
+    utils.clearScreen();
+
+    for (int i = 0; i < amountOfInstructions; i++) {
+      System.out.println("\nEnter step number " + (i + 1) + " of " + amountOfInstructions);
+
+      String currentStep = utils.getInput();
+
+      newRecipe.addInstruction(currentStep);
+    }
+
+    utils.clearScreen();
+
+    System.out.println("\n\nName: " + newRecipe.getName() + "\n" +
+        "Description: " + newRecipe.getDescription() + "\n\n" + utils.ingredientsTable(
+        newRecipe.getIngredients(), newRecipe.getApproximations()) + "\n\nInstructions: ");
+
+    newRecipe.getInstructions().forEach(instruction ->
+        System.out.println(
+            (newRecipe.getInstructions().indexOf(instruction) + 1) + ": " + instruction));
+
+    String addRecipe = uiYesNoOption("\n\nIs this Recipe OK? (Y/n)");
+
+    if (addRecipe.equalsIgnoreCase("y")) {
+      cookBook.addRecipe(newRecipe);
+    }
   }
 
-  // cookbook menu
+  /**
+   * Method that lets the user remove one recipe of their choice from the cookbook.
+   */
+  private void removeRecipe() {
+    utils.clearScreen();
+
+    try {
+      int removeIndex = chooseValidListIndex(utils.cookbookTable(cookBook.getRecipes(), foodStorage)
+              + "Please enter the number (See 'Num') of the recipe you would like to remove.",
+          cookBook.getRecipes().size());
+
+      cookBook.removeRecipe(removeIndex);
+    } catch (IllegalArgumentException e) {
+      utils.clearScreen();
+
+      System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+      utils.getInput();
+    }
+
+
+  }
+
+  /**
+   * Method that gives a recipe suggestion if you have half or more of a recipe's ingredients
+   * available in the food storage.
+   */
+  private void viewSuggestedRecipes() {
+    utils.clearScreen();
+    String includeOutOfDateFood = uiYesNoOption(
+        "Would you like to include out of date groceries into consideration for what ingredients are currently available? (Y/n)");
+
+    utils.clearScreen();
+
+    System.out.println(
+        "NOTE: Recipes are only suggested if you have half or more of the ingredients available in the food storage.\n\n"
+            + "Suggested Recipes:\n" +
+            utils.cookbookTable(
+                cookBook.recipeSuggestion(foodStorage, includeOutOfDateFood.equals("y")),
+                foodStorage) + "\n\nPress ENTER to go back...");
+
+    utils.getInput();
+  }
 
   // methods entering specific elements
 
@@ -980,12 +1181,14 @@ public class UserInterface {
     boolean hasEnteredYOrN = false;
     String yesNoChoice = "";
 
+    System.out.println(message);
+
     while (!hasEnteredYOrN) {
       try {
-        yesNoChoice = utils.yesNoOption(message);
+        yesNoChoice = utils.yesNoOption();
         hasEnteredYOrN = true;
       } catch (IllegalArgumentException e) {
-        System.out.println(e.getMessage() + "\n\n");
+        System.out.println(e.getMessage() + "\n");
       }
     }
 

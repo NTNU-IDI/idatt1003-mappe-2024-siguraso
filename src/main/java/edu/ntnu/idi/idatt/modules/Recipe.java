@@ -93,8 +93,62 @@ public class Recipe {
    * @param newName the new name of the recipe.
    */
   public void setName(String newName) {
+    if (newName.length() > 45) {
+      throw new IllegalArgumentException("Name cannot be longer than 45 characters!");
+    }
+
     this.name = newName;
   }
+
+  /**
+   * Sets a new description for the recipe.
+   *
+   * @param newDescription a {@link} string that contains the new description.
+   */
+  public void setDescription(String newDescription) {
+    this.description = newDescription;
+  }
+
+  // add methods
+
+  /**
+   * Adds another ingredient to the recipe. Used in the {@link edu.ntnu.idi.idatt.UserInterface}
+   * when creating a new {@link Recipe}.
+   *
+   * @param newIngredient the new ingredient to add, given as a {@link GroceryInstance}
+   */
+  public void addIngredient(GroceryInstance newIngredient) {
+    this.ingredients.add(newIngredient);
+  }
+
+  /**
+   * Adds an approximation that's used to approximate an ingredient of the corresponding index to
+   * make the recipe more understandable and easier to make. this method is used in the
+   * {@link edu.ntnu.idi.idatt.UserInterface} class when creating a new recipe.
+   *
+   * @param newApproximation {@link String} containing the approximation for a corresponding
+   *                         ingredient.
+   * @throws IllegalArgumentException if the apporximation is longer than the character limit of
+   *                                  25.
+   */
+  public void addApproximation(String newApproximation) throws IllegalArgumentException {
+    if (newApproximation.length() > 20) {
+      throw new IllegalArgumentException("an approximation cannot be longer than 20 characters!");
+    }
+
+    this.approximations.add(newApproximation);
+  }
+
+  /**
+   * Adds another instruction to the recipe. Used in the {@link edu.ntnu.idi.idatt.UserInterface}
+   * when creating a new recipe
+   *
+   * @param newInstruction the new instruction that to add to the recipe.
+   */
+  public void addInstruction(String newInstruction) {
+    this.instructions.add(newInstruction);
+  }
+
   // other methods
 
   /**

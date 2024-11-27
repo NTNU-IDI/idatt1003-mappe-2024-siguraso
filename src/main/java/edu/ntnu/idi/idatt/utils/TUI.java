@@ -104,13 +104,10 @@ public class TUI {
    * Gives a dialog window where the user enters an input that's either Y or N (ignores case),
    * letting the program know no or yes.
    *
-   * @param message message displayed above the user input (given as a {@link String}.
    * @return a {@link String} containing either "y" or "n"
    * @throws IllegalArgumentException if the user enters anything other than y or n (ignores case).
    */
-  public String yesNoOption(String message) throws IllegalArgumentException {
-    System.out.println(message);
-
+  public String yesNoOption() throws IllegalArgumentException {
     String yesNoChoice = getInput();
     if (yesNoChoice.equalsIgnoreCase("y") || yesNoChoice.equalsIgnoreCase("n")) {
       return yesNoChoice.toLowerCase();
@@ -228,7 +225,7 @@ public class TUI {
 
       // adds the top of the table (the header) to the rows ArrayList
 
-      // character mapping: total: 93 chars: 3 chars num, 17 chars name, 9 chars amount, 9 Chars unit,
+      // character mapping: total: 93 chars: 3 chars num, 30 chars name, 9 chars amount, 9 Chars unit,
       //                                     7 chars Price, 10 chars Price/unit DD.MM.YYYY
       rows.add(
           "+─────+────────────────────────────────+────────GROCERIES──────────────────────+────────────+────────────+");
@@ -312,25 +309,25 @@ public class TUI {
     } else {
 
       // num, name, amount, measurement unit, appproximation (if needed)
-      String tableFormat = "│ %-3d │ %-17s │ %,-9.1f │ %-9s │ ~ %-20s │";
+      String tableFormat = "│ %-3d │ %-30s │ %,-9.1f │ %-9s │ ~ %-20s │";
 
       ArrayList<String> rows = new ArrayList<>();
 
       //adds the header to the list of rows.
       rows.add(
-          "+─────+───────────────────+──────INGREDIENTS──────+────────────────────────+");
+          "+─────+────────────────────────────────INGREDIENTS─+───────────+────────────────────────+");
       rows.add(
-          "│ Num │ Name              │ Amount    │ Unit      │ Approximation          │");
+          "│ Num │ Name                           │ Amount    │ Unit      │ Approximation          │");
       rows.add(
-          "+─────+───────────────────+───────────+───────────+────────────────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+────────────────────────+");
 
       ingredients.forEach(ingredient -> rows.add(String.format(tableFormat,
-          ingredients.indexOf(ingredient), ingredient.getName(), ingredient.getAmount(),
+          ingredients.indexOf(ingredient) + 1, ingredient.getName(), ingredient.getAmount(),
           ingredient.getMeasurementUnit(), approximations.get(ingredients.indexOf(ingredient)))));
 
       //prints out bottom of the table.
       rows.add(
-          "+─────+───────────────────+───────────+───────────+────────────────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+────────────────────────+");
 
       return String.join("\n", rows);
     }
