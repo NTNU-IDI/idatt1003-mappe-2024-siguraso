@@ -5,7 +5,7 @@ import edu.ntnu.idi.idatt.modules.FoodStorage;
 import edu.ntnu.idi.idatt.modules.GroceryInstance;
 import edu.ntnu.idi.idatt.modules.GroceryType;
 import edu.ntnu.idi.idatt.modules.Recipe;
-import edu.ntnu.idi.idatt.utils.TUI;
+import edu.ntnu.idi.idatt.utils.Utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,7 @@ public class UserInterface {
 
   private final FoodStorage foodStorage = new FoodStorage();
   private final Cookbook cookBook = new Cookbook();
-  private final TUI utils = new TUI();
+  private final Utils utils = new Utils();
 
   // init and start methods.
 
@@ -75,7 +75,7 @@ public class UserInterface {
   public void start() {
     utils.clearScreen();
     mainMenu();
-    // When the main menu tells the program to quit, close the scanner from the TUI, and close the
+    // When the main menu tells the program to quit, close the scanner from the Utils, and close the
     // finish the script.
 
     utils.closeInput();
@@ -623,7 +623,7 @@ public class UserInterface {
 
   /**
    * This method takes a user input that defines a search term, which then gets searched for, which
-   * then displays a {@link TUI} table that displays the search results.
+   * then displays a {@link Utils} table that displays the search results.
    */
   private void searchInFoodStorage() {
     System.out.println("Please enter your search term below:");
@@ -1173,8 +1173,8 @@ public class UserInterface {
   }
 
   /**
-   * This method is a UI method that uses the {@link TUI} method yesNoOption, and makes it more user
-   * friendly by, for instance, catching the errors that method throws.
+   * This method is a UI method that uses the {@link Utils} method yesNoOption, and makes it more
+   * user friendly by, for instance, catching the errors that method throws.
    *
    * @param message dialog message given as a {@link String} that displays above the user input.
    * @return a string containing either "y" or "n" (lowercase) that indicates yes or no from the

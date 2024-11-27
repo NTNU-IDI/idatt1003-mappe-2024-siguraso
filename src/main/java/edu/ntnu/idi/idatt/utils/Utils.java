@@ -5,15 +5,13 @@ import edu.ntnu.idi.idatt.modules.GroceryInstance;
 import edu.ntnu.idi.idatt.modules.GroceryType;
 import edu.ntnu.idi.idatt.modules.Recipe;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 /**
  * Text-User-Interface class that manages the different dialog options that are needed to create the
  * text-based user interface.
  */
-public class TUI {
+public class TextInterfaceUtilities {
 
   private final Scanner sc = new Scanner(System.in);
 
