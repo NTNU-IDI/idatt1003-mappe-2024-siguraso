@@ -116,56 +116,6 @@ public class TUI {
     }
   }
 
-  /**
-   * Creates a dialog window that lets the user pick between different choices, and returns an
-   * integer (the primitive type "int") based on what function the user wants to initiate. The
-   * choices are displayed in the same order as given in the choices {@link String} table (see
-   * params).
-   * <p>The choice window will look something like this:</p>
-   * <p>[1] Choice 1
-   * <p>[2] Choice 2
-   * <p>[3] Choice 3
-   * <p>...</p>
-   * <p>Please enter an integer 1 - *number of choices*.</p>
-   *
-   * @param choices a table of {@link String} that contains the
-   * @return the integer (the primitive type "int") that the user has entered.
-   */
-  public int choiceWindow(String[] choices, String message) {
-    List<String> choicesList = Arrays.asList(choices);
-
-    choicesList.forEach(choice -> {
-      int currentIndex = choicesList.indexOf(choice);
-
-      choicesList.set(currentIndex, "[" + (currentIndex + 1) + "] " + choice);
-    });
-
-    String choicesString =
-        message + " (Please enter an integer 1 - " + choices.length + ")\n\n" + String.join("\n",
-            choicesList);
-
-    boolean hasEnteredValidInteger = false;
-    int input = 0;
-
-    do {
-      System.out.println(choicesString);
-      try {
-        input = Integer.parseInt(this.getInput());
-        if (input >= 1 && input <= choicesList.size()) {
-          hasEnteredValidInteger = true;
-        } else {
-          this.clearScreen();
-          System.out.println("Please enter a valid integer!");
-        }
-      } catch (NumberFormatException e) {
-        this.clearScreen();
-        System.out.println("Please enter a valid integer!");
-      }
-    } while (!hasEnteredValidInteger);
-
-    return input;
-  }
-
   // tables:
 
   /**

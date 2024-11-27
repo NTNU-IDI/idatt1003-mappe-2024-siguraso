@@ -8,6 +8,7 @@ import edu.ntnu.idi.idatt.modules.Recipe;
 import edu.ntnu.idi.idatt.utils.TUI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class that creates the menus of the program, and handles the user input for what the user wants
@@ -95,7 +96,7 @@ public class UserInterface {
    */
   private int initiateMainMenuAction() {
     utils.clearScreen();
-    return utils.choiceWindow(
+    return choiceWindow(
         new String[]{"Manage food storage.", "Manage grocery classes.", "Manage cookbook/recipes.",
             "Quit."}, "What do you wish to do?");
   }
@@ -114,7 +115,7 @@ public class UserInterface {
    * <p>[8] Return to main menu.</p>
    */
   private int initiateFoodStorageAction() {
-    return utils.choiceWindow(
+    return choiceWindow(
         new String[]{"Add grocery to storage.", "Remove grocery from storage",
             "Search in food storage.", "Display out of date food only",
             "Edit specific grocery (e.g. edit amount, best before date and price per unit).",
@@ -137,7 +138,7 @@ public class UserInterface {
    * do.
    */
   private int initiateGroceryTypeAction() {
-    return utils.choiceWindow(new String[]{"Add a grocery class.", "Remove a grocery class.",
+    return choiceWindow(new String[]{"Add a grocery class.", "Remove a grocery class.",
             "Edit grocery class (change name or measurement unit).", "Return to main menu."},
         utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) + "\nManage grocery classes:");
   }
@@ -157,7 +158,7 @@ public class UserInterface {
    * wants to initiate.
    */
   private int initiateCookbookAction() {
-    return utils.choiceWindow(new String[]{"View recipe",
+    return choiceWindow(new String[]{"View recipe",
             "Add recipe (!Make sure to add the relevant grocery classes beforehand!).",
             "Remove recipe.",
             "View suggested recipes (based on what you have available in the food storage).",
@@ -313,6 +314,8 @@ public class UserInterface {
 
         // remove recipe
         case 3 -> {
+          utils.clearScreen();
+
           String removeConfirmation = uiYesNoOption(
               "Are you sure you wish to remove a recipe from the cookbook? (Y/n)");
 
@@ -994,7 +997,7 @@ public class UserInterface {
 
     try {
       int removeIndex = chooseValidListIndex(utils.cookbookTable(cookBook.getRecipes(), foodStorage)
-              + "Please enter the number (See 'Num') of the recipe you would like to remove.",
+              + "\n\nPlease enter the number (See 'Num') of the recipe you would like to remove.",
           cookBook.getRecipes().size());
 
       cookBook.removeRecipe(removeIndex);
@@ -1193,6 +1196,56 @@ public class UserInterface {
     }
 
     return yesNoChoice;
+  }
+
+  /**
+   * Creates a dialog window that lets the user pick between different choices, and returns an
+   * integer (the primitive type "int") based on what function the user wants to initiate. The
+   * choices are displayed in the same order as given in the choices {@link String} table (see
+   * params).
+   * <p>The choice window will look something like this:</p>
+   * <p>[1] Choice 1
+   * <p>[2] Choice 2
+   * <p>[3] Choice 3
+   * <p>...</p>
+   * <p>Please enter an integer 1 - *number of choices*.</p>
+   *
+   * @param choices a table of {@link String} that contains the
+   * @return the integer (the primitive type "int") that the user has entered.
+   */
+  private int choiceWindow(String[] choices, String message) {
+    List<String> choicesList = Arrays.asList(choices);
+
+    choicesList.forEach(choice -> {
+      int currentIndex = choicesList.indexOf(choice);
+
+      choicesList.set(currentIndex, "[" + (currentIndex + 1) + "] " + choice);
+    });
+
+    String choicesString =
+        message + " (Please enter an integer 1 - " + choices.length + ")\n\n" + String.join("\n",
+            choicesList);
+
+    boolean hasEnteredValidInteger = false;
+    int input = 0;
+
+    do {
+      System.out.println(choicesString);
+      try {
+        input = Integer.parseInt(utils.getInput());
+        if (input >= 1 && input <= choicesList.size()) {
+          hasEnteredValidInteger = true;
+        } else {
+          utils.clearScreen();
+          System.out.println("Please enter a valid integer!");
+        }
+      } catch (NumberFormatException e) {
+        utils.clearScreen();
+        System.out.println("Please enter a valid integer!");
+      }
+    } while (!hasEnteredValidInteger);
+
+    return input;
   }
 
 }
