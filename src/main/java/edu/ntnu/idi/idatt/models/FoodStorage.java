@@ -1,13 +1,14 @@
 package edu.ntnu.idi.idatt.models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 /**
  * an instance of FoodStorage contains both GroceryInstances and GroceryTypes that are both
- * pre-defined and defined by the user. FoodStorage object's main goals are to more or less manage
- * these objects.
+ * pre-defined and/or defined by the user. FoodStorage object's main goals are to more or less
+ * manage these objects.
  */
 public class FoodStorage {
 
@@ -46,14 +47,14 @@ public class FoodStorage {
    * @param index The indexes the user wants to find the combined value of.
    */
   public double getSpecificValue(int[] index) {
-    double sum = 0;
+    var sumWrapper = new Object() {
+      double sum = 0;
+    };
 
-    // for-loop for each item in the index table.
-    for (int j : index) {
-      sum += this.groceryInstances.get(j - 1).getPrice();
-    }
+    // streams the indexes and adds the price of the grocery instances to the sumWrapper object.
+    Arrays.stream(index).forEach(i -> sumWrapper.sum += this.getSpecificInstance(i).getPrice());
 
-    return sum;
+    return sumWrapper.sum;
   }
 
   /**
@@ -109,18 +110,6 @@ public class FoodStorage {
   }
 
   /**
-   * Sorts the {@link ArrayList} of {@link GroceryInstance} alphabetically, then based on best
-   * before date.
-   */
-  public void sortGroceryInstances() {
-    // sorts the list of grocery instances based on what the best before date is, and then comparing
-    // the name alphabetically
-    this.groceryInstances.sort(Comparator.comparing(GroceryInstance::getName)
-        .thenComparing(GroceryInstance::getBestBeforeDate));
-
-  }
-
-  /**
    * Gets all instances of GroceryType
    *
    * @return An ArrayList containing all instances of GroceryType.
@@ -130,13 +119,23 @@ public class FoodStorage {
   }
 
   /**
+   * Sorts the {@link ArrayList} of {@link GroceryInstance} alphabetically, then based on best
+   * before date.
+   */
+  public void sortGroceryInstances() {
+    // sorts the list of grocery instances based on what the best before date is, and then comparing
+    // the name alphabetically
+    this.groceryInstances.sort(Comparator.comparing(GroceryInstance::getNameLowerCase)
+        .thenComparing(GroceryInstance::getBestBeforeDate));
+
+  }
+
+  /**
    * Sorts the {@link ArrayList} of {@link GroceryType} alphabetically.
    */
   public void sortGroceryTypes() {
-    this.groceryTypes.sort(Comparator.comparing(GroceryType::getName));
+    this.groceryTypes.sort(Comparator.comparing(GroceryType::getNameLowerCase));
   }
-
-  // other methods
 
   /**
    * Goes through the groceries ArrayList and checks if a user-specified search term matches any of

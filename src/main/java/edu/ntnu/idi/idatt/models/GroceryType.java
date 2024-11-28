@@ -33,7 +33,16 @@ public class GroceryType {
    * @return a String containing the name of the grocery type.
    */
   public String getName() {
-    return name;
+    return this.name;
+  }
+
+  /**
+   * Fetches the name of the {@link GroceryType} in lowercase. (Used for sorting purposes)
+   *
+   * @return the name of the grocery in lowercase.
+   */
+  public String getNameLowerCase() {
+    return this.name.toLowerCase();
   }
 
   /**

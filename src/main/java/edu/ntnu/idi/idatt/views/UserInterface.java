@@ -209,6 +209,7 @@ public class UserInterface {
         case 1 -> {
           addGroceryInstance();
           foodStorage.sortGroceryTypes();
+          foodStorage.sortGroceryInstances();
         }
 
         // remove grocery
@@ -228,9 +229,12 @@ public class UserInterface {
         case 4 -> displayOutOfDate();
 
         // edit grocery
-        case 5 -> editGroceryInstance();
+        case 5 -> {
+          editGroceryInstance();
+          foodStorage.sortGroceryInstances();
+        }
 
-        // find cumulatice value of many groceries.
+        // find cumulative value of many groceries.
         case 6 -> valueOfMultipleGroceries();
 
         // remove amount from specific grocery
@@ -413,7 +417,7 @@ public class UserInterface {
 
       utils.clearScreen();
 
-      String curRemoved = foodStorage.getAllGroceryTypes().get(removeIndex).getName();
+      String curRemoved = "name" + foodStorage.getAllGroceryTypes().get(removeIndex).getName();
 
       foodStorage.removeType(removeIndex);
 
@@ -502,27 +506,49 @@ public class UserInterface {
    */
   private void addGroceryInstance() {
     try {
-      int typeIndex;
+      int typeIndex = 0;
 
-      String makeNewType = uiYesNoOption(utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+      boolean hasEnteredValidAmount = false;
+      boolean hasEnteredValidPrice = false;
+      boolean hasEnteredValidBestBefore = false;
+
+      // this boolean is only updated if the user decides to go back to the main menu.
+      boolean createNewInstance = true;
+
+      String useOldType = uiYesNoOption(utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
           + "\nWould you like to add a grocery based on an existing grocery class? (Y/n)");
 
-      if (makeNewType.equals("n")) {
+      if (useOldType.equals("n")) {
         utils.clearScreen();
-        addGroceryType();
-        // gets the size of the arraylist, so that it always gets the last element (the newest one).
-        typeIndex = foodStorage.getAllGroceryTypes().size();
+
+        String makeNewType = uiYesNoOption(
+            "Would you like to add a new grocery class? (Y/n)");
+
+        // if user wants to make a new type, make it now, if not return to previous menu.
+        if (makeNewType.equals("y")) {
+          addGroceryType();
+
+          typeIndex = foodStorage.getAllGroceryTypes().size();
+
+          foodStorage.addInstance(
+              new GroceryInstance(foodStorage.getSpecificType(typeIndex), 0.1,
+                  0.1, null));
+        } else {
+          hasEnteredValidAmount = true;
+          hasEnteredValidPrice = true;
+          hasEnteredValidBestBefore = true;
+          createNewInstance = false;
+        }
+
       } else {
         utils.clearScreen();
         typeIndex = chooseValidListIndex(utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
-                + "\nPlease enter the number of the grocery class you wish to select (See Num in the above table)",
+                + "\nPlease enter the number of the grocery class you wish to select (See 'Num' in the above table)",
             foodStorage.getAllGroceryTypes().size());
+
+        foodStorage.addInstance(new GroceryInstance(foodStorage.getSpecificType(typeIndex), 0.1,
+            0.1, null));
       }
-
-      foodStorage.addInstance(new GroceryInstance(foodStorage.getSpecificType(typeIndex), 0.1,
-          0.1, null));
-
-      boolean hasEnteredValidAmount = false;
 
       utils.clearScreen();
 
@@ -542,8 +568,6 @@ public class UserInterface {
         }
       }
 
-      boolean hasEnteredValidPrice = false;
-
       while (!hasEnteredValidPrice) {
         try {
           double pricePerUnit = utils.doubleOption("Please enter the price per '" + foodStorage
@@ -557,8 +581,6 @@ public class UserInterface {
           System.out.println(e.getMessage() + "\n\n");
         }
       }
-
-      boolean hasEnteredValidBestBefore = false;
 
       while (!hasEnteredValidBestBefore) {
         System.out.println("Please enter the best before date of the grocery (DD.MM.YYYY)");
@@ -576,21 +598,26 @@ public class UserInterface {
       }
       utils.clearScreen();
 
-      String isInstanceOK = uiYesNoOption(
-          "Name: " + foodStorage.getSpecificType(typeIndex).getName() +
-              "\nMeasurement Unit: " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() +
-              "\nAmount: " + foodStorage.getAllGroceryInstances().getLast().getAmount() + " "
-              + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() +
-              "\nPrice per " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + ": "
-              + foodStorage.getAllGroceryInstances().getLast().getPricePerUnit() +
-              "\nBest before: " + foodStorage.getAllGroceryInstances().getLast()
-              .getBestBeforeString() + "\n\nIs this OK? (Y/n)");
+      // if user didnt want to create a new type, ignore the code below.
+      if (createNewInstance) {
 
-      if (isInstanceOK.equals("n")) {
-        foodStorage.getAllGroceryInstances().removeLast();
+        String isInstanceOK = uiYesNoOption(
+            "Name: " + foodStorage.getSpecificType(typeIndex).getName() +
+                "\nMeasurement Unit: " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit()
+                +
+                "\nAmount: " + foodStorage.getAllGroceryInstances().getLast().getAmount() + " "
+                + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() +
+                "\nPrice per " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + ": "
+                + foodStorage.getAllGroceryInstances().getLast().getPricePerUnit() +
+                "\nBest before: " + foodStorage.getAllGroceryInstances().getLast()
+                .getBestBeforeString() + "\n\nIs this OK? (Y/n)");
+
+        if (isInstanceOK.equals("n")) {
+          foodStorage.getAllGroceryInstances().removeLast();
+        }
+
+        foodStorage.sortGroceryTypes();
       }
-
-      foodStorage.sortGroceryTypes();
     } catch (IllegalArgumentException e) {
 
       utils.clearScreen();
@@ -757,14 +784,11 @@ public class UserInterface {
       Arrays.stream(indexes)
           .forEach(index -> combinedValueInstances.add(foodStorage.getSpecificInstance(index)));
 
-      double cumulativeValue = combinedValueInstances.stream()
-          .mapToDouble(GroceryInstance::getPrice).sum();
-
       utils.clearScreen();
 
       System.out.println(
-          utils.foodStorageTable(combinedValueInstances) + "\nCumulative value: " + cumulativeValue
-              + "\n\nPress ENTER to continue...");
+          utils.foodStorageTable(combinedValueInstances) + "\nCumulative value: "
+              + foodStorage.getSpecificValue(indexes) + "\n\nPress ENTER to continue...");
 
       utils.getInput();
 
@@ -1041,7 +1065,7 @@ public class UserInterface {
     }
   }
 
-  // methods entering specific elements
+  // methods for entering specific elements
 
   /**
    * This method creates a menu that makes sure the user picks an integer within a given lists

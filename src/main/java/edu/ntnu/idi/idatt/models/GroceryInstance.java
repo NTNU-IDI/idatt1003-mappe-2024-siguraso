@@ -56,6 +56,15 @@ public class GroceryInstance {
   }
 
   /**
+   * Fetches the name of the {@link GroceryType} in lowercase. (Used for sorting purposes)
+   *
+   * @return a {@link String} containing the name of the grocery in lowercase.
+   */
+  public String getNameLowerCase() {
+    return this.groceryType.getName().toLowerCase();
+  }
+
+  /**
    * gets the measurement unit most often associated to this type of grocery.
    *
    * @return A string containing the measurement unit.
