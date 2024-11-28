@@ -180,10 +180,14 @@ public class GroceryInstance {
   /**
    * Removes a certain amount of this GroceryInstance.
    *
-   * @param amount a double containing the amount you would like to remove.
+   * @param amountToRemove a double containing the amount you would like to remove.
    */
-  public void removeAmount(double amount) {
-    this.amount -= amount;
+  public void removeAmount(double amountToRemove) throws IllegalArgumentException {
+    if (amountToRemove <= 0 || amountToRemove >= this.amount) {
+      throw new IllegalArgumentException("Please enter an amount between 0 and " + this.amount);
+    }
+
+    this.amount -= amountToRemove;
   }
 
   /**
