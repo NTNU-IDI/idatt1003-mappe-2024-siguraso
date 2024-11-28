@@ -38,6 +38,8 @@ public class UserInterface {
     foodStorage.addType(new GroceryType("Oregano - Regular container", "pcs."));
     foodStorage.addType(new GroceryType("Garlic - 2 Pack", "pcs."));
 
+    foodStorage.sortGroceryTypes();
+
     ArrayList<GroceryInstance> marinaraIngredients = new ArrayList<>();
     ArrayList<String> approx = new ArrayList<>();
     marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(1),
