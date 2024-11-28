@@ -1,10 +1,10 @@
-package edu.ntnu.idi.idatt.view;
+package edu.ntnu.idi.idatt.views;
 
-import edu.ntnu.idi.idatt.modules.Cookbook;
-import edu.ntnu.idi.idatt.modules.FoodStorage;
-import edu.ntnu.idi.idatt.modules.GroceryInstance;
-import edu.ntnu.idi.idatt.modules.GroceryType;
-import edu.ntnu.idi.idatt.modules.Recipe;
+import edu.ntnu.idi.idatt.models.Cookbook;
+import edu.ntnu.idi.idatt.models.FoodStorage;
+import edu.ntnu.idi.idatt.models.GroceryInstance;
+import edu.ntnu.idi.idatt.models.GroceryType;
+import edu.ntnu.idi.idatt.models.Recipe;
 import edu.ntnu.idi.idatt.utils.Utils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1022,14 +1022,21 @@ public class UserInterface {
 
     utils.clearScreen();
 
-    System.out.println(
-        "NOTE: Recipes are only suggested if you have half or more of the ingredients available in the food storage.\n\n"
-            + "Suggested Recipes:\n" +
-            utils.cookbookTable(
-                cookBook.recipeSuggestion(foodStorage, includeOutOfDateFood.equals("y")),
-                foodStorage) + "\n\nPress ENTER to go back...");
+    try {
+      System.out.println(
+          "NOTE: Recipes are only suggested if you have half or more of the ingredients available in the food storage.\n\n"
+              + "Suggested Recipes:\n" +
+              utils.cookbookTable(
+                  cookBook.recipeSuggestion(foodStorage.getAllGroceryInstances(),
+                      includeOutOfDateFood.equals("y")),
+                  foodStorage) + "\n\nPress ENTER to go back...");
 
-    utils.getInput();
+      utils.getInput();
+    } catch (IllegalStateException e) {
+      System.out.println(e.getMessage() + "\n\nPress ENTER to go back...");
+
+      utils.getInput();
+    }
   }
 
   // methods entering specific elements

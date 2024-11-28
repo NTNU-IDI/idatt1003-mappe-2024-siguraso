@@ -1,6 +1,5 @@
-package edu.ntnu.idi.idatt.modules;
+package edu.ntnu.idi.idatt.models;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

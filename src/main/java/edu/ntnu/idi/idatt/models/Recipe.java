@@ -1,6 +1,6 @@
-package edu.ntnu.idi.idatt.modules;
+package edu.ntnu.idi.idatt.models;
 
-import edu.ntnu.idi.idatt.view.UserInterface;
+import edu.ntnu.idi.idatt.views.UserInterface;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.modules;
+package edu.ntnu.idi.idatt.models;
 
 import java.util.ArrayList;
 
@@ -60,41 +60,53 @@ public class Cookbook {
    * Gives recommendations for recipes based on what food is stored in the food storage. If the food
    * storage contains half or more of the ingredients in the recipe, it will be a suggested recipe.
    *
-   * @param foodStorage      Food storage that contains all the available groceries.
+   * @param foodStorage      {@link ArrayList} of {@link GroceryInstance} that contains the food
+   *                         from food storage
    * @param includeOutOfDate boolean true or false which lets the user decide weather or not to
    *                         include out of date food.
    * @return an ArrayList consisting of recipes that are suggested.
+   * @throws IllegalStateException if no recommendations are found.
    */
-  public ArrayList<Recipe> recipeSuggestion(FoodStorage foodStorage, boolean includeOutOfDate) {
+  public ArrayList<Recipe> recipeSuggestion(ArrayList<GroceryInstance> foodStorage,
+      boolean includeOutOfDate) throws IllegalStateException {
     ArrayList<Recipe> suggestions = new ArrayList<>();
 
-    for (Recipe recipe : this.recipes) {
-      // counter used to count the amount of shared groceries in the food storage and the recipe
-      int counter = 0;
-      for (GroceryInstance ingredient : recipe.getIngredients()) {
-        for (GroceryInstance availableGrocery : foodStorage.getAllGroceryInstances()) {
-          if (ingredient.getName().equals(availableGrocery.getName())
-              && !availableGrocery.isOutOfDate()) {
-            //if the grocery in the food storage has the same name as the one in the recipe
-            //and it isnt the out of date, add it to the counter..
-            counter += 1;
-          }
-          if (ingredient.getName().equals(availableGrocery.getName())
-              && availableGrocery.isOutOfDate() && includeOutOfDate) {
-            // if the grocery matches names, and is out of date, and the user wants to include out
-            // of date groceries, add it to the counter.
-            counter += 1;
-          }
-        }
-      }
+    this.recipes.forEach(recipe -> {
+      // wrapper for the counter to count the amount of shared groceries in the food storage and the
+      // recipe
+      var counterWrapper = new Object() {
+        int counter = 0;
+      };
 
-      if ((double) counter >= ((double) 1 / 2) * ((double) recipe.getIngredients().size())) {
+      recipe.getIngredients().forEach(ingredient ->
+          foodStorage.forEach(availableGrocery -> {
+            if (ingredient.getName().equals(availableGrocery.getName())
+                && !availableGrocery.isOutOfDate()) {
+              //if the grocery in the food storage has the same name as the one in the recipe
+              //and it isnt the out of date, add it to the counter..
+              counterWrapper.counter++;
+            }
+            if (ingredient.getName().equals(availableGrocery.getName())
+                && availableGrocery.isOutOfDate() && includeOutOfDate) {
+              // if the grocery matches names, and is out of date, and the user wants to include out
+              // of date groceries, add it to the counter.
+              counterWrapper.counter++;
+            }
+          })
+      );
+
+      if ((double) counterWrapper.counter >= ((double) 1 / 2) * ((double) recipe.getIngredients()
+          .size())) {
         // if the food storage has half or more of the amount of ingredients in the recipe
         // it will be suggested.
         suggestions.add(recipe);
       }
-    }
+    });
 
+    if (suggestions.isEmpty()) {
+      throw new IllegalStateException("Found no recommendations, try adding more groceries to the "
+          + "food storage!");
+    }
     return suggestions;
   }
 

@@ -1,9 +1,9 @@
 package edu.ntnu.idi.idatt.utils;
 
-import edu.ntnu.idi.idatt.modules.FoodStorage;
-import edu.ntnu.idi.idatt.modules.GroceryInstance;
-import edu.ntnu.idi.idatt.modules.GroceryType;
-import edu.ntnu.idi.idatt.modules.Recipe;
+import edu.ntnu.idi.idatt.models.FoodStorage;
+import edu.ntnu.idi.idatt.models.GroceryInstance;
+import edu.ntnu.idi.idatt.models.GroceryType;
+import edu.ntnu.idi.idatt.models.Recipe;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,15 +11,15 @@ import java.util.Scanner;
  * Text-User-Interface class that manages the different dialog options that are needed to create the
  * text-based user interface.
  */
-public class TextInterfaceUtilities {
+public class Utils {
 
   private final Scanner sc = new Scanner(System.in);
 
   /**
-   * An instance of the TUI class handles all of the different dialog messages and user inputs so
+   * An instance of the Utils class handles all of the different dialog messages and user inputs so
    * that the user can access the
    */
-  public TUI() {
+  public Utils() {
   }
 
   // user input:

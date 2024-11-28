@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.modules;
+package edu.ntnu.idi.idatt.models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
