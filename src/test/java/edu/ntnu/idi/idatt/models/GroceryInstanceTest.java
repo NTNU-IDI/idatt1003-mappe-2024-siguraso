@@ -144,8 +144,18 @@ class GroceryInstanceTest {
 
     @Test
     @DisplayName(
-        "addAmount if the addAmount = 0, or if the addAmount + the original amount > 999.9.")
+        "addAmount if the addAmount is negative, addAmount = 0,  or if the addAmount + the original amount > 999.9.")
     void groceryInstanceAddAmountThrowsException() {
+      try {
+        groceryInstance.addAmount(-1);
+        fail(
+            "groceryInstanceAddAmountThrowsException() failed, since it didnt throw the expected"
+                + " IllegalArgumentException.");
+      } catch (IllegalArgumentException e) {
+        assertEquals("Cannot add an that amount, please add an amount between 0 and " + (999.9
+            - groceryInstance.getAmount()), e.getMessage());
+      }
+
       try {
         groceryInstance.addAmount(0);
         fail(

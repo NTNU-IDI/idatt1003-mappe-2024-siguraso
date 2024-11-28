@@ -89,13 +89,13 @@ public class FoodStorage {
    * Returns the total value of all out of date items.
    */
   public double getOutOfDateValue() {
-    double sum = 0;
+    var sumWrapper = new Object() {
+      double sum = 0;
+    };
 
-    for (GroceryInstance outdatedInstance : this.getOutOfDateInstances()) {
-      sum += outdatedInstance.getPrice();
-    }
+    this.getOutOfDateInstances().forEach(grocery -> sumWrapper.sum += grocery.getPrice());
 
-    return sum;
+    return sumWrapper.sum;
   }
 
   /**
@@ -105,6 +105,8 @@ public class FoodStorage {
    */
   public ArrayList<GroceryInstance> getAllGroceryInstances() {
     this.removeEmptyInstances();
+    this.mergeDuplicateInstances();
+    this.sortGroceryInstances();
 
     return this.groceryInstances;
   }
@@ -115,6 +117,8 @@ public class FoodStorage {
    * @return An ArrayList containing all instances of GroceryType.
    */
   public ArrayList<GroceryType> getAllGroceryTypes() {
+    this.sortGroceryTypes();
+
     return this.groceryTypes;
   }
 
@@ -122,7 +126,7 @@ public class FoodStorage {
    * Sorts the {@link ArrayList} of {@link GroceryInstance} alphabetically, then based on best
    * before date.
    */
-  public void sortGroceryInstances() {
+  private void sortGroceryInstances() {
     // sorts the list of grocery instances based on what the best before date is, and then comparing
     // the name alphabetically
     this.groceryInstances.sort(Comparator.comparing(GroceryInstance::getNameLowerCase)
@@ -133,7 +137,7 @@ public class FoodStorage {
   /**
    * Sorts the {@link ArrayList} of {@link GroceryType} alphabetically.
    */
-  public void sortGroceryTypes() {
+  private void sortGroceryTypes() {
     this.groceryTypes.sort(Comparator.comparing(GroceryType::getNameLowerCase));
   }
 
@@ -176,30 +180,40 @@ public class FoodStorage {
    * Adds an instance of GroceryInstance to the food storage.
    */
   public void addInstance(GroceryInstance grocery) {
-    this.groceryInstances.forEach(groceryInstance -> {
-      // if there is a grocery with the same best before date, add the amount to the same Grocery
-      // instance.
-      if (this.isSameInstance(groceryInstance, grocery)) {
-        if (groceryInstance.getAmount() + grocery.getAmount() > 999.9) {
-          // if the amount is more than 999.9, both objects will stay in the food storage, but one
-          // object's amount will be set to 999.9, and the rest will be added to the other object.
-          double restAmount = groceryInstance.getAmount() + grocery.getAmount() - 999.9;
-
-          groceryInstance.setAmount(999.9);
-          grocery.setAmount(restAmount);
-        } else {
-          // if the amount isnt over 999.9, the amount will be added to the groceryInstance, while
-          // the grocery object will be set to 0 (something that will be removed later on).
-          groceryInstance.addAmount(grocery.getAmount());
-          // set it to 0, so that it isn't added later on.
-          grocery.setAmount(0);
-        }
-      }
-    });
-
     //if the grocery has been added and is equal to zero, it will be removed next time the program
     //gets the groceryInstances ArrayList.
     this.groceryInstances.add(grocery);
+  }
+
+  /**
+   * Merges duplicate instances of GroceryInstance in the food storage. If the total amount of the
+   * two instances is greater than 999.9, the rest will be added to a separate instance.
+   */
+  private void mergeDuplicateInstances() {
+    // goes through the list of groceries...
+    for (int i = 0; i < this.groceryInstances.size(); i++) {
+      // ...and compares them to every other grocery in the list...
+      for (int j = i + 1; j < this.groceryInstances.size(); j++) {
+        if (isSameInstance(this.groceryInstances.get(i), this.groceryInstances.get(j))) {
+          // ...if they are the same, they will be merged together.
+          if (this.groceryInstances.get(i).getAmount() + this.groceryInstances.get(j).getAmount()
+              > 999.9) {
+            // if the total amount is bigger than 999.9, the rest will be added to the first grocery
+            // instance, and the second will be set to 999.9...
+            double restToAdd =
+                999.9 - this.groceryInstances.get(i).getAmount() + this.groceryInstances.get(j)
+                    .getAmount();
+            this.groceryInstances.get(i).setAmount(999.9);
+            this.groceryInstances.get(j).removeAmount(restToAdd);
+          } else {
+            // ...if not, they will be added together and the second grocery will be set to 0, and
+            // promptly removed.
+            this.groceryInstances.get(i).addAmount(this.groceryInstances.get(j).getAmount());
+            this.groceryInstances.get(j).setAmount(0);
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -225,11 +239,7 @@ public class FoodStorage {
    * Removes all elements from the groceries ArrayList that are equal to zero.
    */
   public void removeEmptyInstances() {
-    this.groceryInstances.forEach(GI -> {
-      if (GI.getAmount() == 0) {
-        this.groceryInstances.remove(GI);
-      }
-    });
+    this.groceryInstances.removeIf(GI -> GI.getAmount() == 0);
   }
 
   // boolean methods
@@ -255,4 +265,17 @@ public class FoodStorage {
         .equals(G2.getBestBeforeString()) && G1.getPricePerUnit() == G2.getPricePerUnit();
   }
 
+  public static void main(String[] args) {
+    FoodStorage foodStorage = new FoodStorage();
+    GroceryType groceryType = new GroceryType("Apple", "kg");
+    GroceryInstance groceryInstance = new GroceryInstance(groceryType, 1.0, 1.0, "01.01.2022");
+    GroceryInstance groceryInstance2 = new GroceryInstance(groceryType, 2.0, 1.0, "01.01.2022");
+    foodStorage.addInstance(groceryInstance);
+    foodStorage.addInstance(groceryInstance2);
+    System.out.println(
+        foodStorage.getSpecificInstance(1).getName() + " " + foodStorage.getSpecificInstance(1)
+            .getAmount());
+
+    System.out.println(foodStorage.getAllGroceryInstances().size());
+  }
 }

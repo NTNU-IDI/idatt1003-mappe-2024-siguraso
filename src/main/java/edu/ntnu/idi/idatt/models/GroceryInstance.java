@@ -135,7 +135,7 @@ public class GroceryInstance {
    * @throws IllegalArgumentException if the given amount is less than 0, or more than 99999.9
    */
   public void setAmount(double newAmount) throws IllegalArgumentException {
-    if (newAmount > 0 && newAmount < 999.9) {
+    if (newAmount >= 0 && newAmount < 999.9) {
       this.amount = newAmount;
     } else {
       throw new IllegalArgumentException("The grocery amount must be between 0 and 999.9!");

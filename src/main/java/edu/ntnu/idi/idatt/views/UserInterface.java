@@ -38,8 +38,7 @@ public class UserInterface {
     foodStorage.addType(new GroceryType("Oregano - Regular container", "pcs."));
     foodStorage.addType(new GroceryType("Garlic - 2 Pack", "pcs."));
 
-    foodStorage.sortGroceryTypes();
-
+    //example recipe marinara sauce
     ArrayList<GroceryInstance> marinaraIngredients = new ArrayList<>();
     ArrayList<String> approx = new ArrayList<>();
     marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(1),
@@ -206,11 +205,7 @@ public class UserInterface {
       utils.clearScreen();
       switch (foodStorageChoice) {
         // add grocery
-        case 1 -> {
-          addGroceryInstance();
-          foodStorage.sortGroceryTypes();
-          foodStorage.sortGroceryInstances();
-        }
+        case 1 -> addGroceryInstance();
 
         // remove grocery
         case 2 -> {
@@ -229,10 +224,7 @@ public class UserInterface {
         case 4 -> displayOutOfDate();
 
         // edit grocery
-        case 5 -> {
-          editGroceryInstance();
-          foodStorage.sortGroceryInstances();
-        }
+        case 5 -> editGroceryInstance();
 
         // find cumulative value of many groceries.
         case 6 -> valueOfMultipleGroceries();
@@ -259,10 +251,7 @@ public class UserInterface {
       int groceryTypeChoice = initiateGroceryTypeAction();
       switch (groceryTypeChoice) {
         // add grocery type
-        case 1 -> {
-          addGroceryType();
-          foodStorage.sortGroceryTypes();
-        }
+        case 1 -> addGroceryType();
 
         // remove grocery type
         case 2 -> {
@@ -488,8 +477,6 @@ public class UserInterface {
           System.out.println(e.getMessage() + "\n\n");
         }
       }
-
-      foodStorage.sortGroceryTypes();
     } catch (IllegalArgumentException e) {
       utils.clearScreen();
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
@@ -615,8 +602,6 @@ public class UserInterface {
         if (isInstanceOK.equals("n")) {
           foodStorage.getAllGroceryInstances().removeLast();
         }
-
-        foodStorage.sortGroceryTypes();
       }
     } catch (IllegalArgumentException e) {
 
@@ -820,7 +805,7 @@ public class UserInterface {
                 + " do you wish to remove? (0.0 - "
                 + foodStorage.getSpecificInstance(removeAmountIndex).getAmount() + ")");
 
-        foodStorage.getSpecificInstance(removeAmountIndex).removeAmount(removeAmount);
+        foodStorage.removeInstanceAmount(removeAmountIndex, removeAmount);
 
         hasEnteredValidAmount = true;
 
