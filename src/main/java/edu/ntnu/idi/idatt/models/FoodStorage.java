@@ -176,13 +176,24 @@ public class FoodStorage {
    * Adds an instance of GroceryInstance to the food storage.
    */
   public void addInstance(GroceryInstance grocery) {
-    this.groceryInstances.forEach(GI -> {
+    this.groceryInstances.forEach(groceryInstance -> {
       // if there is a grocery with the same best before date, add the amount to the same Grocery
       // instance.
-      if (this.isSameInstance(GI, grocery)) {
-        GI.addAmount(grocery.getAmount());
-        // set it to 0, so that it isn't added later on.
-        grocery.setAmount(0);
+      if (this.isSameInstance(groceryInstance, grocery)) {
+        if (groceryInstance.getAmount() + grocery.getAmount() > 999.9) {
+          // if the amount is more than 999.9, both objects will stay in the food storage, but one
+          // object's amount will be set to 999.9, and the rest will be added to the other object.
+          double restAmount = groceryInstance.getAmount() + grocery.getAmount() - 999.9;
+
+          groceryInstance.setAmount(999.9);
+          grocery.setAmount(restAmount);
+        } else {
+          // if the amount isnt over 999.9, the amount will be added to the groceryInstance, while
+          // the grocery object will be set to 0 (something that will be removed later on).
+          groceryInstance.addAmount(grocery.getAmount());
+          // set it to 0, so that it isn't added later on.
+          grocery.setAmount(0);
+        }
       }
     });
 
