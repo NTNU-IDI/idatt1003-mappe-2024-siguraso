@@ -92,8 +92,9 @@ public class Recipe {
    * Sets the name of the recipe
    *
    * @param newName the new name of the recipe.
+   * @throws IllegalArgumentException if newName is longer than 45 characters.
    */
-  public void setName(String newName) {
+  public void setName(String newName) throws IllegalArgumentException {
     if (newName.length() > 45) {
       throw new IllegalArgumentException("Name cannot be longer than 45 characters!");
     }
@@ -134,7 +135,7 @@ public class Recipe {
    */
   public void addApproximation(String newApproximation) throws IllegalArgumentException {
     if (newApproximation.length() > 20) {
-      throw new IllegalArgumentException("an approximation cannot be longer than 20 characters!");
+      throw new IllegalArgumentException("An approximation cannot be longer than 20 characters!");
     }
 
     this.approximations.add(newApproximation);
@@ -161,44 +162,48 @@ public class Recipe {
    * @return Boolean true or false weather or not you can make the recipe or not
    */
   public boolean canMakeRecipe(FoodStorage foodStorage, boolean includeOutOfDate) {
+    // a wrapper class to hold the variables
+    var variableWrapper = new Object() {
+      int counter = 0;
+      double totalInstanceAmount = 0;
+    };
 
-    int counter = 0;
+    this.getIngredients().forEach(ingredient -> {
+      // reset the variables
+      variableWrapper.totalInstanceAmount = 0;
 
-    for (GroceryInstance ingredient : this.getIngredients()) {
       //does a search to find is there are any matching elements
       List<GroceryInstance> matchingElements = foodStorage.groceryInstanceSearch(
           ingredient.getName());
 
-      double totalAmount = 0;
-
       // find the total amount
-      for (GroceryInstance instance : matchingElements) {
+      matchingElements.forEach(instance -> {
         // count it out if it is out of date, since you dont really wanna make food thats outta date
         // also checks if it has the same measurement unit, since they can share names as well as
         // having different measurement units.
 
         if (!instance.isOutOfDate() &&
             ingredient.getMeasurementUnit().equals(instance.getMeasurementUnit())) {
-          totalAmount += instance.getAmount();
+          variableWrapper.totalInstanceAmount += instance.getAmount();
         }
 
         // if the user wants to check out of date food as well, and it is out of date,
         // include the grocery in the amount anyways.
         if (instance.isOutOfDate() && includeOutOfDate && ingredient.getMeasurementUnit()
             .equals(instance.getMeasurementUnit())) {
-          totalAmount += instance.getAmount();
+          variableWrapper.totalInstanceAmount += instance.getAmount();
         }
-      }
+      });
 
       // if there is enough of this ingredient, add it to the counter.
-      if (totalAmount >= ingredient.getAmount()) {
-        counter++;
+      if (variableWrapper.totalInstanceAmount >= ingredient.getAmount()) {
+        variableWrapper.counter++;
       }
-    }
+    });
 
     // if there are as many eligeble groceries in the storage as there are in the length of the
     // ingredients, you can make the recipe.
-    return counter >= this.getIngredients().size();
+    return variableWrapper.counter >= this.getIngredients().size();
 
   }
 

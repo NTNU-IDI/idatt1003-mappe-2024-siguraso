@@ -116,10 +116,12 @@ public class TestCookbook {
       try {
         ArrayList<GroceryInstance> groceryInstances = new ArrayList<>();
         groceryInstances.add(new GroceryInstance(new GroceryType("tomato",
-            "kg"), 1, 1, "12.31.9999"));
+            "kg"), 1, 1, "31.12.9999"));
 
-        ArrayList<Recipe> suggestions = cookbook.recipeSuggestion(groceryInstances,
-            true);
+        cookbook.getSpecificRecipe(1).addIngredient(new GroceryInstance(new GroceryType(
+            "tomato", "kg"), 1, 1, "31.12.9999"));
+
+        ArrayList<Recipe> suggestions = cookbook.recipeSuggestion(groceryInstances, true);
 
         assertEquals(1, suggestions.size());
       } catch (IllegalStateException e) {
