@@ -193,12 +193,18 @@ public class GroceryInstance {
   }
 
   /**
-   * Adds a certain amount of this GroceryInstance.
+   * Adds a certain amount to this GroceryInstance.
    *
-   * @param amount a double of the amount that is to be added.
+   * @param amountToAdd a double of the amount that is to be added.
    */
-  public void addAmount(double amount) {
-    this.amount += amount;
+  public void addAmount(double amountToAdd) {
+    if (amountToAdd <= 0 || amountToAdd + this.amount > 999.9) {
+      throw new IllegalArgumentException(
+          "Cannot add an that amount, please add an amount between 0 and " + (999.9
+              - this.amount));
+    }
+
+    this.amount += amountToAdd;
   }
 
   // Boolean methods

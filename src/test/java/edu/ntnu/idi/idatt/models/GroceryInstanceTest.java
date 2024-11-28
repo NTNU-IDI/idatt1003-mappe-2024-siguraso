@@ -2,6 +2,8 @@ package edu.ntnu.idi.idatt.models;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Calendar;
+import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -140,5 +142,152 @@ class GroceryInstanceTest {
       }
     }
 
+    @Test
+    @DisplayName(
+        "addAmount if the addAmount = 0, or if the addAmount + the original amount > 999.9.")
+    void groceryInstanceAddAmountThrowsException() {
+      try {
+        groceryInstance.addAmount(0);
+        fail(
+            "groceryInstanceAddAmountThrowsException() failed, since it didnt throw the expected"
+                + " IllegalArgumentException.");
+      } catch (IllegalArgumentException e) {
+        assertEquals("Cannot add an that amount, please add an amount between 0 and " + (999.9
+            - groceryInstance.getAmount()), e.getMessage());
+      }
+
+      try {
+        groceryInstance.addAmount(1000);
+        fail(
+            "groceryInstanceAddAmountThrowsException() failed, since it didnt throw the expected"
+                + " IllegalArgumentException.");
+      } catch (IllegalArgumentException e) {
+        assertEquals("Cannot add an that amount, please add an amount between 0 and " + (999.9
+            - groceryInstance.getAmount()), e.getMessage());
+      }
+    }
+
+  }
+
+  @Nested
+  @DisplayName("Positive tests for the GroceryInstance class, checks if the GroceryInstance throws "
+      + "exceptions when it should not.")
+  public class GroceryInstanceDoesNotThrowExceptions {
+
+    @Test
+    @DisplayName("Test if the GroceryInstance does not throw any exceptions when creating a new "
+        + "instance.")
+    void newGroceryInstanceDoesNotThrowException() {
+      try {
+        GroceryInstance newGroceryInstance = new GroceryInstance(new GroceryType("null", "null"),
+            0, 0, "01.01.2022");
+
+      } catch (Exception e) {
+        fail("newGroceryInstanceDoesNotThrowException() failed, since it threw an exception.");
+      }
+    }
+
+    @Test
+    @DisplayName("Getter methods fetch the correct values.")
+    void groceryInstanceGetterMethods() {
+      // create a 'copy' of the best before date that has the same values, but is a different object.
+      // to run tests on it.
+      Date bestBeforeCopy = new Date(122, Calendar.JANUARY, 1);
+
+      try {
+        assertEquals("Tomato", groceryInstance.getName());
+        assertEquals("kg", groceryInstance.getMeasurementUnit());
+        assertEquals("tomato", groceryInstance.getNameLowerCase());
+        assertEquals(10, groceryInstance.getAmount());
+        assertEquals(20, groceryInstance.getPricePerUnit());
+        assertEquals((20 * 10), groceryInstance.getPrice());
+        assertEquals("01.01.2022", groceryInstance.getBestBeforeString());
+        assertEquals("01.01.2022", groceryInstance.getBestBeforeString());
+        assertEquals(bestBeforeCopy, groceryInstance.getBestBeforeDate());
+      } catch (Exception e) {
+        fail("groceryInstanceGetterMethods() failed, since it threw an exception, message: "
+            + e.getMessage());
+      }
+    }
+
+    @Test
+    @DisplayName("setAmount sets the amount to a new value without throwing an exception.")
+    void groceryInstanceSetAmount() {
+      try {
+        groceryInstance.setAmount(20);
+        assertEquals(20, groceryInstance.getAmount());
+      } catch (Exception e) {
+        fail("groceryInstanceSetAmount() failed, since it threw an exception, message: "
+            + e.getMessage());
+      }
+    }
+
+    @Test
+    @DisplayName("setPricePerUnit sets the price per unit to a new value without throwing an exception.")
+    void groceryInstanceSetPricePerUnit() {
+      try {
+        groceryInstance.setPricePerUnit(30);
+        assertEquals(30, groceryInstance.getPricePerUnit());
+      } catch (Exception e) {
+        fail("groceryInstanceSetPricePerUnit() failed, since it threw an exception, message: "
+            + e.getMessage());
+      }
+    }
+
+    @Test
+    @DisplayName("setBestBeforeDate sets the best before date to a new value without throwing an exception.")
+    void groceryInstanceSetBestBeforeDate() {
+      // create a 'copy' of the new best before date that has the same values, but is a different
+      // object, used to compare the values.
+      Date bestBeforeCopy = new Date(123, Calendar.JANUARY, 1);
+
+      try {
+        groceryInstance.setBestBeforeDate("01.01.2023");
+        assertEquals("01.01.2023", groceryInstance.getBestBeforeString());
+        assertEquals(bestBeforeCopy, groceryInstance.getBestBeforeDate());
+      } catch (Exception e) {
+        fail("groceryInstanceSetBestBeforeDate() failed, since it threw an exception, message: "
+            + e.getMessage());
+      }
+    }
+
+    @Test
+    @DisplayName("removeAmount removes the correct amount without throwing an exception.")
+    void groceryInstanceRemoveAmount() {
+      try {
+        groceryInstance.removeAmount(5);
+        assertEquals(5, groceryInstance.getAmount());
+      } catch (Exception e) {
+        fail("groceryInstanceRemoveAmount() failed, since it threw an exception, message: "
+            + e.getMessage());
+      }
+    }
+
+    @Test
+    @DisplayName("addAmount adds the correct amount without throwing an exception.")
+    void groceryInstanceAddAmount() {
+      try {
+        groceryInstance.addAmount(5);
+        assertEquals(15, groceryInstance.getAmount());
+      } catch (Exception e) {
+        fail("groceryInstanceAddAmount() failed, since it threw an exception, message: "
+            + e.getMessage());
+      }
+    }
+
+    @Test
+    @DisplayName("isOutOfDate returns true if the best before date is before the current date.")
+    void groceryInstanceIsOutOfDate() {
+      try {
+        assertTrue(groceryInstance.isOutOfDate());
+
+        groceryInstance.setBestBeforeDate("31.12.9998");
+
+        assertFalse(groceryInstance.isOutOfDate());
+      } catch (Exception e) {
+        fail("groceryInstanceIsOutOfDate() failed, since it threw an exception, message: "
+            + e.getMessage());
+      }
+    }
   }
 }
