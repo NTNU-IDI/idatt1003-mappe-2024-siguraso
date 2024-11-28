@@ -181,6 +181,8 @@ public class GroceryInstance {
    * Removes a certain amount of this GroceryInstance.
    *
    * @param amountToRemove a double containing the amount you would like to remove.
+   * @throws IllegalArgumentException if the amount to remove is less than 0 or more than the
+   *                                  current amount.
    */
   public void removeAmount(double amountToRemove) throws IllegalArgumentException {
     if (amountToRemove <= 0 || amountToRemove >= this.amount) {

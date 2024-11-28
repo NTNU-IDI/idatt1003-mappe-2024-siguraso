@@ -807,21 +807,40 @@ public class UserInterface {
             + "\n\nFrom which grocery do you wish to remove?",
         foodStorage.getAllGroceryInstances().size());
 
-    double amountToRemove = doubleOptionParameter("How many '" + foodStorage.getSpecificInstance(
-            removeAmountIndex).getMeasurementUnit() + "' of '" + foodStorage.getSpecificInstance(
-            removeAmountIndex).getName() + "' do you wish to remove?", 0.0,
-        foodStorage.getSpecificInstance(removeAmountIndex).getAmount());
-
     double oldAmount = foodStorage.getSpecificInstance(removeAmountIndex).getAmount();
-    double newAmount = oldAmount - amountToRemove;
+    double removeAmount = 0;
+
+    boolean hasEnteredValidAmount = false;
+
+    while (!hasEnteredValidAmount) {
+      try {
+        removeAmount = utils.doubleOption(
+            "How much " + foodStorage.getSpecificInstance(removeAmountIndex).getMeasurementUnit()
+                + " of " + foodStorage.getSpecificInstance(removeAmountIndex).getName()
+                + " do you wish to remove? (0.0 - "
+                + foodStorage.getSpecificInstance(removeAmountIndex).getAmount() + ")");
+
+        foodStorage.getSpecificInstance(removeAmountIndex).removeAmount(removeAmount);
+
+        hasEnteredValidAmount = true;
+
+      } catch (Exception e) {
+        utils.clearScreen();
+        System.out.println(e.getMessage() + "\n");
+      }
+    }
 
     utils.clearScreen();
-    String yesNoChoice = uiYesNoOption(
-        "From old amount: " + oldAmount + "\nTo new amount: " + newAmount
-            + "\n\nIs this OK? (Y/n)");
 
-    if (yesNoChoice.equalsIgnoreCase("y")) {
-      foodStorage.getSpecificInstance(removeAmountIndex).setAmount(newAmount);
+    String yesNoChoice = uiYesNoOption("Remove " + foodStorage.getSpecificType(removeAmountIndex)
+        .getName() + " from the food storage?\n\n" + "From old amount: " + oldAmount +
+        "\nTo new amount: " + (oldAmount - removeAmount)
+        + "\n\nIs this OK? (Y/n)");
+
+    utils.clearScreen();
+
+    if (yesNoChoice.equalsIgnoreCase("n")) {
+      foodStorage.getSpecificInstance(removeAmountIndex).setAmount(oldAmount);
     }
   }
 
@@ -1106,41 +1125,6 @@ public class UserInterface {
       return index;
     }
   }
-
-  /**
-   * This method is used to display a dialog option that lets the user pick a double within a given
-   * intervall. If the given double is outside of this interval, the user gets instructed to try
-   * again until they enter a valid double.
-   *
-   * @param message dialog message given as a {@link String} that is shown above the user input.
-   * @param start   start of the interval (the lowest value the user can input) (given as an int).
-   * @param end     end of the interval (the highest value the user can input) (given as an int).
-   * @return a valid double defined by the user.
-   */
-  private double doubleOptionParameter(String message, double start, double end) {
-    boolean hasEnteredValidDouble = false;
-    double value = 0;
-    while (!hasEnteredValidDouble) {
-      try {
-        value = utils.doubleOption(message +
-            " (Please enter a decimal number " + start + " - " + end + ")");
-
-        if (value >= start && value <= end) {
-          hasEnteredValidDouble = true;
-        } else {
-          utils.clearScreen();
-          System.out.println(
-              "Please enter a decimal number between " + start + " and " + end + ".\n");
-        }
-      } catch (NumberFormatException e) {
-        utils.clearScreen();
-        System.out.println(e.getMessage() + "\n");
-      }
-    }
-
-    return value;
-  }
-
 
   /**
    * This method is used to create a dialog menu that lets the user choose multiple different
