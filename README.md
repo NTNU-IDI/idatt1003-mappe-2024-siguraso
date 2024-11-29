@@ -1,7 +1,6 @@
 # Portfolio project IDATT1003
 
 STUDENT NAME = "Sigurd Andris Sørengen"
-STUDENT ID = "Your ID"
 
 ## Project description
 
@@ -34,7 +33,7 @@ The tests for each of the model classes are stored in [src/test/java/edu/ntnu/id
 
 ## How to run the project
 
-1. Download the source code
+1. Download the source code.
 2. Run the file "FoodWasteApp.java" (make sure to have Java installed!) stored within src/main/java/edu/ntnu/idi/idatt using the file explorer of your choice.
 3. The program will prompty open in a terminal window.
 
@@ -42,11 +41,14 @@ The tests for each of the model classes are stored in [src/test/java/edu/ntnu/id
 
 ## How to run the tests
 
-*Coming soon!*
+1. Download the source code.
+2. Open the source code using any IDE of your choice, where you have configured the project to be a Maven test project.
+4. Simply run the test you wish to run!
 
-## References
+## Project references
 
-*Coming soon!*
+Horstman, C. S. (2024). *CoreJava Volume I: Fundamentals Twelfth Edition* (12th Edt.). Oracle Press.
 
-[//]: # (TODO: Include references here, if any. For example, if you have used code from the course book, include a reference to the chapter.
-Or if you have used code from a website or other source, include a link to the source.)
+Oracle. (No year). *Class SimpleDateFormat*. url: https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
+
+
