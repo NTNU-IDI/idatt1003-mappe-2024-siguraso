@@ -264,18 +264,4 @@ public class FoodStorage {
     return isSameType(G1, G2) && G1.getBestBeforeString()
         .equals(G2.getBestBeforeString()) && G1.getPricePerUnit() == G2.getPricePerUnit();
   }
-
-  public static void main(String[] args) {
-    FoodStorage foodStorage = new FoodStorage();
-    GroceryType groceryType = new GroceryType("Apple", "kg");
-    GroceryInstance groceryInstance = new GroceryInstance(groceryType, 1.0, 1.0, "01.01.2022");
-    GroceryInstance groceryInstance2 = new GroceryInstance(groceryType, 2.0, 1.0, "01.01.2022");
-    foodStorage.addInstance(groceryInstance);
-    foodStorage.addInstance(groceryInstance2);
-    System.out.println(
-        foodStorage.getSpecificInstance(1).getName() + " " + foodStorage.getSpecificInstance(1)
-            .getAmount());
-
-    System.out.println(foodStorage.getAllGroceryInstances().size());
-  }
 }

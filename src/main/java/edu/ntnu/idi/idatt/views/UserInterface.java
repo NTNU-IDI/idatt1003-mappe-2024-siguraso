@@ -73,6 +73,11 @@ public class UserInterface {
         marinaraIngredients, approx));
   }
 
+  /**
+   * Starts the program by clearing the screen, and then initiating the main menu. Once the user
+   * initiates the quit action, the program will close the scanner from the Utils, and close the
+   * program.
+   */
   public void start() {
     utils.clearScreen();
     mainMenu();
@@ -83,7 +88,7 @@ public class UserInterface {
     utils.clearScreen();
   }
 
-  // main menu and sub-menus Initiaters:
+  // main menu and sub-menus Initiators:
 
   /**
    * Displays the main menu that branches out to the different other menus.
