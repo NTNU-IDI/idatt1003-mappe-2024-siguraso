@@ -46,7 +46,7 @@ public class FoodStorage {
    *
    * @param index The indexes the user wants to find the combined value of.
    */
-  public double getSpecificValue(int[] index) {
+  public double getMultipleSpecificValue(int[] index) {
     var sumWrapper = new Object() {
       double sum = 0;
     };
@@ -142,6 +142,66 @@ public class FoodStorage {
   }
 
   /**
+   * Merges duplicate instances of GroceryInstance in the food storage. If the total amount of the
+   * two instances is greater than 999.9, the rest will be added to a separate instance.
+   */
+  private void mergeDuplicateInstances() {
+    // goes through the list of groceries...
+    for (int i = 0; i < this.groceryInstances.size(); i++) {
+      // ...and compares them to every other grocery in the list...
+      for (int j = i + 1; j < this.groceryInstances.size(); j++) {
+        if (isSameInstance(this.groceryInstances.get(i), this.groceryInstances.get(j))) {
+          // ...if they are the same, they will be merged together.
+          if (this.groceryInstances.get(i).getAmount() + this.groceryInstances.get(j).getAmount()
+              > 999.9) {
+            // if the total amount is bigger than 999.9, the rest will be added to the first grocery
+            // instance, and the second will be set to 999.9...
+            double restToAdd =
+                999.9 - this.groceryInstances.get(i).getAmount() + this.groceryInstances.get(j)
+                    .getAmount();
+            this.groceryInstances.get(i).setAmount(999.9);
+            this.groceryInstances.get(j).removeAmount(restToAdd);
+          } else {
+            // ...if not, they will be added together and the second grocery will be set to 0, and
+            // promptly removed.
+            this.groceryInstances.get(i).addAmount(this.groceryInstances.get(j).getAmount());
+            this.groceryInstances.get(j).setAmount(0);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Removes all elements from the groceries ArrayList that are equal to zero.
+   */
+  private void removeEmptyInstances() {
+    this.groceryInstances.removeIf(GI -> GI.getAmount() == 0);
+  }
+
+
+  /**
+   * Checks if two GroceryInstances are of the same GroceryType
+   *
+   * @return true is they are the same GroceryType, false if they aren't.
+   */
+  private boolean isSameType(GroceryInstance G1, GroceryInstance G2) {
+    return G1.getName().equals(G2.getName()) && G1.getMeasurementUnit()
+        .equals(G2.getMeasurementUnit());
+  }
+
+  /**
+   * Checks if two GroceryInstances can be melted together if they essentially are the same
+   * GroceryInstance.
+   *
+   * @return true if they can be melted together, false if not.
+   */
+  private boolean isSameInstance(GroceryInstance G1, GroceryInstance G2) {
+    return isSameType(G1, G2) && G1.getBestBeforeString()
+        .equals(G2.getBestBeforeString()) && G1.getPricePerUnit() == G2.getPricePerUnit();
+  }
+
+  /**
    * Goes through the groceries ArrayList and checks if a user-specified search term matches any of
    * the names of the items in the ArrayList.
    *
@@ -186,42 +246,12 @@ public class FoodStorage {
   }
 
   /**
-   * Merges duplicate instances of GroceryInstance in the food storage. If the total amount of the
-   * two instances is greater than 999.9, the rest will be added to a separate instance.
-   */
-  private void mergeDuplicateInstances() {
-    // goes through the list of groceries...
-    for (int i = 0; i < this.groceryInstances.size(); i++) {
-      // ...and compares them to every other grocery in the list...
-      for (int j = i + 1; j < this.groceryInstances.size(); j++) {
-        if (isSameInstance(this.groceryInstances.get(i), this.groceryInstances.get(j))) {
-          // ...if they are the same, they will be merged together.
-          if (this.groceryInstances.get(i).getAmount() + this.groceryInstances.get(j).getAmount()
-              > 999.9) {
-            // if the total amount is bigger than 999.9, the rest will be added to the first grocery
-            // instance, and the second will be set to 999.9...
-            double restToAdd =
-                999.9 - this.groceryInstances.get(i).getAmount() + this.groceryInstances.get(j)
-                    .getAmount();
-            this.groceryInstances.get(i).setAmount(999.9);
-            this.groceryInstances.get(j).removeAmount(restToAdd);
-          } else {
-            // ...if not, they will be added together and the second grocery will be set to 0, and
-            // promptly removed.
-            this.groceryInstances.get(i).addAmount(this.groceryInstances.get(j).getAmount());
-            this.groceryInstances.get(j).setAmount(0);
-          }
-        }
-      }
-    }
-  }
-
-  /**
    * Adds an instance of GroceryType to the food storage.
    */
   public void addType(GroceryType groceryType) {
     this.groceryTypes.add(groceryType);
   }
+
 
   /**
    * Removes a specific amount from a given grocery from the groceries ArrayList based on the index
@@ -233,35 +263,5 @@ public class FoodStorage {
    */
   public void removeInstanceAmount(int index, double amount) {
     this.groceryInstances.get(index - 1).removeAmount(amount);
-  }
-
-  /**
-   * Removes all elements from the groceries ArrayList that are equal to zero.
-   */
-  public void removeEmptyInstances() {
-    this.groceryInstances.removeIf(GI -> GI.getAmount() == 0);
-  }
-
-  // boolean methods
-
-  /**
-   * Checks if two GroceryInstances are of the same GroceryType
-   *
-   * @return true is they are the same GroceryType, false if they aren't.
-   */
-  private boolean isSameType(GroceryInstance G1, GroceryInstance G2) {
-    return G1.getName().equals(G2.getName()) && G1.getMeasurementUnit()
-        .equals(G2.getMeasurementUnit());
-  }
-
-  /**
-   * Checks if two GroceryInstances can be melted together if they essentially are the same
-   * GroceryInstance.
-   *
-   * @return true if they can be melted together, false if not.
-   */
-  private boolean isSameInstance(GroceryInstance G1, GroceryInstance G2) {
-    return isSameType(G1, G2) && G1.getBestBeforeString()
-        .equals(G2.getBestBeforeString()) && G1.getPricePerUnit() == G2.getPricePerUnit();
   }
 }

@@ -778,7 +778,7 @@ public class UserInterface {
 
       System.out.println(
           utils.foodStorageTable(combinedValueInstances) + "\nCumulative value: "
-              + foodStorage.getSpecificValue(indexes) + "\n\nPress ENTER to continue...");
+              + foodStorage.getMultipleSpecificValue(indexes) + "\n\nPress ENTER to continue...");
 
       utils.getInput();
 
