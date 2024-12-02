@@ -123,8 +123,9 @@ class TestFoodStorage {
         + "instance.")
     void foodStorageAddInstanceDoesNotThrowException() {
       try {
-        // indirectly tests the sorting algorithm, since the instance has a name with the first
-        // letter of the alphabet, meaning it will go from the last to the first element.
+        // also indirectly tests the sortInsrances method because the instances are sorted by
+        // alpghabetically, meaning that a grocery instance with the name "a" will sorted to the
+        // first index.
         GroceryType type = new GroceryType("a", "kg");
         GroceryInstance instance = new GroceryInstance(type, 1, 1, "01.01.9999");
         foodStorage.addInstance(instance);
@@ -138,11 +139,9 @@ class TestFoodStorage {
     @DisplayName("addType to food storage should not throw any exceptions when adding a new type.")
     void foodStorageAddTypeDoesNotThrowException() {
       try {
-        // indirectly tests the sorting algorithm, since the type has a name with the first
-        // letter of the alphabet, meaning it will go from the last to the first element.
         GroceryType type = new GroceryType("a", "kg");
         foodStorage.addType(type);
-        assertEquals("a", foodStorage.getAllGroceryTypes().getFirst().getName());
+        assertEquals("a", foodStorage.getAllGroceryTypes().getLast().getName());
       } catch (Exception e) {
         fail("foodStorageAddTypeDoesNotThrowException() failed, since it threw an exception.");
       }
@@ -162,6 +161,28 @@ class TestFoodStorage {
       } catch (Exception e) {
         fail(
             "foodStorageRemoveInstanceAmountDoesNotThrowException() failed, since it threw an "
+                + "exception, message: " + e.getMessage());
+      }
+    }
+
+    @Test
+    @DisplayName(
+        "sortGroceryTypes sorts GroceryTypes alphabetically.")
+    void foodStorageSortGroceryTypesDoesNotThrowException() {
+      try {
+        GroceryType type = new GroceryType("a", "kg");
+        GroceryType type2 = new GroceryType("b", "kg");
+        GroceryType type3 = new GroceryType("c", "kg");
+        foodStorage.addType(type);
+        foodStorage.addType(type2);
+        foodStorage.addType(type3);
+        foodStorage.sortGroceryTypes();
+        assertEquals("a", foodStorage.getSpecificType(1).getName());
+        assertEquals("b", foodStorage.getSpecificType(2).getName());
+        assertEquals("c", foodStorage.getSpecificType(3).getName());
+      } catch (Exception e) {
+        fail(
+            "foodStorageSortGroceryTypesDoesNotThrowException() failed, since it threw an "
                 + "exception, message: " + e.getMessage());
       }
     }

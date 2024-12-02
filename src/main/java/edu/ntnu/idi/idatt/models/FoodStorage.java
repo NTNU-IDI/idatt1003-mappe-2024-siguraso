@@ -117,8 +117,6 @@ public class FoodStorage {
    * @return An ArrayList containing all instances of GroceryType.
    */
   public ArrayList<GroceryType> getAllGroceryTypes() {
-    this.sortGroceryTypes();
-
     return this.groceryTypes;
   }
 
@@ -137,7 +135,7 @@ public class FoodStorage {
   /**
    * Sorts the {@link ArrayList} of {@link GroceryType} alphabetically.
    */
-  private void sortGroceryTypes() {
+  public void sortGroceryTypes() {
     this.groceryTypes.sort(Comparator.comparing(GroceryType::getNameLowerCase));
   }
 

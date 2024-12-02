@@ -71,6 +71,8 @@ public class UserInterface {
     cookBook.addRecipe(new Recipe("Marinara Sauce",
         "4 servings of classic marinara sauce, perfect for italian dishes.", instructions,
         marinaraIngredients, approx));
+
+    foodStorage.sortGroceryTypes();
   }
 
   /**
@@ -256,7 +258,10 @@ public class UserInterface {
       int groceryTypeChoice = initiateGroceryTypeAction();
       switch (groceryTypeChoice) {
         // add grocery type
-        case 1 -> addGroceryType();
+        case 1 -> {
+          addGroceryType();
+          foodStorage.sortGroceryTypes();
+        }
 
         // remove grocery type
         case 2 -> {
@@ -271,7 +276,10 @@ public class UserInterface {
         }
 
         // edit grocery type
-        case 3 -> editGroceryType();
+        case 3 -> {
+          editGroceryType();
+          foodStorage.sortGroceryTypes();
+        }
 
         //return to main menu.
         case 4 -> returnToMainMenu = true;
@@ -394,6 +402,7 @@ public class UserInterface {
       //if the user doesnt want to keep it, remove it from the list.
       foodStorage.getAllGroceryTypes().removeLast();
     }
+    foodStorage.sortGroceryTypes();
   }
 
   /**
