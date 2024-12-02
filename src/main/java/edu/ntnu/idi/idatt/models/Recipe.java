@@ -1,6 +1,5 @@
 package edu.ntnu.idi.idatt.models;
 
-import edu.ntnu.idi.idatt.views.UserInterface;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +113,7 @@ public class Recipe {
   // add methods
 
   /**
-   * Adds another ingredient to the recipe. Used in the {@link UserInterface} when creating a new
+   * Adds another ingredient to the recipe. Used in the UserInterface when creating a new
    * {@link Recipe}.
    *
    * @param newIngredient the new ingredient to add, given as a {@link GroceryInstance}
@@ -126,7 +125,7 @@ public class Recipe {
   /**
    * Adds an approximation that's used to approximate an ingredient of the corresponding index to
    * make the recipe more understandable and easier to make. this method is used in the
-   * {@link UserInterface} class when creating a new recipe.
+   * UserInterface class when creating a new recipe.
    *
    * @param newApproximation {@link String} containing the approximation for a corresponding
    *                         ingredient.
@@ -142,8 +141,7 @@ public class Recipe {
   }
 
   /**
-   * Adds another instruction to the recipe. Used in the {@link UserInterface} when creating a new
-   * recipe
+   * Adds another instruction to the recipe. Used in the UserInterface when creating a new recipe
    *
    * @param newInstruction the new instruction that to add to the recipe.
    */
