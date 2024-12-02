@@ -28,14 +28,13 @@ public class UserInterface {
    */
   public void init() {
 
-    foodStorage.addType(new GroceryType("Tomato", "kg"));
-    foodStorage.addType(new GroceryType("Milk", "L"));
-    foodStorage.addType(new GroceryType("Pepsi", "L"));
+    foodStorage.addType(new GroceryType("Tomato - Loose weight", "kg"));
+    foodStorage.addType(new GroceryType("Milk - 1L", "pcs."));
     foodStorage.addType(new GroceryType("Bread", "pcs."));
-    foodStorage.addType(new GroceryType("Union", "pcs."));
-    foodStorage.addType(new GroceryType("Butter", "pcs."));
-    foodStorage.addType(new GroceryType("Salt - Regular container", "pcs."));
-    foodStorage.addType(new GroceryType("Oregano - Regular container", "pcs."));
+    foodStorage.addType(new GroceryType("Union - Loose weight", "kg"));
+    foodStorage.addType(new GroceryType("Butter - 400g container", "pcs."));
+    foodStorage.addType(new GroceryType("Salt - 100g container", "pcs."));
+    foodStorage.addType(new GroceryType("Oregano - 100g container", "pcs."));
     foodStorage.addType(new GroceryType("Garlic - 2 Pack", "pcs."));
 
     //example recipe marinara sauce
@@ -45,19 +44,19 @@ public class UserInterface {
         0.4, 0.0, null));
     approx.add("400 grams of tomato");
 
-    marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(6), 1,
+    marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(5), 1,
         0.0, null));
     approx.add("2 Tablespoons");
 
-    marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(8), 1,
+    marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(7), 1,
         0.0, null));
     approx.add("2 Teaspoons");
 
-    marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(9), 1,
+    marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(8), 1,
         0.0, null));
     approx.add("A 2 pack of garlic");
 
-    marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(7), 1,
+    marinaraIngredients.add(new GroceryInstance(foodStorage.getSpecificType(6), 1,
         0.0, null));
     approx.add("1 Teaspoon");
 
@@ -420,7 +419,7 @@ public class UserInterface {
 
       utils.clearScreen();
 
-      String curRemoved = "name" + foodStorage.getAllGroceryTypes().get(removeIndex).getName();
+      String curRemoved = foodStorage.getAllGroceryTypes().get(removeIndex - 1).getName();
 
       foodStorage.removeType(removeIndex);
 
