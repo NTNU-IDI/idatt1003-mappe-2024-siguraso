@@ -211,8 +211,8 @@ class GroceryInstanceTest {
         assertEquals(10, groceryInstance.getAmount());
         assertEquals(20, groceryInstance.getPricePerUnit());
         assertEquals((20 * 10), groceryInstance.getPrice());
-        assertEquals("01.01.2022", groceryInstance.getBestBeforeString());
-        assertEquals("01.01.2022", groceryInstance.getBestBeforeString());
+        assertEquals("\u001B[31m01.01.2022\u001B[0m", groceryInstance.getBestBeforeString());
+        assertEquals("\u001B[31m01.01.2022\u001B[0m", groceryInstance.getBestBeforeString());
         assertEquals(bestBeforeCopy, groceryInstance.getBestBeforeDate());
       } catch (Exception e) {
         fail("groceryInstanceGetterMethods() failed, since it threw an exception, message: "
@@ -249,12 +249,16 @@ class GroceryInstanceTest {
     void groceryInstanceSetBestBeforeDate() {
       // create a 'copy' of the new best before date that has the same values, but is a different
       // object, used to compare the values.
+      // Sets the date twice, once for an expire date that is before the current date, and once for
+      // a date that is after the current date to test the red text color.
       Date bestBeforeCopy = new Date(123, Calendar.JANUARY, 1);
 
       try {
         groceryInstance.setBestBeforeDate("01.01.2023");
-        assertEquals("01.01.2023", groceryInstance.getBestBeforeString());
+        assertEquals("\u001B[31m01.01.2023\u001B[0m", groceryInstance.getBestBeforeString());
         assertEquals(bestBeforeCopy, groceryInstance.getBestBeforeDate());
+        groceryInstance.setBestBeforeDate("31.12.9998");
+        assertEquals("31.12.9998", groceryInstance.getBestBeforeString());
       } catch (Exception e) {
         fail("groceryInstanceSetBestBeforeDate() failed, since it threw an exception, message: "
             + e.getMessage());

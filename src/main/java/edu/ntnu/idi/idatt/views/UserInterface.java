@@ -115,21 +115,23 @@ public class UserInterface {
    * <p>[1] Add grocery to storage.</p>
    * <p>[2] Remove grocery from storage.</p>
    * <p>[3] Search in food storage.</p>
-   * <p>[4] Display out of date food only.</p>
+   * <p>[4] Display expired food only.</p>
    * <p>[5] Edit specific grocery (e.g. edit amount, best before date and price per unit).</p>
    * <p>[6] Check the value of multiple groceries..</p>
    * <p>[7] Remove amount from specific grocery</p>
    * <p>[8] Return to main menu.</p>
    */
   private int initiateFoodStorageAction() {
+    String valueFormat = "Total value of food storage: %.2f kr";
+
     return choiceWindow(
         new String[]{"Add grocery to storage.", "Remove grocery from storage",
-            "Search in food storage.", "Display out of date food only",
+            "Search in food storage.", "Display expired food only",
             "Edit specific grocery (e.g. edit amount, best before date and price per unit).",
             "Check the value of multiple groceries.", "Remove amount from specific grocery",
             "Return to main menu."}, utils.foodStorageTable(foodStorage.getAllGroceryInstances())
-            + "\n\nTotal Value of food storage: " + foodStorage.getTotalValue()
-            + "\n\nFood storage menu:");
+            + "\n\n" + String.format(valueFormat, foodStorage.getTotalValue())
+            + "\n\nManage food storage:");
   }
 
   /**
@@ -423,7 +425,7 @@ public class UserInterface {
 
       foodStorage.removeType(removeIndex);
 
-      System.out.println("Successfully removed grocery type: " + curRemoved + "."
+      System.out.println("Successfully removed grocery class: " + curRemoved + "."
           + "\n\nPress ENTER to continue.");
 
       utils.getInput();
@@ -604,8 +606,7 @@ public class UserInterface {
         String isInstanceOK = uiYesNoOption(
             "Name: " + foodStorage.getSpecificType(typeIndex).getName() +
                 "\nMeasurement Unit: " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit()
-                +
-                "\nAmount: " + foodStorage.getAllGroceryInstances().getLast().getAmount() + " "
+                + "\nAmount: " + foodStorage.getAllGroceryInstances().getLast().getAmount() + " "
                 + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() +
                 "\nPrice per " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + ": "
                 + foodStorage.getAllGroceryInstances().getLast().getPricePerUnit() +
@@ -671,9 +672,11 @@ public class UserInterface {
    * the cumulative value of said groceries.
    */
   private void displayOutOfDate() {
+    String outOfDateValueFormat = "Total value of expired: %.2f kr";
+
     System.out.println(
         "All out of date food:\n\n" + utils.foodStorageTable(foodStorage.getOutOfDateInstances())
-            + "\n\nTotal Value: " + foodStorage.getOutOfDateValue()
+            + "\n\n" + String.format(outOfDateValueFormat, foodStorage.getOutOfDateValue())
             + "\n\nPress ENTER to continue...");
 
     utils.getInput();

@@ -87,6 +87,10 @@ public class GroceryInstance {
    * display the best before date.
    */
   public String getBestBeforeString() {
+    if (this.isOutOfDate()) {
+      // if it out of date, color the String red.
+      return "\u001B[31m" + this.bestBefore + "\u001B[0m";
+    }
     return this.bestBefore;
   }
 
