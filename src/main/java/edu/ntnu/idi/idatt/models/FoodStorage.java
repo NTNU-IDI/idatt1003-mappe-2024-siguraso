@@ -76,11 +76,11 @@ public class FoodStorage {
   public ArrayList<GroceryInstance> getOutOfDateInstances() {
     ArrayList<GroceryInstance> outdatedInstances = new ArrayList<>();
 
-    for (GroceryInstance grocery : this.groceryInstances) {
+    this.groceryInstances.forEach(grocery -> {
       if (grocery.isOutOfDate()) {
         outdatedInstances.add(grocery);
       }
-    }
+    });
 
     return outdatedInstances;
   }
@@ -105,8 +105,6 @@ public class FoodStorage {
    */
   public ArrayList<GroceryInstance> getAllGroceryInstances() {
     this.removeEmptyInstances();
-    this.mergeDuplicateInstances();
-    this.sortGroceryInstances();
 
     return this.groceryInstances;
   }
@@ -124,7 +122,7 @@ public class FoodStorage {
    * Sorts the {@link ArrayList} of {@link GroceryInstance} alphabetically, then based on best
    * before date.
    */
-  private void sortGroceryInstances() {
+  public void sortGroceryInstances() {
     // sorts the list of grocery instances based on what the best before date is, and then comparing
     // the name alphabetically
     this.groceryInstances.sort(Comparator.comparing(GroceryInstance::getNameLowerCase)
@@ -143,7 +141,7 @@ public class FoodStorage {
    * Merges duplicate instances of GroceryInstance in the food storage. If the total amount of the
    * two instances is greater than 999.9, the rest will be added to a separate instance.
    */
-  private void mergeDuplicateInstances() {
+  public void mergeDuplicateInstances() {
     // goes through the list of groceries...
     for (int i = 0; i < this.groceryInstances.size(); i++) {
       // ...and compares them to every other grocery in the list...

@@ -213,7 +213,12 @@ public class UserInterface {
       utils.clearScreen();
       switch (foodStorageChoice) {
         // add grocery
-        case 1 -> addGroceryInstance();
+        case 1 -> {
+          addGroceryInstance();
+          foodStorage.mergeDuplicateInstances();
+          foodStorage.sortGroceryInstances();
+          foodStorage.sortGroceryTypes();
+        }
 
         // remove grocery
         case 2 -> {
@@ -232,7 +237,11 @@ public class UserInterface {
         case 4 -> displayOutOfDate();
 
         // edit grocery
-        case 5 -> editGroceryInstance();
+        case 5 -> {
+          editGroceryInstance();
+          foodStorage.mergeDuplicateInstances();
+          foodStorage.sortGroceryInstances();
+        }
 
         // find cumulative value of many groceries.
         case 6 -> valueOfMultipleGroceries();
@@ -403,7 +412,6 @@ public class UserInterface {
       //if the user doesnt want to keep it, remove it from the list.
       foodStorage.getAllGroceryTypes().removeLast();
     }
-    foodStorage.sortGroceryTypes();
   }
 
   /**
@@ -555,19 +563,19 @@ public class UserInterface {
       utils.clearScreen();
 
       while (!hasEnteredValidAmount) {
-        try {
-          double amount = utils.doubleOption("Please enter the amount of '" +
-              foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '" +
-              foodStorage.getSpecificType(typeIndex).getName() +
-              "' that you would like to add to the food storage. (0.0 - 999.9)");
+        //try {
+        double amount = utils.doubleOption("Please enter the amount of '" +
+            foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '" +
+            foodStorage.getSpecificType(typeIndex).getName() +
+            "' that you would like to add to the food storage. (0.0 - 999.9)");
 
-          foodStorage.getAllGroceryInstances().getLast().setAmount(amount);
+        foodStorage.getAllGroceryInstances().getLast().setAmount(amount);
 
-          hasEnteredValidAmount = true;
-        } catch (Exception e) {
-          utils.clearScreen();
-          System.out.println(e.getMessage() + "\n\n");
-        }
+        hasEnteredValidAmount = true;
+        //} catch (Exception e) {
+        //  utils.clearScreen();
+        //  System.out.println(e.getMessage() + "\n\n");
+        //}
       }
 
       while (!hasEnteredValidPrice) {
@@ -615,6 +623,12 @@ public class UserInterface {
 
         if (isInstanceOK.equals("n")) {
           foodStorage.getAllGroceryInstances().removeLast();
+        } else {
+          utils.clearScreen();
+          System.out.println("Successfully added grocery to the food storage."
+              + "\nPress ENTER to continue...");
+
+          utils.getInput();
         }
       }
     } catch (IllegalArgumentException e) {
