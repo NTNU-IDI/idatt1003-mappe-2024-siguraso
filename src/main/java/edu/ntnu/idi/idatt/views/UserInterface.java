@@ -221,14 +221,7 @@ public class UserInterface {
         }
 
         // remove grocery
-        case 2 -> {
-          String removeConfirmation = uiYesNoOption(
-              "Do you really wish to remove a grocery from the food storage? (Y/n)");
-
-          if (removeConfirmation.equals("y")) {
-            removeGroceryInstance();
-          }
-        }
+        case 2 -> removeGroceryInstance();
 
         // search groceries
         case 3 -> searchInFoodStorage();
@@ -429,14 +422,23 @@ public class UserInterface {
 
       utils.clearScreen();
 
-      String curRemoved = foodStorage.getAllGroceryTypes().get(removeIndex - 1).getName();
+      String curRemoved = foodStorage.getSpecificType(removeIndex).getName();
 
-      foodStorage.removeType(removeIndex);
+      String removeConfirm = uiYesNoOption(
+          "Do you really wish to remove the grocery class: " + curRemoved + "? (Y/n)");
 
-      System.out.println("Successfully removed grocery class: " + curRemoved + "."
-          + "\n\nPress ENTER to continue.");
+      if (removeConfirm.equals("y")) {
+        foodStorage.removeType(removeIndex);
 
-      utils.getInput();
+        utils.clearScreen();
+
+        System.out.println("Successfully removed grocery class: " + curRemoved + "."
+            + "\nPress ENTER to continue.");
+
+        utils.getInput();
+      }
+
+      utils.clearScreen();
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
       utils.getInput();
@@ -563,19 +565,19 @@ public class UserInterface {
       utils.clearScreen();
 
       while (!hasEnteredValidAmount) {
-        //try {
-        double amount = utils.doubleOption("Please enter the amount of '" +
-            foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '" +
-            foodStorage.getSpecificType(typeIndex).getName() +
-            "' that you would like to add to the food storage. (0.0 - 999.9)");
+        try {
+          double amount = utils.doubleOption("Please enter the amount of '" +
+              foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '" +
+              foodStorage.getSpecificType(typeIndex).getName() +
+              "' that you would like to add to the food storage. (0.0 - 999.9)");
 
-        foodStorage.getAllGroceryInstances().getLast().setAmount(amount);
+          foodStorage.getAllGroceryInstances().getLast().setAmount(amount);
 
-        hasEnteredValidAmount = true;
-        //} catch (Exception e) {
-        //  utils.clearScreen();
-        //  System.out.println(e.getMessage() + "\n\n");
-        //}
+          hasEnteredValidAmount = true;
+        } catch (Exception e) {
+          utils.clearScreen();
+          System.out.println(e.getMessage() + "\n\n");
+        }
       }
 
       while (!hasEnteredValidPrice) {
@@ -654,7 +656,25 @@ public class UserInterface {
 
       utils.clearScreen();
 
-      foodStorage.removeInstance(removeIndex);
+      String curRemoved = foodStorage.getSpecificInstance(removeIndex).getName();
+
+      String removeConfirm = uiYesNoOption(
+          "Do you really wish to remove " + foodStorage.getSpecificInstance(removeIndex).getName()
+              + " from the food storage? (Y/n)");
+
+      if (removeConfirm.equals("y")) {
+        utils.clearScreen();
+
+        foodStorage.removeInstance(removeIndex);
+
+        System.out.println("Successfully removed " + curRemoved + " from the food storage."
+            + "\nPress ENTER to continue...");
+
+        utils.getInput();
+      }
+
+      utils.clearScreen();
+
     } catch (Exception e) {
       utils.clearScreen();
 
