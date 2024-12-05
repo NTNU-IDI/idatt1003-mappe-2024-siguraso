@@ -187,6 +187,60 @@ class TestFoodStorage {
       }
     }
 
+    @Test
+    @DisplayName(
+        "sortGroceryInstances sorts GroceryInstances alphabetically, then by best before date.")
+    void foodStorageSortGroceryInstancesDoesNotThrowException() {
+      try {
+        GroceryType type = new GroceryType("a", "kg");
+        GroceryType type2 = new GroceryType("b", "kg");
+        GroceryType type3 = new GroceryType("c", "kg");
+        GroceryInstance instance2 = new GroceryInstance(type2, 1, 1, "31.12.9999");
+        GroceryInstance instance = new GroceryInstance(type, 1, 1, "31.12.9999");
+        GroceryInstance instance3 = new GroceryInstance(type3, 1, 1, "31.12.9999");
+        foodStorage.addInstance(instance);
+        foodStorage.addInstance(instance2);
+        foodStorage.addInstance(instance3);
+        foodStorage.sortGroceryInstances();
+        // test alphabetical order
+        assertEquals("a", foodStorage.getSpecificInstance(1).getName());
+        assertEquals("b", foodStorage.getSpecificInstance(2).getName());
+        assertEquals("c", foodStorage.getSpecificInstance(3).getName());
+        foodStorage.addInstance(new GroceryInstance(type, 1, 1, "30.12.9999"));
+        foodStorage.sortGroceryInstances();
+        // test best before date order
+        assertEquals("30.12.9999", foodStorage.getSpecificInstance(1).getBestBeforeString());
+        assertEquals("31.12.9999", foodStorage.getSpecificInstance(2).getBestBeforeString());
+      } catch (Exception e) {
+        fail(
+            "foodStorageSortGroceryInstancesDoesNotThrowException() failed, since it threw an "
+                + "exception, message: " + e.getMessage());
+      }
+    }
 
+    @Test
+    @DisplayName(
+        "mergeDuplicateInstances merges duplicate instances of GroceryInstance in the food storage.")
+    void foodStorageMergeDuplicateInstancesDoesNotThrowException() {
+      try {
+        GroceryType type = new GroceryType("a", "kg");
+        GroceryInstance instance = new GroceryInstance(type, 1, 1, "31.12.9999");
+        GroceryInstance instance2 = new GroceryInstance(type, 1, 1, "31.12.9999");
+        foodStorage.addInstance(instance);
+        foodStorage.addInstance(instance2);
+        // first we see that the amount of instances is 4...
+        assertEquals(4, foodStorage.getAllGroceryInstances().size());
+        foodStorage.mergeDuplicateInstances();
+        foodStorage.sortGroceryInstances();
+        // ...then we see that the amount of instances is 3, since the two instances of the same
+        // type are merged together.
+        assertEquals(3, foodStorage.getAllGroceryInstances().size());
+        assertEquals(2, foodStorage.getSpecificInstance(1).getAmount());
+      } catch (Exception e) {
+        fail(
+            "foodStorageMergeDuplicateInstancesDoesNotThrowException() failed, since it threw an "
+                + "exception, message: " + e.getMessage());
+      }
+    }
   }
 }
