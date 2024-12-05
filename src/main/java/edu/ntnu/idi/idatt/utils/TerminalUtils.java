@@ -11,7 +11,7 @@ import java.util.Scanner;
  * Text-User-Interface class that manages the different input validations as well as creating
  * different types of tables used throughout the user interface.
  */
-public class TextInputUtils {
+public class TerminalUtils {
 
   private final Scanner sc = new Scanner(System.in);
 
@@ -19,7 +19,7 @@ public class TextInputUtils {
    * An instance of the Utils class handles all of the different dialog messages and user inputs so
    * that the user can access the
    */
-  public TextInputUtils() {
+  public TerminalUtils() {
   }
 
   // user input:
