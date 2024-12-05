@@ -5,7 +5,9 @@ import edu.ntnu.idi.idatt.models.FoodStorage;
 import edu.ntnu.idi.idatt.models.GroceryInstance;
 import edu.ntnu.idi.idatt.models.GroceryType;
 import edu.ntnu.idi.idatt.models.Recipe;
+import edu.ntnu.idi.idatt.utils.SoundPlayer;
 import edu.ntnu.idi.idatt.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +21,7 @@ public class UserInterface {
   private final FoodStorage foodStorage = new FoodStorage();
   private final Cookbook cookBook = new Cookbook();
   private final Utils utils = new Utils();
+  private final SoundPlayer soundPlayer = new SoundPlayer();
 
   // init and start methods.
 
@@ -374,6 +377,8 @@ public class UserInterface {
       }
     }
 
+    soundPlayer.playConfirmSound();
+
     boolean hasEnteredValidUnit = false;
 
     utils.clearScreen();
@@ -392,6 +397,8 @@ public class UserInterface {
         System.out.println(e.getMessage() + "\n\n");
       }
     }
+
+    soundPlayer.playConfirmSound();
 
     utils.clearScreen();
 
@@ -436,6 +443,8 @@ public class UserInterface {
             + "\nPress ENTER to continue.");
 
         utils.getInput();
+
+        soundPlayer.playInputSound();
       }
 
       utils.clearScreen();
@@ -471,10 +480,13 @@ public class UserInterface {
 
           String newName = utils.getInput();
 
+          //if the string isnt empty, set the new name.
           if (!newName.isEmpty()) {
             foodStorage.getSpecificType(editIndex).setName(newName);
           }
           hasEnteredValidName = true;
+
+          soundPlayer.playConfirmSound();
         } catch (IllegalArgumentException e) {
           utils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
@@ -497,6 +509,8 @@ public class UserInterface {
             foodStorage.getSpecificType(editIndex).setMeasurementUnit(newUnit);
           }
           hasEnteredValidUnit = true;
+
+          soundPlayer.playConfirmSound();
         } catch (IllegalArgumentException e) {
           utils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
@@ -574,6 +588,8 @@ public class UserInterface {
           foodStorage.getAllGroceryInstances().getLast().setAmount(amount);
 
           hasEnteredValidAmount = true;
+
+          soundPlayer.playConfirmSound();
         } catch (Exception e) {
           utils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
@@ -589,6 +605,8 @@ public class UserInterface {
           foodStorage.getAllGroceryInstances().getLast().setPricePerUnit(pricePerUnit);
 
           hasEnteredValidPrice = true;
+
+          soundPlayer.playConfirmSound();
         } catch (Exception e) {
           System.out.println(e.getMessage() + "\n\n");
         }
@@ -603,6 +621,7 @@ public class UserInterface {
           foodStorage.getAllGroceryInstances().getLast().setBestBeforeDate(bestBefore);
           hasEnteredValidBestBefore = true;
 
+          soundPlayer.playConfirmSound();
         } catch (IllegalArgumentException e) {
           utils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
@@ -631,6 +650,8 @@ public class UserInterface {
               + "\nPress ENTER to continue...");
 
           utils.getInput();
+
+          soundPlayer.playInputSound();
         }
       }
     } catch (IllegalArgumentException e) {
@@ -638,6 +659,7 @@ public class UserInterface {
       utils.clearScreen();
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
       utils.getInput();
+      soundPlayer.playInputSound();
     }
   }
 
@@ -671,6 +693,8 @@ public class UserInterface {
             + "\nPress ENTER to continue...");
 
         utils.getInput();
+
+        soundPlayer.playInputSound();
       }
 
       utils.clearScreen();
@@ -691,6 +715,8 @@ public class UserInterface {
     System.out.println("Please enter your search term below:");
     String searchTerm = utils.getInput();
 
+    soundPlayer.playConfirmSound();
+
     utils.clearScreen();
 
     System.out.println(
@@ -699,6 +725,8 @@ public class UserInterface {
             + "\n\nPress ENTER to continue...");
 
     utils.getInput();
+
+    soundPlayer.playInputSound();
   }
 
   /**
@@ -714,6 +742,8 @@ public class UserInterface {
             + "\n\nPress ENTER to continue...");
 
     utils.getInput();
+
+    soundPlayer.playInputSound();
   }
 
   /**
@@ -746,6 +776,8 @@ public class UserInterface {
           }
           hasEnteredValidAmount = true;
 
+          soundPlayer.playConfirmSound();
+
         } catch (Exception e) {
           utils.clearScreen();
           System.out.println(e.getMessage() + "\n");
@@ -770,6 +802,8 @@ public class UserInterface {
           }
           hasEnteredValidPrice = true;
 
+          soundPlayer.playConfirmSound();
+
         } catch (Exception e) {
           utils.clearScreen();
           System.out.println(e.getMessage() + "\n");
@@ -792,6 +826,8 @@ public class UserInterface {
             foodStorage.getSpecificInstance(editIndex).setBestBeforeDate(bestBefore);
           }
           hasEnteredValidBestBefore = true;
+
+          soundPlayer.playConfirmSound();
         } catch (IllegalArgumentException e) {
           utils.clearScreen();
           System.out.println(e.getMessage() + "\n");
@@ -801,6 +837,8 @@ public class UserInterface {
 
     } catch (Exception e) {
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
+      utils.getInput();
+      soundPlayer.playInputSound();
     }
   }
 
@@ -826,6 +864,8 @@ public class UserInterface {
               + foodStorage.getMultipleSpecificValue(indexes) + "\n\nPress ENTER to continue...");
 
       utils.getInput();
+
+      soundPlayer.playInputSound();
 
     } catch (Exception e) {
       utils.clearScreen();
@@ -858,6 +898,8 @@ public class UserInterface {
         foodStorage.removeInstanceAmount(removeAmountIndex, removeAmount);
 
         hasEnteredValidAmount = true;
+
+        soundPlayer.playConfirmSound();
 
       } catch (Exception e) {
         utils.clearScreen();
@@ -905,6 +947,8 @@ public class UserInterface {
     System.out.println("\n\nPress ENTER to to go back...");
 
     utils.getInput();
+
+    soundPlayer.playInputSound();
   }
 
   /**
@@ -912,7 +956,8 @@ public class UserInterface {
    */
   private void createRecipe() {
     // placeholder recipe to make it set-able, so that it can throw the errors at the right time.
-    Recipe newRecipe = new Recipe("", "", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    Recipe newRecipe = new Recipe("", "", new ArrayList<>(), new ArrayList<>(),
+        new ArrayList<>());
 
     boolean hasEnteredValidName = false;
 
@@ -925,6 +970,7 @@ public class UserInterface {
         newRecipe.setName(name);
 
         hasEnteredValidName = true;
+        soundPlayer.playConfirmSound();
       } catch (IllegalArgumentException e) {
         utils.clearScreen();
 
@@ -936,6 +982,7 @@ public class UserInterface {
     utils.clearScreen();
     System.out.println("Enter a short description for this recipe.");
     String description = utils.getInput();
+    soundPlayer.playConfirmSound();
     newRecipe.setDescription(description);
 
     boolean hasEnteredValidInteger = false;
@@ -949,6 +996,8 @@ public class UserInterface {
         amountOfIngredients = utils.integerOption("How many ingredients are there in this recipe?");
 
         hasEnteredValidInteger = true;
+
+        soundPlayer.playInputSound();
       } catch (Exception e) {
         utils.clearScreen();
 
@@ -962,9 +1011,10 @@ public class UserInterface {
       int typeIndex = 0;
       try {
         typeIndex = chooseValidListIndex("Ingredient " + (i + 1) + "\n\n" +
-                utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
-                "\nPlease choose which ingredient to add. (Enter the number 'Num' of the ingredient you would like to add.)",
-            foodStorage.getAllGroceryTypes().size());
+            utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
+            "\nPlease choose which ingredient to add. (Enter the number 'Num' of the ingredient "
+            + "you would like to add.)", foodStorage.getAllGroceryTypes().size());
+        soundPlayer.playInputSound();
         utils.clearScreen();
       } catch (IllegalArgumentException e) {
         utils.clearScreen();
@@ -987,6 +1037,8 @@ public class UserInterface {
 
           newIngredient.setAmount(ingredientAmount);
 
+          soundPlayer.playConfirmSound();
+
           utils.clearScreen();
           hasEnteredValidAmount = true;
         } catch (Exception e) {
@@ -1008,6 +1060,8 @@ public class UserInterface {
             + "? (e.g. 1 tablespoon, 1 teaspoon, cup, etc.)");
 
         String approximation = utils.getInput();
+
+        soundPlayer.playInputSound();
 
         utils.clearScreen();
 
@@ -1034,6 +1088,8 @@ public class UserInterface {
 
         hasEnteredValidInteger = true;
 
+        soundPlayer.playInputSound();
+
         utils.clearScreen();
       } catch (Exception e) {
         utils.clearScreen();
@@ -1050,6 +1106,8 @@ public class UserInterface {
       String currentStep = utils.getInput();
 
       newRecipe.addInstruction(currentStep);
+
+      soundPlayer.playConfirmSound();
     }
 
     utils.clearScreen();
@@ -1086,9 +1144,8 @@ public class UserInterface {
 
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
       utils.getInput();
+      soundPlayer.playInputSound();
     }
-
-
   }
 
   /**
@@ -1112,10 +1169,14 @@ public class UserInterface {
                   foodStorage) + "\n\nPress ENTER to go back...");
 
       utils.getInput();
+
+      soundPlayer.playInputSound();
     } catch (IllegalStateException e) {
       System.out.println(e.getMessage() + "\n\nPress ENTER to go back...");
 
       utils.getInput();
+
+      soundPlayer.playInputSound();
     }
   }
 
@@ -1149,6 +1210,7 @@ public class UserInterface {
                 "Please enter an integer 1 - " + lengthOfList + ".\n");
           } else {
             hasEnteredValidIndex = true;
+            soundPlayer.playInputSound();
           }
         } catch (NumberFormatException e) {
           utils.clearScreen();
@@ -1197,6 +1259,7 @@ public class UserInterface {
 
         if (currentIndex > 0 && currentIndex <= lengthOfList && !indexes.contains(currentIndex)) {
           indexes.add(currentIndex);
+          soundPlayer.playInputSound();
         } else {
           utils.clearScreen();
           System.out.println("Please enter an integer (1 - " +
@@ -1242,6 +1305,7 @@ public class UserInterface {
       try {
         yesNoChoice = utils.yesNoOption();
         hasEnteredYOrN = true;
+        soundPlayer.playConfirmSound();
       } catch (IllegalArgumentException e) {
         System.out.println(e.getMessage() + "\n");
       }
@@ -1296,6 +1360,8 @@ public class UserInterface {
         System.out.println("Please enter a valid integer!");
       }
     } while (!hasEnteredValidInteger);
+
+    soundPlayer.playInputSound();
 
     return input;
   }
