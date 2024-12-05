@@ -33,11 +33,9 @@ The tests for each of the model classes are stored in [src/test/java/edu/ntnu/id
 
 ## How to run the project
 
-1. Download the source code.
-2. Run the file "FoodWasteApp.java" (make sure to have Java installed!) stored within src/main/java/edu/ntnu/idi/idatt using the file explorer of your choice.
-3. The program will prompty open in a terminal window.
-
-(Alternatively you can run the file directly through the terminal.)
+1. Go to the releases tab [here](https://github.com/NTNU-IDI/idatt1003-mappe-2024-siguraso/releases).
+2. Download the .jar file of the latest release.
+3. Open a new terminal window in the directory where you saved the .jar file and enter the terminal command `java -jar "filename".jar`.
 
 ## How to run the tests
 
