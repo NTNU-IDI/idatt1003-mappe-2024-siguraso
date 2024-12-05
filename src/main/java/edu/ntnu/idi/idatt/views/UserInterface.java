@@ -5,8 +5,8 @@ import edu.ntnu.idi.idatt.models.FoodStorage;
 import edu.ntnu.idi.idatt.models.GroceryInstance;
 import edu.ntnu.idi.idatt.models.GroceryType;
 import edu.ntnu.idi.idatt.models.Recipe;
+import edu.ntnu.idi.idatt.utils.TextInputUtils;
 import edu.ntnu.idi.idatt.utils.SoundPlayer;
-import edu.ntnu.idi.idatt.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class UserInterface {
 
   private final FoodStorage foodStorage = new FoodStorage();
   private final Cookbook cookBook = new Cookbook();
-  private final Utils utils = new Utils();
+  private final TextInputUtils textInputUtils = new TextInputUtils();
   private final SoundPlayer soundPlayer = new SoundPlayer();
 
   // init and start methods.
@@ -83,13 +83,13 @@ public class UserInterface {
    * program.
    */
   public void start() {
-    utils.clearScreen();
+    textInputUtils.clearScreen();
     mainMenu();
     // When the main menu tells the program to quit, close the scanner from the Utils, and close the
     // finish the script.
 
-    utils.closeInput();
-    utils.clearScreen();
+    textInputUtils.closeInput();
+    textInputUtils.clearScreen();
   }
 
   // main menu and sub-menus Initiators:
@@ -105,7 +105,7 @@ public class UserInterface {
    * @return the integer (of the primitive "int" type) to know what the user wants to initiate.
    */
   private int initiateMainMenuAction() {
-    utils.clearScreen();
+    textInputUtils.clearScreen();
     return choiceWindow(
         new String[]{"Manage food storage.", "Manage grocery classes.", "Manage cookbook/recipes.",
             "Quit."}, "What do you wish to do?");
@@ -132,7 +132,8 @@ public class UserInterface {
             "Search in food storage.", "Display expired food only",
             "Edit specific grocery (e.g. edit amount, best before date and price per unit).",
             "Check the value of multiple groceries.", "Remove amount from specific grocery",
-            "Return to main menu."}, utils.foodStorageTable(foodStorage.getAllGroceryInstances())
+            "Return to main menu."},
+        textInputUtils.foodStorageTable(foodStorage.getAllGroceryInstances())
             + "\n\n" + String.format(valueFormat, foodStorage.getTotalValue())
             + "\n\nManage food storage:");
   }
@@ -152,7 +153,8 @@ public class UserInterface {
   private int initiateGroceryTypeAction() {
     return choiceWindow(new String[]{"Add a grocery class.", "Remove a grocery class.",
             "Edit grocery class (change name or measurement unit).", "Return to main menu."},
-        utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) + "\nManage grocery classes:");
+        textInputUtils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+            + "\nManage grocery classes:");
   }
 
   /**
@@ -175,7 +177,7 @@ public class UserInterface {
             "Remove recipe.",
             "View suggested recipes (based on what you have available in the food storage).",
             "Return to main menu."},
-        utils.cookbookTable(cookBook.getRecipes(), foodStorage) + "\n\nManage cookbook:");
+        textInputUtils.cookbookTable(cookBook.getRecipes(), foodStorage) + "\n\nManage cookbook:");
   }
 
   // menus that take the initiation values, and does the action.
@@ -187,7 +189,7 @@ public class UserInterface {
     boolean quitProgram = false;
 
     do {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
       int mainMenuChoice = initiateMainMenuAction();
       switch (mainMenuChoice) {
         case 1 -> foodStorageMenu();
@@ -210,10 +212,10 @@ public class UserInterface {
     boolean returnToMainMenu = false;
 
     do {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
       int foodStorageChoice = initiateFoodStorageAction();
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
       switch (foodStorageChoice) {
         // add grocery
         case 1 -> {
@@ -259,7 +261,7 @@ public class UserInterface {
     boolean returnToMainMenu = false;
 
     do {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       int groceryTypeChoice = initiateGroceryTypeAction();
       switch (groceryTypeChoice) {
@@ -271,7 +273,7 @@ public class UserInterface {
 
         // remove grocery type
         case 2 -> {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           String removeConfirmation = uiYesNoOption(
               "Do you really wish to remove a grocery class? (Y/n");
 
@@ -301,25 +303,25 @@ public class UserInterface {
 
     boolean returnToMainMenu = false;
     do {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       int cookbookChoice = initiateCookbookAction();
       switch (cookbookChoice) {
         // view recipe
         case 1 -> {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           try {
             int viewIndex = chooseValidListIndex(
-                utils.cookbookTable(cookBook.getRecipes(), foodStorage) +
+                textInputUtils.cookbookTable(cookBook.getRecipes(), foodStorage) +
                     "\nEnter the number of the recipe you would like to view (See Num on the above table).",
                 cookBook.getRecipes().size());
 
             viewRecipe(viewIndex);
           } catch (Exception e) {
-            utils.clearScreen();
+            textInputUtils.clearScreen();
             System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
 
-            utils.getInput();
+            textInputUtils.getInput();
           }
         }
 
@@ -328,7 +330,7 @@ public class UserInterface {
 
         // remove recipe
         case 3 -> {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
 
           String removeConfirmation = uiYesNoOption(
               "Are you sure you wish to remove a recipe from the cookbook? (Y/n)");
@@ -357,7 +359,7 @@ public class UserInterface {
    * which is promptly added to the {@link FoodStorage}.
    */
   private void addGroceryType() {
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     boolean hasEnteredValidName = false;
 
@@ -367,12 +369,12 @@ public class UserInterface {
       try {
         System.out.println(
             "What is the name of the grocery class you would like to add? (max 30 characters)");
-        String TypeName = utils.getInput();
+        String TypeName = textInputUtils.getInput();
         foodStorage.getAllGroceryTypes().getLast().setName(TypeName);
 
         hasEnteredValidName = true;
       } catch (IllegalArgumentException e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
         System.out.println(e.getMessage() + "\n\n");
       }
     }
@@ -381,26 +383,26 @@ public class UserInterface {
 
     boolean hasEnteredValidUnit = false;
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     while (!hasEnteredValidUnit) {
       try {
         System.out.println(
             "What is the measurement unit most associated with '" + foodStorage.getAllGroceryTypes()
                 .getLast().getName() + "' (e.g. kg, pcs., L, etc.)?");
-        String UnitName = utils.getInput();
+        String UnitName = textInputUtils.getInput();
         foodStorage.getAllGroceryTypes().getLast().setMeasurementUnit(UnitName);
 
         hasEnteredValidUnit = true;
       } catch (IllegalArgumentException e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
         System.out.println(e.getMessage() + "\n\n");
       }
     }
 
     soundPlayer.playConfirmSound();
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     // returns either y or n.
 
@@ -419,15 +421,15 @@ public class UserInterface {
    * {@link FoodStorage} based on a given index.
    */
   private void removeGroceryType() {
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     try {
       int removeIndex = chooseValidListIndex(
-          utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+          textInputUtils.groceryTypeTable(foodStorage.getAllGroceryTypes())
               + "\nPlease enter the number of the grocery type you would like to remove "
               + "(See Num on the above table).", foodStorage.getAllGroceryTypes().size());
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       String curRemoved = foodStorage.getSpecificType(removeIndex).getName();
 
@@ -437,20 +439,20 @@ public class UserInterface {
       if (removeConfirm.equals("y")) {
         foodStorage.removeType(removeIndex);
 
-        utils.clearScreen();
+        textInputUtils.clearScreen();
 
         System.out.println("Successfully removed grocery class: " + curRemoved + "."
             + "\nPress ENTER to continue.");
 
-        utils.getInput();
+        textInputUtils.getInput();
 
         soundPlayer.playInputSound();
       }
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
-      utils.getInput();
+      textInputUtils.getInput();
     }
   }
 
@@ -459,15 +461,15 @@ public class UserInterface {
    * {@link GroceryType}.
    */
   private void editGroceryType() {
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     try {
       int editIndex = chooseValidListIndex(
-          utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+          textInputUtils.groceryTypeTable(foodStorage.getAllGroceryTypes())
               + "\nPlease enter the number of the grocery type you would like to edit "
               + "(See Num on the above table).", foodStorage.getAllGroceryTypes().size());
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       boolean hasEnteredValidName = false;
 
@@ -478,7 +480,7 @@ public class UserInterface {
                       editIndex)
                   .getName() + "') (leave empty if you want it unchanged.) \n(max 30 characters).");
 
-          String newName = utils.getInput();
+          String newName = textInputUtils.getInput();
 
           //if the string isnt empty, set the new name.
           if (!newName.isEmpty()) {
@@ -488,12 +490,12 @@ public class UserInterface {
 
           soundPlayer.playConfirmSound();
         } catch (IllegalArgumentException e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
         }
       }
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       boolean hasEnteredValidUnit = false;
 
@@ -503,7 +505,7 @@ public class UserInterface {
               + foodStorage.getSpecificType(editIndex).getMeasurementUnit()
               + "') (leave empty if you want it unchanged.) (max 16 characters)");
 
-          String newUnit = utils.getInput();
+          String newUnit = textInputUtils.getInput();
 
           if (!newUnit.isEmpty()) {
             foodStorage.getSpecificType(editIndex).setMeasurementUnit(newUnit);
@@ -512,15 +514,15 @@ public class UserInterface {
 
           soundPlayer.playConfirmSound();
         } catch (IllegalArgumentException e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
         }
       }
     } catch (IllegalArgumentException e) {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
 
-      utils.getInput();
+      textInputUtils.getInput();
     }
   }
 
@@ -541,11 +543,12 @@ public class UserInterface {
       // this boolean is only updated if the user decides to go back to the main menu.
       boolean createNewInstance = true;
 
-      String useOldType = uiYesNoOption(utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
-          + "\nWould you like to add a grocery based on an existing grocery class? (Y/n)");
+      String useOldType = uiYesNoOption(
+          textInputUtils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+              + "\nWould you like to add a grocery based on an existing grocery class? (Y/n)");
 
       if (useOldType.equals("n")) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
 
         String makeNewType = uiYesNoOption(
             "Would you like to add a new grocery class? (Y/n)");
@@ -567,8 +570,9 @@ public class UserInterface {
         }
 
       } else {
-        utils.clearScreen();
-        typeIndex = chooseValidListIndex(utils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+        textInputUtils.clearScreen();
+        typeIndex = chooseValidListIndex(
+            textInputUtils.groceryTypeTable(foodStorage.getAllGroceryTypes())
                 + "\nPlease enter the number of the grocery class you wish to select (See 'Num' in the above table)",
             foodStorage.getAllGroceryTypes().size());
 
@@ -576,11 +580,11 @@ public class UserInterface {
             0.1, null));
       }
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       while (!hasEnteredValidAmount) {
         try {
-          double amount = utils.doubleOption("Please enter the amount of '" +
+          double amount = textInputUtils.doubleOption("Please enter the amount of '" +
               foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '" +
               foodStorage.getSpecificType(typeIndex).getName() +
               "' that you would like to add to the food storage. (0.0 - 999.9)");
@@ -591,16 +595,17 @@ public class UserInterface {
 
           soundPlayer.playConfirmSound();
         } catch (Exception e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
         }
       }
 
       while (!hasEnteredValidPrice) {
         try {
-          double pricePerUnit = utils.doubleOption("Please enter the price per '" + foodStorage
-              .getSpecificType(typeIndex).getMeasurementUnit() +
-              "' (enter a decimal number 0.0 - 99999.9).");
+          double pricePerUnit = textInputUtils.doubleOption(
+              "Please enter the price per '" + foodStorage
+                  .getSpecificType(typeIndex).getMeasurementUnit() +
+                  "' (enter a decimal number 0.0 - 99999.9).");
 
           foodStorage.getAllGroceryInstances().getLast().setPricePerUnit(pricePerUnit);
 
@@ -615,7 +620,7 @@ public class UserInterface {
       while (!hasEnteredValidBestBefore) {
         System.out.println("Please enter the best before date of the grocery (DD.MM.YYYY)");
 
-        String bestBefore = utils.getInput();
+        String bestBefore = textInputUtils.getInput();
 
         try {
           foodStorage.getAllGroceryInstances().getLast().setBestBeforeDate(bestBefore);
@@ -623,11 +628,11 @@ public class UserInterface {
 
           soundPlayer.playConfirmSound();
         } catch (IllegalArgumentException e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n\n");
         }
       }
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       // if user didnt want to create a new type, ignore the code below.
       if (createNewInstance) {
@@ -645,20 +650,20 @@ public class UserInterface {
         if (isInstanceOK.equals("n")) {
           foodStorage.getAllGroceryInstances().removeLast();
         } else {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println("Successfully added grocery to the food storage."
               + "\nPress ENTER to continue...");
 
-          utils.getInput();
+          textInputUtils.getInput();
 
           soundPlayer.playInputSound();
         }
       }
     } catch (IllegalArgumentException e) {
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
-      utils.getInput();
+      textInputUtils.getInput();
       soundPlayer.playInputSound();
     }
   }
@@ -668,15 +673,15 @@ public class UserInterface {
    * food storage.
    */
   private void removeGroceryInstance() {
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     try {
       int removeIndex = chooseValidListIndex(
-          utils.foodStorageTable(foodStorage.getAllGroceryInstances())
+          textInputUtils.foodStorageTable(foodStorage.getAllGroceryInstances())
               + "\nPlease enter the number of the grocery type you would like to remove "
               + "(See Num on the above table).", foodStorage.getAllGroceryInstances().size());
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       String curRemoved = foodStorage.getSpecificInstance(removeIndex).getName();
 
@@ -685,46 +690,46 @@ public class UserInterface {
               + " from the food storage? (Y/n)");
 
       if (removeConfirm.equals("y")) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
 
         foodStorage.removeInstance(removeIndex);
 
         System.out.println("Successfully removed " + curRemoved + " from the food storage."
             + "\nPress ENTER to continue...");
 
-        utils.getInput();
+        textInputUtils.getInput();
 
         soundPlayer.playInputSound();
       }
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
     } catch (Exception e) {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
-      utils.getInput();
+      textInputUtils.getInput();
     }
   }
 
   /**
    * This method takes a user input that defines a search term, which then gets searched for, which
-   * then displays a {@link Utils} table that displays the search results.
+   * then displays a table that displays the search results.
    */
   private void searchInFoodStorage() {
     System.out.println("Please enter your search term below:");
-    String searchTerm = utils.getInput();
+    String searchTerm = textInputUtils.getInput();
 
     soundPlayer.playConfirmSound();
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     System.out.println(
-        "Search restults for the term '" + searchTerm + "': \n\n" + utils.foodStorageTable(
+        "Search restults for the term '" + searchTerm + "': \n\n" + textInputUtils.foodStorageTable(
             new ArrayList<>(foodStorage.groceryInstanceSearch(searchTerm)))
             + "\n\nPress ENTER to continue...");
 
-    utils.getInput();
+    textInputUtils.getInput();
 
     soundPlayer.playInputSound();
   }
@@ -737,11 +742,12 @@ public class UserInterface {
     String outOfDateValueFormat = "Total value of expired: %.2f kr";
 
     System.out.println(
-        "All out of date food:\n\n" + utils.foodStorageTable(foodStorage.getOutOfDateInstances())
+        "All out of date food:\n\n" + textInputUtils.foodStorageTable(
+            foodStorage.getOutOfDateInstances())
             + "\n\n" + String.format(outOfDateValueFormat, foodStorage.getOutOfDateValue())
             + "\n\nPress ENTER to continue...");
 
-    utils.getInput();
+    textInputUtils.getInput();
 
     soundPlayer.playInputSound();
   }
@@ -752,17 +758,17 @@ public class UserInterface {
   private void editGroceryInstance() {
     try {
       int editIndex = chooseValidListIndex(
-          utils.foodStorageTable(foodStorage.getAllGroceryInstances())
+          textInputUtils.foodStorageTable(foodStorage.getAllGroceryInstances())
               + "\nPlease enter the number of the grocery you would like to edit. "
               + "(See Num on the above table).", foodStorage.getAllGroceryInstances().size());
 
       boolean hasEnteredValidAmount = false;
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       while (!hasEnteredValidAmount) {
         try {
-          double amount = utils.doubleOption(
+          double amount = textInputUtils.doubleOption(
               "Please enter the new amount you would like to change to. (Changing from "
                   + foodStorage.getSpecificInstance(editIndex).getAmount()
                   + " " + foodStorage.getSpecificInstance(editIndex).getMeasurementUnit()
@@ -779,21 +785,23 @@ public class UserInterface {
           soundPlayer.playConfirmSound();
 
         } catch (Exception e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n");
         }
       }
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
       boolean hasEnteredValidPrice = false;
 
       while (!hasEnteredValidPrice) {
         try {
-          double pricePerUnit = utils.doubleOption("Please enter the price per '" + foodStorage
-              .getSpecificInstance(editIndex).getMeasurementUnit() +
-              "' you would like to change to. (Changing from " + foodStorage.getSpecificInstance(
-              editIndex).getPricePerUnit() + ".) (enter a decimal number 0.0 - 99999.9.)"
-              + "\n(Enter '0' if you dont want to change it.)");
+          double pricePerUnit = textInputUtils.doubleOption(
+              "Please enter the price per '" + foodStorage
+                  .getSpecificInstance(editIndex).getMeasurementUnit() +
+                  "' you would like to change to. (Changing from "
+                  + foodStorage.getSpecificInstance(
+                  editIndex).getPricePerUnit() + ".) (enter a decimal number 0.0 - 99999.9.)"
+                  + "\n(Enter '0' if you dont want to change it.)");
 
           // Since the set method for the grocery instance class doesn't allow for an amount to be 0
           // we make the user input 0 if they don't want to change the value.
@@ -805,12 +813,12 @@ public class UserInterface {
           soundPlayer.playConfirmSound();
 
         } catch (Exception e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n");
         }
       }
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
       boolean hasEnteredValidBestBefore = false;
 
       while (!hasEnteredValidBestBefore) {
@@ -819,7 +827,7 @@ public class UserInterface {
                 + foodStorage.getSpecificInstance(editIndex).getBestBeforeString() + ".)"
                 + "\n(Leave empty is you don't want to change it.)");
 
-        String bestBefore = utils.getInput();
+        String bestBefore = textInputUtils.getInput();
 
         try {
           if (!bestBefore.isEmpty()) {
@@ -829,15 +837,15 @@ public class UserInterface {
 
           soundPlayer.playConfirmSound();
         } catch (IllegalArgumentException e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n");
         }
       }
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
     } catch (Exception e) {
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
-      utils.getInput();
+      textInputUtils.getInput();
       soundPlayer.playInputSound();
     }
   }
@@ -849,7 +857,7 @@ public class UserInterface {
   private void valueOfMultipleGroceries() {
     try {
       int[] indexes = chooseMultipleValidListIndex(
-          utils.foodStorageTable(foodStorage.getAllGroceryInstances())
+          textInputUtils.foodStorageTable(foodStorage.getAllGroceryInstances())
               + "\n(See Num on the above table)", foodStorage.getAllGroceryInstances().size());
 
       ArrayList<GroceryInstance> combinedValueInstances = new ArrayList<>();
@@ -857,18 +865,18 @@ public class UserInterface {
       Arrays.stream(indexes)
           .forEach(index -> combinedValueInstances.add(foodStorage.getSpecificInstance(index)));
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       System.out.println(
-          utils.foodStorageTable(combinedValueInstances) + "\nCumulative value: "
+          textInputUtils.foodStorageTable(combinedValueInstances) + "\nCumulative value: "
               + foodStorage.getMultipleSpecificValue(indexes) + "\n\nPress ENTER to continue...");
 
-      utils.getInput();
+      textInputUtils.getInput();
 
       soundPlayer.playInputSound();
 
     } catch (Exception e) {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
     }
   }
@@ -878,7 +886,7 @@ public class UserInterface {
    */
   private void removeAmountFromSpecificGrocery() {
     int removeAmountIndex = chooseValidListIndex(
-        utils.foodStorageTable(foodStorage.getAllGroceryInstances())
+        textInputUtils.foodStorageTable(foodStorage.getAllGroceryInstances())
             + "\n\nFrom which grocery do you wish to remove?",
         foodStorage.getAllGroceryInstances().size());
 
@@ -889,7 +897,7 @@ public class UserInterface {
 
     while (!hasEnteredValidAmount) {
       try {
-        removeAmount = utils.doubleOption(
+        removeAmount = textInputUtils.doubleOption(
             "How much " + foodStorage.getSpecificInstance(removeAmountIndex).getMeasurementUnit()
                 + " of " + foodStorage.getSpecificInstance(removeAmountIndex).getName()
                 + " do you wish to remove? (0.0 - "
@@ -902,19 +910,19 @@ public class UserInterface {
         soundPlayer.playConfirmSound();
 
       } catch (Exception e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
         System.out.println(e.getMessage() + "\n");
       }
     }
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     String yesNoChoice = uiYesNoOption("Remove " + foodStorage.getSpecificType(removeAmountIndex)
         .getName() + " from the food storage?\n\n" + "From old amount: " + oldAmount +
         "\nTo new amount: " + (oldAmount - removeAmount)
         + "\n\nIs this OK? (Y/n)");
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     if (yesNoChoice.equalsIgnoreCase("n")) {
       foodStorage.getSpecificInstance(removeAmountIndex).setAmount(oldAmount);
@@ -941,12 +949,13 @@ public class UserInterface {
     });
 
     System.out.println("Name: " + thisRecipe.getName() + "\nDescription: "
-        + thisRecipe.getDescription() + "\n" + utils.ingredientsTable(thisRecipe.getIngredients(),
+        + thisRecipe.getDescription() + "\n" + textInputUtils.ingredientsTable(
+        thisRecipe.getIngredients(),
         thisRecipe.getApproximations()) + "\n\nInstructions:\n" + String.join("\n", instructions));
 
     System.out.println("\n\nPress ENTER to to go back...");
 
-    utils.getInput();
+    textInputUtils.getInput();
 
     soundPlayer.playInputSound();
   }
@@ -962,26 +971,26 @@ public class UserInterface {
     boolean hasEnteredValidName = false;
 
     while (!hasEnteredValidName) {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       System.out.println("What is the name of the recipe? (max 45 characters)");
-      String name = utils.getInput();
+      String name = textInputUtils.getInput();
       try {
         newRecipe.setName(name);
 
         hasEnteredValidName = true;
         soundPlayer.playConfirmSound();
       } catch (IllegalArgumentException e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
 
         System.out.println(e.getMessage() + "\n");
       }
     }
 
     // no need to try the description, since it has no character limit.
-    utils.clearScreen();
+    textInputUtils.clearScreen();
     System.out.println("Enter a short description for this recipe.");
-    String description = utils.getInput();
+    String description = textInputUtils.getInput();
     soundPlayer.playConfirmSound();
     newRecipe.setDescription(description);
 
@@ -990,34 +999,35 @@ public class UserInterface {
     int amountOfIngredients = 0;
 
     while (!hasEnteredValidInteger) {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       try {
-        amountOfIngredients = utils.integerOption("How many ingredients are there in this recipe?");
+        amountOfIngredients = textInputUtils.integerOption(
+            "How many ingredients are there in this recipe?");
 
         hasEnteredValidInteger = true;
 
         soundPlayer.playInputSound();
       } catch (Exception e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
 
         System.out.println(e.getMessage() + "\n");
       }
     }
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     for (int i = 0; i < amountOfIngredients; i++) {
       int typeIndex = 0;
       try {
         typeIndex = chooseValidListIndex("Ingredient " + (i + 1) + "\n\n" +
-            utils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
+            textInputUtils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
             "\nPlease choose which ingredient to add. (Enter the number 'Num' of the ingredient "
             + "you would like to add.)", foodStorage.getAllGroceryTypes().size());
         soundPlayer.playInputSound();
-        utils.clearScreen();
+        textInputUtils.clearScreen();
       } catch (IllegalArgumentException e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
         System.out.println(e.getMessage() + "\n");
 
       }
@@ -1031,7 +1041,7 @@ public class UserInterface {
 
       while (!hasEnteredValidAmount) {
         try {
-          double ingredientAmount = utils.doubleOption(
+          double ingredientAmount = textInputUtils.doubleOption(
               "How many '" + newIngredient.getMeasurementUnit() + "' of '" + newIngredient.getName()
                   + "' is used in this recipe?");
 
@@ -1039,17 +1049,17 @@ public class UserInterface {
 
           soundPlayer.playConfirmSound();
 
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           hasEnteredValidAmount = true;
         } catch (Exception e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n");
         }
       }
 
       newRecipe.addIngredient(newIngredient);
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       boolean hasEnteredValidApproximation = false;
 
@@ -1059,17 +1069,17 @@ public class UserInterface {
             + newIngredient.getMeasurementUnit() + " of " + newIngredient.getName()
             + "? (e.g. 1 tablespoon, 1 teaspoon, cup, etc.)");
 
-        String approximation = utils.getInput();
+        String approximation = textInputUtils.getInput();
 
         soundPlayer.playInputSound();
 
-        utils.clearScreen();
+        textInputUtils.clearScreen();
 
         try {
           newRecipe.addApproximation(approximation);
           hasEnteredValidApproximation = true;
         } catch (IllegalArgumentException e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n");
         }
       }
@@ -1079,41 +1089,41 @@ public class UserInterface {
 
     int amountOfInstructions = 0;
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     while (!hasEnteredValidInteger) {
       try {
-        amountOfInstructions = utils.integerOption(
+        amountOfInstructions = textInputUtils.integerOption(
             "How many steps are there in the instructions to this recipe?");
 
         hasEnteredValidInteger = true;
 
         soundPlayer.playInputSound();
 
-        utils.clearScreen();
+        textInputUtils.clearScreen();
       } catch (Exception e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
 
         System.out.println(e.getMessage() + "\n");
       }
     }
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     for (int i = 0; i < amountOfInstructions; i++) {
       System.out.println("\nEnter step number " + (i + 1) + " of " + amountOfInstructions);
 
-      String currentStep = utils.getInput();
+      String currentStep = textInputUtils.getInput();
 
       newRecipe.addInstruction(currentStep);
 
       soundPlayer.playConfirmSound();
     }
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     System.out.println("\n\nName: " + newRecipe.getName() + "\n" +
-        "Description: " + newRecipe.getDescription() + "\n\n" + utils.ingredientsTable(
+        "Description: " + newRecipe.getDescription() + "\n\n" + textInputUtils.ingredientsTable(
         newRecipe.getIngredients(), newRecipe.getApproximations()) + "\n\nInstructions: ");
 
     newRecipe.getInstructions().forEach(instruction ->
@@ -1131,19 +1141,20 @@ public class UserInterface {
    * Method that lets the user remove one recipe of their choice from the cookbook.
    */
   private void removeRecipe() {
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     try {
-      int removeIndex = chooseValidListIndex(utils.cookbookTable(cookBook.getRecipes(), foodStorage)
+      int removeIndex = chooseValidListIndex(
+          textInputUtils.cookbookTable(cookBook.getRecipes(), foodStorage)
               + "\n\nPlease enter the number (See 'Num') of the recipe you would like to remove.",
           cookBook.getRecipes().size());
 
       cookBook.removeRecipe(removeIndex);
     } catch (IllegalArgumentException e) {
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
-      utils.getInput();
+      textInputUtils.getInput();
       soundPlayer.playInputSound();
     }
   }
@@ -1153,28 +1164,28 @@ public class UserInterface {
    * available in the food storage.
    */
   private void viewSuggestedRecipes() {
-    utils.clearScreen();
+    textInputUtils.clearScreen();
     String includeOutOfDateFood = uiYesNoOption(
         "Would you like to include out of date groceries into consideration for what ingredients are currently available? (Y/n)");
 
-    utils.clearScreen();
+    textInputUtils.clearScreen();
 
     try {
       System.out.println(
           "NOTE: Recipes are only suggested if you have half or more of the ingredients available in the food storage.\n\n"
               + "Suggested Recipes:\n" +
-              utils.cookbookTable(
+              textInputUtils.cookbookTable(
                   cookBook.recipeSuggestion(foodStorage.getAllGroceryInstances(),
                       includeOutOfDateFood.equals("y")),
                   foodStorage) + "\n\nPress ENTER to go back...");
 
-      utils.getInput();
+      textInputUtils.getInput();
 
       soundPlayer.playInputSound();
     } catch (IllegalStateException e) {
       System.out.println(e.getMessage() + "\n\nPress ENTER to go back...");
 
-      utils.getInput();
+      textInputUtils.getInput();
 
       soundPlayer.playInputSound();
     }
@@ -1202,10 +1213,10 @@ public class UserInterface {
 
       while (!hasEnteredValidIndex) {
         try {
-          index = utils.integerOption(message);
+          index = textInputUtils.integerOption(message);
 
           if (index < 1 || index > lengthOfList) {
-            utils.clearScreen();
+            textInputUtils.clearScreen();
             System.out.println(
                 "Please enter an integer 1 - " + lengthOfList + ".\n");
           } else {
@@ -1213,11 +1224,11 @@ public class UserInterface {
             soundPlayer.playInputSound();
           }
         } catch (NumberFormatException e) {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println(e.getMessage() + "\n");
         }
       }
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       return index;
     }
@@ -1246,7 +1257,7 @@ public class UserInterface {
 
     while (!hasQuit) {
       try {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
 
         System.out.println(message);
 
@@ -1255,24 +1266,24 @@ public class UserInterface {
         System.out.println(
             "Enter another value: (1 - " + lengthOfList + ").");
 
-        int currentIndex = utils.integerOption("");
+        int currentIndex = textInputUtils.integerOption("");
 
         if (currentIndex > 0 && currentIndex <= lengthOfList && !indexes.contains(currentIndex)) {
           indexes.add(currentIndex);
           soundPlayer.playInputSound();
         } else {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println("Please enter an integer (1 - " +
               foodStorage.getAllGroceryInstances().size()
               + "), that you haven't already added! \n");
         }
       } catch (Exception e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
         System.out.println("Please enter an integer (1 - " +
             foodStorage.getAllGroceryInstances().size() + "), that you haven't already added!\n");
       }
 
-      utils.clearScreen();
+      textInputUtils.clearScreen();
 
       System.out.println(message);
 
@@ -1288,8 +1299,8 @@ public class UserInterface {
   }
 
   /**
-   * This method is a UI method that uses the {@link Utils} method yesNoOption, and makes it more
-   * user friendly by, for instance, catching the errors that method throws.
+   * This method is a UI method that uses the method yesNoOption, and makes it more user friendly
+   * by, for instance, catching the errors that method throws.
    *
    * @param message dialog message given as a {@link String} that displays above the user input.
    * @return a string containing either "y" or "n" (lowercase) that indicates yes or no from the
@@ -1303,7 +1314,7 @@ public class UserInterface {
 
     while (!hasEnteredYOrN) {
       try {
-        yesNoChoice = utils.yesNoOption();
+        yesNoChoice = textInputUtils.yesNoOption();
         hasEnteredYOrN = true;
         soundPlayer.playConfirmSound();
       } catch (IllegalArgumentException e) {
@@ -1348,15 +1359,15 @@ public class UserInterface {
     do {
       System.out.println(choicesString);
       try {
-        input = Integer.parseInt(utils.getInput());
+        input = Integer.parseInt(textInputUtils.getInput());
         if (input >= 1 && input <= choicesList.size()) {
           hasEnteredValidInteger = true;
         } else {
-          utils.clearScreen();
+          textInputUtils.clearScreen();
           System.out.println("Please enter a valid integer!");
         }
       } catch (NumberFormatException e) {
-        utils.clearScreen();
+        textInputUtils.clearScreen();
         System.out.println("Please enter a valid integer!");
       }
     } while (!hasEnteredValidInteger);

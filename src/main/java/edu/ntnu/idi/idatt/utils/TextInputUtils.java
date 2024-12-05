@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Text-User-Interface class that manages the different dialog options that are needed to create the
- * text-based user interface.
+ * Text-User-Interface class that manages the different input validations as well as creating
+ * different types of tables used throughout the user interface.
  */
-public class Utils {
+public class TextInputUtils {
 
   private final Scanner sc = new Scanner(System.in);
 
@@ -19,7 +19,7 @@ public class Utils {
    * An instance of the Utils class handles all of the different dialog messages and user inputs so
    * that the user can access the
    */
-  public Utils() {
+  public TextInputUtils() {
   }
 
   // user input:
@@ -58,7 +58,7 @@ public class Utils {
     System.out.flush();
   }
 
-  // dialog options
+  // input validation:
 
   /**
    * Gives a dialog window that checks if the user enters an input containing an integer (the
