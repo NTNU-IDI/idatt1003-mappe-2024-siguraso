@@ -129,7 +129,7 @@ class TestFoodStorage {
         GroceryType type = new GroceryType("a", "kg");
         GroceryInstance instance = new GroceryInstance(type, 1, 1, "01.01.9999");
         foodStorage.addInstance(instance);
-        assertEquals("a", foodStorage.getAllGroceryInstances().getFirst().getName());
+        assertEquals("a", foodStorage.getAllGroceryInstances().getLast().getName());
       } catch (Exception e) {
         fail("foodStorageAddInstanceDoesNotThrowException() failed, since it threw an exception.");
       }
