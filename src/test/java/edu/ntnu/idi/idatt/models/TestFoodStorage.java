@@ -35,7 +35,7 @@ class TestFoodStorage {
     @Test
     @DisplayName("getter methods should not throw any exceptions when fetching data, and checks if "
         + "they return the right data.")
-    void groceryInstanceGettersDoesNotThrowException() {
+    void foodStorageGettersDoesNotThrowException() {
       try {
         GroceryType type = new GroceryType("type", "kg");
         GroceryInstance instance = new GroceryInstance(type, 1, 3,
@@ -186,5 +186,7 @@ class TestFoodStorage {
                 + "exception, message: " + e.getMessage());
       }
     }
+
+
   }
 }
