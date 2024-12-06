@@ -124,4 +124,82 @@ public class SoundPlayer {
           + "line is unavailable");
     }
   }
+
+  /**
+   * Plays the add sound, a sound that is played when the user adds an item to the food storage. It
+   * contains a funky man saying the phrase "Yeah!".
+   */
+  public void playAddSound() {
+    try {
+      clip = AudioSystem.getClip();
+
+      // creates an InputStream for the inputSound, more or less used to get the file location of the
+      InputStream addSound = getClass().getResourceAsStream("/sounds/addSound.wav");
+
+      // If the file is not found, throw an IOException
+      if (addSound == null) {
+        throw new IOException();
+      }
+
+      // Here, we need to create a wrapper for the inputsound inputstream, as instances of
+      // InputStream don't support mark and reset, something that is needed when playing the sound
+      // in a .jar file.
+      BufferedInputStream addSoundWrapper = new BufferedInputStream(addSound);
+
+      // sets the audioInputStream to the inputSoundWrapper,
+      audioInputStream = AudioSystem.getAudioInputStream(addSoundWrapper);
+
+      clip.open(audioInputStream);
+      clip.start();
+
+    } catch (UnsupportedAudioFileException e) {
+      throw new IllegalArgumentException(
+          "UnsupportedAudioException: Could not play the sound, unsupported file type");
+    } catch (IOException e) {
+      throw new IllegalArgumentException(
+          "IOException: Could not play the sound, sound file not found");
+    } catch (LineUnavailableException e) {
+      throw new IllegalArgumentException("LineUnavailableException: Could not play the sound, "
+          + "line is unavailable");
+    }
+  }
+
+  /**
+   * Plays the remove sound, a sound that is played when the user removes an item from the food
+   * storage. It contains a man screaming (NOT LOUD!).
+   */
+  public void playRemoveSound() {
+    try {
+      clip = AudioSystem.getClip();
+
+      // creates an InputStream for the inputSound, more or less used to get the file location of the
+      InputStream removeSound = getClass().getResourceAsStream("/sounds/removeSound.wav");
+
+      // If the file is not found, throw an IOException
+      if (removeSound == null) {
+        throw new IOException();
+      }
+
+      // Here, we need to create a wrapper for the inputsound inputstream, as instances of
+      // InputStream don't support mark and reset, something that is needed when playing the sound
+      // in a .jar file.
+      BufferedInputStream removeSoundWrapper = new BufferedInputStream(removeSound);
+
+      // sets the audioInputStream to the inputSoundWrapper,
+      audioInputStream = AudioSystem.getAudioInputStream(removeSoundWrapper);
+
+      clip.open(audioInputStream);
+      clip.start();
+
+    } catch (UnsupportedAudioFileException e) {
+      throw new IllegalArgumentException(
+          "UnsupportedAudioException: Could not play the sound, unsupported file type");
+    } catch (IOException e) {
+      throw new IllegalArgumentException(
+          "IOException: Could not play the sound, sound file not found");
+    } catch (LineUnavailableException e) {
+      throw new IllegalArgumentException("LineUnavailableException: Could not play the sound, "
+          + "line is unavailable");
+    }
+  }
 }

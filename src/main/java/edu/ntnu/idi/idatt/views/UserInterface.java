@@ -413,6 +413,13 @@ public class UserInterface {
     if (keepCurrentType.equals("n")) {
       //if the user doesnt want to keep it, remove it from the list.
       foodStorage.getAllGroceryTypes().removeLast();
+    } else {
+      System.out.println("Successfully added grocery class: " + foodStorage.getAllGroceryTypes()
+          .getLast().getName() + ".\nPress ENTER to continue...");
+
+      terminalUtils.getInput();
+
+      soundPlayer.playAddSound();
     }
   }
 
@@ -446,13 +453,14 @@ public class UserInterface {
 
         terminalUtils.getInput();
 
-        soundPlayer.playInputSound();
+        soundPlayer.playRemoveSound();
       }
 
       terminalUtils.clearScreen();
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
       terminalUtils.getInput();
+      soundPlayer.playInputSound();
     }
   }
 
@@ -656,7 +664,7 @@ public class UserInterface {
 
           terminalUtils.getInput();
 
-          soundPlayer.playInputSound();
+          soundPlayer.playAddSound();
         }
       }
     } catch (IllegalArgumentException e) {
@@ -699,7 +707,7 @@ public class UserInterface {
 
         terminalUtils.getInput();
 
-        soundPlayer.playInputSound();
+        soundPlayer.playRemoveSound();
       }
 
       terminalUtils.clearScreen();
@@ -709,6 +717,7 @@ public class UserInterface {
 
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
       terminalUtils.getInput();
+      soundPlayer.playInputSound();
     }
   }
 
@@ -1134,6 +1143,13 @@ public class UserInterface {
 
     if (addRecipe.equalsIgnoreCase("y")) {
       cookBook.addRecipe(newRecipe);
+
+      System.out.println("Successfully added recipe to the cookbook."
+          + "\nPress ENTER to continue...");
+
+      terminalUtils.getInput();
+
+      soundPlayer.playAddSound();
     }
   }
 
@@ -1155,7 +1171,7 @@ public class UserInterface {
 
       System.out.println(e.getMessage() + "\n\nPress ENTER to continue...");
       terminalUtils.getInput();
-      soundPlayer.playInputSound();
+      soundPlayer.playRemoveSound();
     }
   }
 
