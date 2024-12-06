@@ -136,7 +136,7 @@ public class TerminalUtils {
 
       // appends the header of the table to the string
       // character mapping: total: 40 chars: 3 chars num, 16 chars name, 16 chars measurement unit
-      rows.add("+─────+────────────────GROCERY TYPES───+──────────────────+");
+      rows.add("+─────+───────────────GROCERY CLASSES──+──────────────────+");
       rows.add("│ Num │ Name                           │ Measurement Unit │");
       rows.add("+─────+────────────────────────────────+──────────────────+");
 
