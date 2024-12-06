@@ -127,7 +127,7 @@ public class TerminalUtils {
   public String groceryTypeTable(ArrayList<GroceryType> groceryTypes) {
     if (groceryTypes.isEmpty()) {
       // if there are no grocery types to display, return a string saying exactly that.
-      return "=========NO GROCERY TYPES TO DISPLAY!========";
+      return "=========NO GROCERY CLASSES TO DISPLAY!========";
     } else {
       // creates the format for the table.
       String tableFormat = "│ %-3d │ %-30s │ %-16s │";
