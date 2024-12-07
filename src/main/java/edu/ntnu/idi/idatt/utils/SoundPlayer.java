@@ -23,6 +23,8 @@ public class SoundPlayer {
   // defines the AutioInputStream object:
   private AudioInputStream audioInputStream;
 
+  private boolean muteSound = false;
+
   /**
    * Class that allows the use of sound effects in the FoodWasteApp. Sounds that are used throughout
    * the application are stored in the main/resources/sounds directory. The sounds played in this
@@ -37,6 +39,11 @@ public class SoundPlayer {
    * confirms an action. Sounds more or less like a small "click" sound.
    */
   public void playConfirmSound() {
+    if (muteSound) {
+      // If the sound is muted, return without playing the sound.
+      return;
+    }
+
     try {
       clip = AudioSystem.getClip();
 
@@ -91,6 +98,11 @@ public class SoundPlayer {
    * and light "ding" sound.
    */
   public void playInputSound() {
+    if (muteSound) {
+      // If the sound is muted, return without playing the sound.
+      return;
+    }
+
     try {
       clip = AudioSystem.getClip();
 
@@ -130,6 +142,11 @@ public class SoundPlayer {
    * contains a funky man saying the phrase "Yeah!".
    */
   public void playAddSound() {
+    if (muteSound) {
+      // If the sound is muted, return without playing the sound.
+      return;
+    }
+
     try {
       clip = AudioSystem.getClip();
 
@@ -169,6 +186,11 @@ public class SoundPlayer {
    * storage. It contains a man screaming (NOT LOUD!).
    */
   public void playRemoveSound() {
+    if (muteSound) {
+      // If the sound is muted, return without playing the sound.
+      return;
+    }
+
     try {
       clip = AudioSystem.getClip();
 
@@ -201,5 +223,21 @@ public class SoundPlayer {
       throw new IllegalArgumentException("LineUnavailableException: Could not play the sound, "
           + "line is unavailable");
     }
+  }
+
+  /**
+   * Toggles weather or not the sound is muted. All menu sounds are muted when the sound is muted.
+   */
+  public void toggleSoundMute() {
+    muteSound = !muteSound;
+  }
+
+  /**
+   * Checks weather or not the sound is muted.
+   *
+   * @return {@link Boolean} true if the sound is muted, false if it is not.
+   */
+  public boolean isMuted() {
+    return muteSound;
   }
 }

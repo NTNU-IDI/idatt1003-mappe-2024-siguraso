@@ -105,10 +105,13 @@ public class UserInterface {
    * @return the integer (of the primitive "int" type) to know what the user wants to initiate.
    */
   private int initiateMainMenuAction() {
+    String soundStatus = soundPlayer.isMuted() ? "Muted" : "Unmuted";
+
     terminalUtils.clearScreen();
     return choiceWindow(
         new String[]{"Manage food storage.", "Manage grocery classes.", "Manage cookbook/recipes.",
-            "Quit."}, "What do you wish to do?");
+            "Toggle sound mute. (Currently sound is " + soundStatus + ")", "Quit."},
+        "What do you wish to do?");
   }
 
   /**
@@ -195,7 +198,9 @@ public class UserInterface {
 
         case 3 -> cookbookMenu();
 
-        case 4 -> quitProgram = true;
+        case 4 -> soundPlayer.toggleSoundMute();
+
+        case 5 -> quitProgram = true;
       }
     } while (!quitProgram);
 
