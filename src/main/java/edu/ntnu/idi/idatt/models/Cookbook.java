@@ -10,7 +10,7 @@ public class Cookbook {
   ArrayList<Recipe> recipes = new ArrayList<>();
 
   /**
-   * A collection of recipes.
+   * A collection of recipes. The class is used to manage the recipes in the collection.
    */
   public Cookbook() {
   }
@@ -18,7 +18,7 @@ public class Cookbook {
   // get-methods
 
   /**
-   * Gets a specific recipe from the recipes in the cookbook.
+   * Returns a specific recipe from the recipes in the cookbook.
    *
    * @param index the index of the recipe that the user wants to access.
    * @return the recipe the user wants to access.
@@ -28,9 +28,9 @@ public class Cookbook {
   }
 
   /**
-   * Gets all the recipes of a given cookbook.
+   * Returns all the recipes in the cookbook in an {@link ArrayList}.
    *
-   * @return An ArrayList of instances of Recipe.
+   * @return An {@link ArrayList} of instances of Recipe.
    */
   public ArrayList<Recipe> getRecipes() {
     return this.recipes;
@@ -41,16 +41,16 @@ public class Cookbook {
   /**
    * Allows the user to add a recipe to the cookbook.
    *
-   * @param recipe an instance of Recipe that the user wants to add to the cookbook.
+   * @param recipe an instance of {@link Recipe} that the user wants to add to the cookbook.
    */
   public void addRecipe(Recipe recipe) {
     this.recipes.add(recipe);
   }
 
   /**
-   * Removes a user-specified recipe from the cookbook.
+   * Removes a {@link Recipe} from the cookbook based on what index is given.
    *
-   * @param index the index of the recipe that the user wants to remove from the cookbook.
+   * @param index the index of the {@link Recipe} that the user wants to remove from the cookbook.
    */
   public void removeRecipe(int index) {
     this.recipes.remove(index - 1);

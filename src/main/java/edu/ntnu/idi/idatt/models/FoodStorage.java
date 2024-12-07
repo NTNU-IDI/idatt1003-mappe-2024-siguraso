@@ -6,20 +6,21 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * an instance of FoodStorage contains both GroceryInstances and GroceryTypes that are both
- * pre-defined and/or defined by the user. FoodStorage object's main goals are to more or less
- * manage these objects.
+ * An instance of FoodStorage is used to store multiple instances of the {@link GroceryInstance}
+ * class as well as multiple instances of the {@link GroceryType} class. The FoodStorage class is
+ * used to more or less manage the groceries that the user has in their food storage.
  */
 public class FoodStorage {
 
   // variables
-  ArrayList<GroceryInstance> groceryInstances = new ArrayList<>();
-  ArrayList<GroceryType> groceryTypes = new ArrayList<>();
+  private final ArrayList<GroceryInstance> groceryInstances = new ArrayList<>();
+  private final ArrayList<GroceryType> groceryTypes = new ArrayList<>();
 
 
   /**
-   * A class that stores multiple instances of the {@link GroceryInstance} class. Used to view how
-   * much of each grocery the user has.
+   * A class that stores multiple instances of the {@link GroceryInstance} class as well as multiple
+   * instances of the {@link GroceryType} class. The FoodStorage class is used to manage the
+   * groceries that the user has in their food storage.
    */
   public FoodStorage() {
   }
@@ -27,14 +28,15 @@ public class FoodStorage {
   // Get-methods
 
   /**
-   * Fetches an instance of GroceryInstance from the food storage, based on what index is given.
+   * Fetches an instance of {@link GroceryInstance}from the food storage, based on what index is
+   * given.
    */
   public GroceryInstance getSpecificInstance(int index) {
     return this.groceryInstances.get(index - 1);
   }
 
   /**
-   * Fetches an instance of GroceryType from the GroceryTypes ArrayList based on what index is
+   * Fetches an instance of {@link GroceryType} from the food storage, based on what index is
    * given.
    */
   public GroceryType getSpecificType(int index) {
@@ -42,9 +44,11 @@ public class FoodStorage {
   }
 
   /**
-   * Finds the total value of specified GroceryInstances.
+   * Finds the total value of multiple specific items in the food storage based on the indexes
+   * given.
    *
-   * @param index The indexes the user wants to find the combined value of.
+   * @param index a table of integers containing the indexes of the groceries the user wants to
+   *              calculate the total value of.
    */
   public double getMultipleSpecificValue(int[] index) {
     var sumWrapper = new Object() {
@@ -58,7 +62,7 @@ public class FoodStorage {
   }
 
   /**
-   * Finds the total value of all items in food storage.
+   * Finds the total value of all instances of {@link GroceryInstance} in the food storage.
    */
   public double getTotalValue() {
     double sum = 0;
@@ -71,7 +75,8 @@ public class FoodStorage {
   }
 
   /**
-   * Returns an ArrayList that contains all out of date items in the food storage.
+   * Fetches an {@link ArrayList} containing all the instances of {@link GroceryInstance} that are
+   * out of date.
    */
   public ArrayList<GroceryInstance> getOutOfDateInstances() {
     ArrayList<GroceryInstance> outdatedInstances = new ArrayList<>();
@@ -86,7 +91,7 @@ public class FoodStorage {
   }
 
   /**
-   * Returns the total value of all out of date items.
+   * Fetches the total value of all the instances of {@link GroceryInstance} that are out of date.
    */
   public double getOutOfDateValue() {
     var sumWrapper = new Object() {
@@ -99,7 +104,8 @@ public class FoodStorage {
   }
 
   /**
-   * Gets all instances of GroceryInstance.
+   * Fetches an {@link ArrayList} containing all the instances of {@link GroceryInstance} that are
+   * in the food storage.
    *
    * @return An ArrayList containing all instances of GroceryInstance.
    */
@@ -110,9 +116,10 @@ public class FoodStorage {
   }
 
   /**
-   * Gets all instances of GroceryType
+   * Fetches an {@link ArrayList} containing all the instances of {@link GroceryInstance} that are
+   * in the food storage.
    *
-   * @return An ArrayList containing all instances of GroceryType.
+   * @return An {@link ArrayList} containing all instances of GroceryType.
    */
   public ArrayList<GroceryType> getAllGroceryTypes() {
     return this.groceryTypes;
@@ -138,8 +145,8 @@ public class FoodStorage {
   }
 
   /**
-   * Merges duplicate instances of GroceryInstance in the food storage. If the total amount of the
-   * two instances is greater than 999.9, the rest will be added to a separate instance.
+   * Merges duplicate instances of {@link GroceryInstance} in the food storage based on the name,
+   * best before date, price per unit and measurement unit.
    */
   public void mergeDuplicateInstances() {
     // goes through the list of groceries...
@@ -169,37 +176,25 @@ public class FoodStorage {
   }
 
   /**
-   * Removes all elements from the groceries ArrayList that are equal to zero.
+   * Removes all instances of {@link GroceryInstance} that have an amount of 0.
    */
   private void removeEmptyInstances() {
     this.groceryInstances.removeIf(GI -> GI.getAmount() == 0);
   }
 
-
-  /**
-   * Checks if two GroceryInstances are of the same GroceryType
-   *
-   * @return true is they are the same GroceryType, false if they aren't.
-   */
   private boolean isSameType(GroceryInstance G1, GroceryInstance G2) {
     return G1.getName().equals(G2.getName()) && G1.getMeasurementUnit()
         .equals(G2.getMeasurementUnit());
   }
 
-  /**
-   * Checks if two GroceryInstances can be melted together if they essentially are the same
-   * GroceryInstance.
-   *
-   * @return true if they can be melted together, false if not.
-   */
   private boolean isSameInstance(GroceryInstance G1, GroceryInstance G2) {
     return isSameType(G1, G2) && G1.getBestBeforeString()
         .equals(G2.getBestBeforeString()) && G1.getPricePerUnit() == G2.getPricePerUnit();
   }
 
   /**
-   * Goes through the groceries ArrayList and checks if a user-specified search term matches any of
-   * the names of the items in the ArrayList.
+   * Searches for a specific {@link GroceryInstance} in the food storage based on the search term
+   * given by the user.
    *
    * @param searchTerm The search term specified by the user.
    * @return Returns an ArrayList of all the items that matched the users search term.
@@ -213,9 +208,11 @@ public class FoodStorage {
   // add/remove methods
 
   /**
-   * Removes an instance of GroceryInstance from the food storage, based on the index given.
+   * Removes an instance of {@link GroceryInstance} from the food storage, based on the index
+   * given.
    *
-   * @param index the index of the instance of GroceryÍnstance that the user wants to remove.
+   * @param index the index of the instance of {@link GroceryInstance} that the user wants to
+   *              remove.
    */
   public void removeInstance(int index) {
     //here, index - 1 is used so that the lists displayed go from 1 - (n + 1), and not 0 - n
@@ -224,16 +221,16 @@ public class FoodStorage {
   }
 
   /**
-   * removes an instance of GroceryType from the food storage, based on the index given.
+   * Removes an instance of {@link GroceryType} from the food storage, based on the index given.
    *
-   * @param index the index of the instance of GroceryType that the user wants to remove.
+   * @param index the index of the instance of {@link GroceryType} that the user wants to remove.
    */
   public void removeType(int index) {
     this.groceryTypes.remove(index - 1);
   }
 
   /**
-   * Adds an instance of GroceryInstance to the food storage.
+   * Adds an instance of {@link GroceryInstance} to the food storage.
    */
   public void addInstance(GroceryInstance grocery) {
     //if the grocery has been added and is equal to zero, it will be removed next time the program
@@ -242,7 +239,7 @@ public class FoodStorage {
   }
 
   /**
-   * Adds an instance of GroceryType to the food storage.
+   * Adds an instance of {@link GroceryType} to the food storage.
    */
   public void addType(GroceryType groceryType) {
     this.groceryTypes.add(groceryType);
@@ -250,8 +247,8 @@ public class FoodStorage {
 
 
   /**
-   * Removes a specific amount from a given grocery from the groceries ArrayList based on the index
-   * given.
+   * Removes a specific amount of a specific {@link GroceryInstance} from the food storage. The
+   * specific grocery is specified by the given index.
    *
    * @param index  Specifies which grocery the user wants to remove from.
    * @param amount Specifies the amount of the grocery the user wants to remove (based on the

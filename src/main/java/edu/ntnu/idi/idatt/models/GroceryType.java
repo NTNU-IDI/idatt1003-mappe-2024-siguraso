@@ -2,9 +2,9 @@ package edu.ntnu.idi.idatt.models;
 
 /**
  * An instance of the GroceryType class explains a "general class" of a grocery (e.g. tomato,
- * potato, butter, etc.). This class is used in tandem with GroceryInstance, where GroceryType
- * explains what class the grocery is (if the grocery is a tomato, it is a part of the "tomato
- * general class", or in other words, the tomato GroceryType).
+ * potato, butter, etc.). This class is used in tandem with {@link GroceryInstance}, where
+ * GroceryType explains what class the grocery is (if the grocery is a tomato, it is a part of the
+ * "tomato general class", or in other words, the tomato GroceryType).
  */
 public class GroceryType {
 
@@ -15,7 +15,9 @@ public class GroceryType {
   // Constructor
 
   /**
-   * Grocery class that defines important information about one type of grocery.
+   * Grocery class that defines a general class of groceries. The class is used to define what type
+   * of grocery we are dealing with (e.g. tomato, potato, butter, etc.), as well as its most often
+   * used measurement unit.
    *
    * @param name            The name of the grocery.
    * @param measurementUnit The unit most often used to measure said grocery.
@@ -28,7 +30,7 @@ public class GroceryType {
   // Get-methods
 
   /**
-   * Gets the name of the GroceryType.
+   * Fetches the name of the {@link GroceryType}.
    *
    * @return a String containing the name of the grocery type.
    */
@@ -46,7 +48,7 @@ public class GroceryType {
   }
 
   /**
-   * Gets the measurement unit most often associated with this type of grocery.
+   * Fetches the measurement unit of this {@link GroceryType}.
    *
    * @return a String containing the measurement unit.
    */
@@ -57,7 +59,7 @@ public class GroceryType {
   // Set-methods
 
   /**
-   * Sets the name of the {@link GroceryType} to one defined by the user.
+   * Sets the name of the {@link GroceryType} to a new, user-specified name.
    *
    * @param newName the new user-specified name.
    * @throws IllegalArgumentException if the name is longer than the character limit of 30
@@ -73,7 +75,8 @@ public class GroceryType {
   }
 
   /**
-   * Sets the measurement unit of the grocery type to one defined by the user.
+   * Sets the measurement unit of the {@link GroceryType} to a new, user-specified measurement
+   * unit.
    *
    * @param newMeasurementUnit a String containing the new user-defined measurement unit
    * @throws IllegalArgumentException if a given measurement unit is longer than the character limit

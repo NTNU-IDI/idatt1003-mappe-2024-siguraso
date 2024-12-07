@@ -8,9 +8,10 @@ import java.util.Date;
  * Unlike GroceryTypes, which here are more or less viewed as a 'class' of a grocery, a
  * GroceryInstance is viewed as a product of a GroceryType, or in other words we view
  * GroceryInstances as the products themselves, while GroceryTypes are the product class. For
- * example the product class tomato can have many different products, and each product have their
+ * example the grocery class tomato can have many different products, and each product have their
  * own prices, best-before dates, etc.. GroceryInstances define exactly these product-specific
- * variables based on a 'product class', or in other words, a GroceryType.
+ * variables based on a 'product class', or in other words, a GroceryType as well as other more
+ * specific information about the product, like how much of the product there is.
  **/
 public class GroceryInstance {
 
@@ -47,9 +48,9 @@ public class GroceryInstance {
   // Get-methods
 
   /**
-   * Gets the name of the grocery
+   * Fetches the name of the {@link GroceryType} of this {@link GroceryInstance}.
    *
-   * @return String contaoining the name of the grocery
+   * @return {@link String} containing the name of the {@link GroceryType}.
    */
   public String getName() {
     return this.groceryType.getName();
@@ -74,7 +75,7 @@ public class GroceryInstance {
   }
 
   /**
-   * Gets the amount of the grocery defined in the GroceryInstance.
+   * Fetches the amount of the {@link GroceryInstance}.
    *
    * @return a double containing the amount.
    */
@@ -84,7 +85,8 @@ public class GroceryInstance {
 
   /**
    * Method for displaying the best before date as an instance of String. Useful when trying to
-   * display the best before date.
+   * display the best before date. If the grocery is out of date, the String will be colored red.
+   * The best before date is given in the format "DD.MM.YYYY".
    */
   public String getBestBeforeString() {
     if (this.isOutOfDate()) {
@@ -113,7 +115,7 @@ public class GroceryInstance {
   }
 
   /**
-   * Gets the price per unit for this GroceryInstance.
+   * Fetches the price per unit for this GroceryInstance.
    *
    * @return a double containing the price per unit
    */
@@ -122,7 +124,7 @@ public class GroceryInstance {
   }
 
   /**
-   * Gets the total price of this GroceryInstance
+   * Gets the total price of this {@link GroceryInstance}
    *
    * @return a double containing the total price of this GroceryInstance.
    */
@@ -147,7 +149,7 @@ public class GroceryInstance {
   }
 
   /**
-   * Sets the price per unit
+   * Sets the price per unit of the {@link GroceryInstance}.
    *
    * @param newPricePerUnit a double containing the new price per unit.
    * @throws IllegalArgumentException if the given price per unit is less than 0 or more than
@@ -164,7 +166,8 @@ public class GroceryInstance {
   }
 
   /**
-   * Sets the best before date.
+   * Sets the best before date of the {@link GroceryInstance}. Based on a given {@link String}
+   * containing the date in the format "DD.MM.YYYY".
    *
    * @param newBestBefore the new best before date as a {@link String} in the format DD.MM.YYYY.
    * @throws IllegalArgumentException if the given date is invalid (e.g. has an invalid month, day
@@ -182,7 +185,7 @@ public class GroceryInstance {
   // Other void-methods.
 
   /**
-   * Removes a certain amount of this GroceryInstance.
+   * Removes a defined amount from this {@link GroceryInstance}.
    *
    * @param amountToRemove a double containing the amount you would like to remove.
    * @throws IllegalArgumentException if the amount to remove is less than 0 or more than the
@@ -197,7 +200,7 @@ public class GroceryInstance {
   }
 
   /**
-   * Adds a certain amount to this GroceryInstance.
+   * Adds a defined amount to this {@link GroceryInstance}.
    *
    * @param amountToAdd a double of the amount that is to be added.
    */
@@ -215,6 +218,8 @@ public class GroceryInstance {
 
   /**
    * Checks weather or not this {@link GroceryInstance} is out of date.
+   *
+   * @return {@link Boolean} true or false that checks if the grocery is out of date.
    */
   public boolean isOutOfDate() {
     Date today = new Date();
@@ -223,10 +228,10 @@ public class GroceryInstance {
   }
 
   /**
-   * Checks weather or not an entered date is a valid date.
+   * Checks weather or not an entered {@link String} is a valid date.
    *
    * @param dateString the date given as a {@link String} in the format DD.MM.YYYY
-   * @return {@link Boolean} true or false that checks if the date is valid.
+   * @return {@link Boolean} true or false based on if the date is valid.
    */
   private boolean isValidDate(String dateString) {
     String[] dateParts = dateString.split("\\.");

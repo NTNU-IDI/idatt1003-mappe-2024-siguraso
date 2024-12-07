@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An instance of recipe more or less explains how to make a certain type of food. There are many An
- * instance of the recipe object is complete with ingredients, instructions, a description as well
- * as including approximations for the amounts of the different ingredients to make it easier to
- * actually make the recipes.
+ * An instance of recipe more or less explains how to make a certain type of food. An instance of
+ * the recipe object is complete with ingredients, instructions, a description as well as including
+ * approximations for the amounts of the different ingredients to make it easier to actually make
+ * the recipes.
  */
 public class Recipe {
 
@@ -18,7 +18,8 @@ public class Recipe {
   ArrayList<String> approximations;
 
   /**
-   * A food recipe, complete with a name, a short description, instructions, and ingredients.
+   * A food recipe, complete with a name, a short description, instructions, ingredients and an
+   * approximation corresponding to the ingredients.
    *
    * @param name           Name of the recipe.
    * @param description    A short description of the end product.
@@ -43,43 +44,48 @@ public class Recipe {
   // get-methods
 
   /**
-   * Gets the name of the recipe. (e.g. cheesecake, tomato soup, etc.)
+   * Returns the name of the {@link Recipe}. Used in the UserInterface class to display the name of
+   * the recipe name.
    *
-   * @return a String that contains the name of the recipe.
+   * @return a {@link String} that contains the name of the recipe.
    */
   public String getName() {
     return this.name;
   }
 
   /**
-   * Returns the ArrayList containing the ingredients in the form of instances of GroceryInstance.
+   * Fetches the ingredients of the recipe.
+   *
+   * @return an {@link ArrayList} containing {@link GroceryInstance} explaining the ingredients of
+   * the recipe.
    */
   public ArrayList<GroceryInstance> getIngredients() {
     return this.ingredients;
   }
 
   /**
-   * Gets the description of the recipe.
+   * Fetches the description of the recipe.
    *
-   * @return a String containing the description of the recipe.
+   * @return a {@link String} containing the description of the recipe.
    */
   public String getDescription() {
     return this.description;
   }
 
   /**
-   * Gets the instructions for the recipe.
+   * Fetches the instructions of the recipe.
    *
-   * @return an ArrayList containing String of the instructions.
+   * @return an {@link ArrayList} containing {@link String} that explains the instructions of the
    */
   public ArrayList<String> getInstructions() {
     return this.instructions;
   }
 
   /**
-   * Gets the approximations for the corresponding ingredients.
+   * Fetches the corresponding approximations of the ingredients in the recipe.
    *
-   * @return an ArrayList of String containing the approximations.
+   * @return an {@link ArrayList} containing {@link String} that explains the approximations of the
+   * ingredients in the recipe.
    */
   public ArrayList<String> getApproximations() {
     return this.approximations;
@@ -88,9 +94,9 @@ public class Recipe {
   // set-methods
 
   /**
-   * Sets the name of the recipe
+   * Sets the name of the recipe to a new name.
    *
-   * @param newName the new name of the recipe.
+   * @param newName a {@link String} that contains the new name of the {@link Recipe}.
    * @throws IllegalArgumentException if newName is longer than 45 characters.
    */
   public void setName(String newName) throws IllegalArgumentException {
@@ -104,7 +110,7 @@ public class Recipe {
   /**
    * Sets a new description for the recipe.
    *
-   * @param newDescription a {@link} string that contains the new description.
+   * @param newDescription a {@link String} that contains the new description.
    */
   public void setDescription(String newDescription) {
     this.description = newDescription;
@@ -123,13 +129,22 @@ public class Recipe {
   }
 
   /**
+   * Adds another instruction to the recipe. Used in the UserInterface when creating a new recipe
+   *
+   * @param newInstruction the new instruction that to add to the recipe.
+   */
+  public void addInstruction(String newInstruction) {
+    this.instructions.add(newInstruction);
+  }
+
+  /**
    * Adds an approximation that's used to approximate an ingredient of the corresponding index to
    * make the recipe more understandable and easier to make. this method is used in the
    * UserInterface class when creating a new recipe.
    *
    * @param newApproximation {@link String} containing the approximation for a corresponding
    *                         ingredient.
-   * @throws IllegalArgumentException if the apporximation is longer than the character limit of
+   * @throws IllegalArgumentException if the approximation is longer than the character limit of
    *                                  25.
    */
   public void addApproximation(String newApproximation) throws IllegalArgumentException {
@@ -140,15 +155,6 @@ public class Recipe {
     this.approximations.add(newApproximation);
   }
 
-  /**
-   * Adds another instruction to the recipe. Used in the UserInterface when creating a new recipe
-   *
-   * @param newInstruction the new instruction that to add to the recipe.
-   */
-  public void addInstruction(String newInstruction) {
-    this.instructions.add(newInstruction);
-  }
-
   // other methods
 
   /**
@@ -157,7 +163,7 @@ public class Recipe {
    *
    * @param foodStorage      The Food Storage containing the available groceries.
    * @param includeOutOfDate if you want to include out of date items, leave this as true.
-   * @return Boolean true or false weather or not you can make the recipe or not
+   * @return {@link Boolean} true if you can make the recipe, false if you can't.
    */
   public boolean canMakeRecipe(FoodStorage foodStorage, boolean includeOutOfDate) {
     // a wrapper class to hold the variables
