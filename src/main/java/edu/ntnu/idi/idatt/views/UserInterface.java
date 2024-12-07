@@ -182,9 +182,6 @@ public class UserInterface {
 
   // menus that take the initiation values, and does the action.
 
-  /**
-   * Takes the user input for what sub-menu the user wants to access, and initiates the given menu.
-   */
   private void mainMenu() {
     boolean quitProgram = false;
 
@@ -204,10 +201,6 @@ public class UserInterface {
 
   }
 
-  /**
-   * Takes the user input for what the user wants to do to the {@link FoodStorage} and actually
-   * initiates and  does the action in a user friendly way.
-   */
   private void foodStorageMenu() {
     boolean returnToMainMenu = false;
 
@@ -253,10 +246,6 @@ public class UserInterface {
     } while (!returnToMainMenu);
   }
 
-  /**
-   * Takes the user input for what the user wants to do in the compendium of {@link GroceryType},
-   * and actually initiates and does the action in a user friendly way..
-   */
   private void groceryTypeMenu() {
     boolean returnToMainMenu = false;
 
@@ -295,10 +284,6 @@ public class UserInterface {
     } while (!returnToMainMenu);
   }
 
-  /**
-   * Takes the user input for what the user wants to do in the {@link Cookbook}, and actually does
-   * it by initializing different actions in a user-friendly way.
-   */
   private void cookbookMenu() {
 
     boolean returnToMainMenu = false;
@@ -354,10 +339,6 @@ public class UserInterface {
 
   // grocery class menu
 
-  /**
-   * This method takes a series of user inputs, and puts them into a single {@link GroceryType},
-   * which is promptly added to the {@link FoodStorage}.
-   */
   private void addGroceryType() {
     terminalUtils.clearScreen();
 
@@ -423,10 +404,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * This method takes a user input that decides which {@link GroceryType} to remove from the
-   * {@link FoodStorage} based on a given index.
-   */
   private void removeGroceryType() {
     terminalUtils.clearScreen();
 
@@ -464,10 +441,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * This method takes a series of user inputs that decides how to edit a given
-   * {@link GroceryType}.
-   */
   private void editGroceryType() {
     terminalUtils.clearScreen();
 
@@ -536,10 +509,6 @@ public class UserInterface {
 
   //grocerey instance menu
 
-  /**
-   * This method takes a series of inputs that lets the user define a new instance of
-   * {@link GroceryInstance} to add to the {@link FoodStorage}
-   */
   private void addGroceryInstance() {
     try {
       int typeIndex = 0;
@@ -676,10 +645,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * This method takes a user input that decides which {@link GroceryInstance} to remove from the
-   * food storage.
-   */
   private void removeGroceryInstance() {
     terminalUtils.clearScreen();
 
@@ -721,10 +686,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * This method takes a user input that defines a search term, which then gets searched for, which
-   * then displays a table that displays the search results.
-   */
   private void searchInFoodStorage() {
     System.out.println("Please enter your search term below:");
     String searchTerm = terminalUtils.getInput();
@@ -743,10 +704,6 @@ public class UserInterface {
     soundPlayer.playInputSound();
   }
 
-  /**
-   * Method that more or less prints out all of the out of date food in the food storage, as well as
-   * the cumulative value of said groceries.
-   */
   private void displayOutOfDate() {
     String outOfDateValueFormat = "Total value of expired: %.2f kr";
 
@@ -761,9 +718,6 @@ public class UserInterface {
     soundPlayer.playInputSound();
   }
 
-  /**
-   * Method that lets the user edit a {@link GroceryInstance} by showing a user-friendly ui.
-   */
   private void editGroceryInstance() {
     try {
       int editIndex = chooseValidListIndex(
@@ -859,10 +813,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * Method that lets the user pick numerous {@link GroceryInstance} and find the combined price of
-   * said instances.
-   */
   private void valueOfMultipleGroceries() {
     try {
       int[] indexes = chooseMultipleValidListIndex(
@@ -890,9 +840,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * Method that lets the user pick a {@link GroceryInstance} to remove a certain amount from.
-   */
   private void removeAmountFromSpecificGrocery() {
     int removeAmountIndex = chooseValidListIndex(
         terminalUtils.foodStorageTable(foodStorage.getAllGroceryInstances())
@@ -940,11 +887,6 @@ public class UserInterface {
 
   // cookbook menu
 
-  /**
-   * Method that lets the user view a recipe of their choice.
-   *
-   * @param viewIndex the index of the recipe that the user would like to view.
-   */
   private void viewRecipe(int viewIndex) {
     Recipe thisRecipe = cookBook.getSpecificRecipe(viewIndex);
 
@@ -969,9 +911,6 @@ public class UserInterface {
     soundPlayer.playInputSound();
   }
 
-  /**
-   * Method that lets the user create an instance of {@link Recipe} by defining its characteristics
-   */
   private void createRecipe() {
     // placeholder recipe to make it set-able, so that it can throw the errors at the right time.
     Recipe newRecipe = new Recipe("", "", new ArrayList<>(), new ArrayList<>(),
@@ -1153,9 +1092,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * Method that lets the user remove one recipe of their choice from the cookbook.
-   */
   private void removeRecipe() {
     terminalUtils.clearScreen();
 
@@ -1175,10 +1111,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * Method that gives a recipe suggestion if you have half or more of a recipe's ingredients
-   * available in the food storage.
-   */
   private void viewSuggestedRecipes() {
     terminalUtils.clearScreen();
     String includeOutOfDateFood = uiYesNoOption(
@@ -1209,15 +1141,6 @@ public class UserInterface {
 
   // methods for entering specific elements
 
-  /**
-   * This method creates a menu that makes sure the user picks an integer within a given lists
-   * index.
-   *
-   * @param message      dialog message as a {@link String} that displays above the user input.
-   * @param lengthOfList the length of a given list.
-   * @return the index of the given {@link GroceryType} that the user wants to initiate.
-   * @throws IllegalArgumentException id the given list length is empty.
-   */
   private int chooseValidListIndex(String message, int lengthOfList)
       throws IllegalArgumentException {
     if (lengthOfList == 0) {
@@ -1250,15 +1173,6 @@ public class UserInterface {
     }
   }
 
-  /**
-   * This method is used to create a dialog menu that lets the user choose multiple different
-   * indexes from a given list.
-   *
-   * @param message      the dialog message that will display over the user input.
-   * @param lengthOfList the length of the given list.
-   * @return an array of integers containing all indexes the user wants to access.
-   * @throws IllegalArgumentException if the given list is empty.
-   */
   private int[] chooseMultipleValidListIndex(String message, int lengthOfList)
       throws IllegalArgumentException {
     if (lengthOfList == 0) {
@@ -1314,14 +1228,6 @@ public class UserInterface {
     return indexes.stream().mapToInt(i -> i).toArray();
   }
 
-  /**
-   * This method is a UI method that uses the method yesNoOption, and makes it more user friendly
-   * by, for instance, catching the errors that method throws.
-   *
-   * @param message dialog message given as a {@link String} that displays above the user input.
-   * @return a string containing either "y" or "n" (lowercase) that indicates yes or no from the
-   * user.
-   */
   private String uiYesNoOption(String message) {
     boolean hasEnteredYOrN = false;
     String yesNoChoice = "";
@@ -1341,21 +1247,6 @@ public class UserInterface {
     return yesNoChoice;
   }
 
-  /**
-   * Creates a dialog window that lets the user pick between different choices, and returns an
-   * integer (the primitive type "int") based on what function the user wants to initiate. The
-   * choices are displayed in the same order as given in the choices {@link String} table (see
-   * params).
-   * <p>The choice window will look something like this:</p>
-   * <p>[1] Choice 1
-   * <p>[2] Choice 2
-   * <p>[3] Choice 3
-   * <p>...</p>
-   * <p>Please enter an integer 1 - *number of choices*.</p>
-   *
-   * @param choices a table of {@link String} that contains the
-   * @return the integer (the primitive type "int") that the user has entered.
-   */
   private int choiceWindow(String[] choices, String message) {
     List<String> choicesList = Arrays.asList(choices);
 
