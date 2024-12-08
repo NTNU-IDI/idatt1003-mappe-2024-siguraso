@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Text-User-Interface class that manages the different input validations as well as creating
- * different types of tables used throughout the user interface.
+ * Text-User-Interface class that manages the input/output of the program. The class contains
+ * different methods that are used to validate user input, print out tables, and clear the terminal
+ * window.
  */
 public class TerminalUtils {
 
   private final Scanner sc = new Scanner(System.in);
 
   /**
-   * An instance of the Utils class handles all of the different dialog messages and user inputs so
-   * that the user can access the
+   * An instance of the TerminalUtils class handles all of the different dialog messages and user
+   * inputs so that the user can access the different functionalities of the program.
    */
   public TerminalUtils() {
   }
@@ -129,8 +130,6 @@ public class TerminalUtils {
       // if there are no grocery types to display, return a string saying exactly that.
       return "=========NO GROCERY CLASSES TO DISPLAY!========";
     } else {
-      // creates the format for the table.
-      String tableFormat = "│ %-3d │ %-30s │ %-16s │";
 
       ArrayList<String> rows = new ArrayList<>();
 
@@ -140,9 +139,10 @@ public class TerminalUtils {
       rows.add("│ Num │ Name                           │ Measurement Unit │");
       rows.add("+─────+────────────────────────────────+──────────────────+");
 
+      // appends the grocery type numbers to the format of the table.
       groceryTypes.forEach(type -> rows.add(
-          String.format(tableFormat, (groceryTypes.indexOf(type) + 1), type.getName(),
-              type.getMeasurementUnit())));
+          String.format("│ %-3d │ %-30s │ %-16s │", (groceryTypes.indexOf(type) + 1),
+              type.getName(), type.getMeasurementUnit())));
 
       //prints out bottom of table
       rows.add("+─────+────────────────────────────────+──────────────────+");
@@ -164,32 +164,35 @@ public class TerminalUtils {
   public String foodStorageTable(ArrayList<GroceryInstance> groceryInstances) {
     if (groceryInstances.isEmpty()) {
       //tells the user that there is no items in food storage if there is none.
-      return "======================================NO GROCERIES TO DISPLAY!=========================================";
+      return
+          "======================================NO GROCERIES TO DISPLAY!=========================="
+              + "===============";
     } else {
-      // creates the format for the table.
-      String tableFormat = "│ %-3d │ %-30s │ %,-9.1f │ %-9s │ %,-13.2f │ %,-10.2f │ %-10s │";
-
       ArrayList<String> rows = new ArrayList<>();
 
       // adds the top of the table (the header) to the rows ArrayList
+      // character mapping: total: 93 chars: 3 chars num, 30 chars name, 9 chars amount,
+      //                           9 Chars unit, 7 chars Price, 10 chars Price/unit DD.MM.YYYY
+      rows.add(
+          "+─────+────────────────────────────────+────────GROCERIES──────────────────────+────────"
+              + "────+────────────+");
+      rows.add(
+          "│ Num │ Name                           │ Amount    │ Unit      │ Total Price   │ Price/U"
+              + "nit │ BestBefore │");
+      rows.add(
+          "+─────+────────────────────────────────+───────────+───────────+───────────────+────────"
+              + "────+────────────+");
 
-      // character mapping: total: 93 chars: 3 chars num, 30 chars name, 9 chars amount, 9 Chars unit,
-      //                                     7 chars Price, 10 chars Price/unit DD.MM.YYYY
-      rows.add(
-          "+─────+────────────────────────────────+────────GROCERIES──────────────────────+────────────+────────────+");
-      rows.add(
-          "│ Num │ Name                           │ Amount    │ Unit      │ Total Price   │ Price/Unit │ BestBefore │");
-      rows.add(
-          "+─────+────────────────────────────────+───────────+───────────+───────────────+────────────+────────────+");
-
-      groceryInstances.forEach(instance -> rows.add(String.format(tableFormat,
-          groceryInstances.indexOf(instance) + 1, instance.getName(), instance.getAmount(),
-          instance.getMeasurementUnit(), instance.getPrice(), instance.getPricePerUnit(),
-          instance.getBestBeforeString())));
+      groceryInstances.forEach(instance -> rows.add(
+          String.format("│ %-3d │ %-30s │ %,-9.1f │ %-9s │ %,-13.2f │ %,-10.2f │ %-10s │",
+              groceryInstances.indexOf(instance) + 1, instance.getName(), instance.getAmount(),
+              instance.getMeasurementUnit(), instance.getPrice(), instance.getPricePerUnit(),
+              instance.getBestBeforeString())));
 
       // prints out bottom of table
       rows.add(
-          "+─────+────────────────────────────────+───────────+───────────+───────────────+────────────+────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+───────────────+────────"
+              + "────+────────────+");
 
       return String.join("\n", rows);
     }
@@ -209,11 +212,9 @@ public class TerminalUtils {
   public String cookbookTable(ArrayList<Recipe> recipes, FoodStorage foodStorage) {
     if (recipes.isEmpty()) {
       return
-          "==========================================NO RECIPES TO DISPLAY!===========================================";
+          "==========================================NO RECIPES TO DISPLAY!========================"
+              + "===================";
     } else {
-      // creates the format for the table.
-      String tableFormat = "│ %-3d │ %-45s │ %-11d │ %-8s │ %-21s │";
-
       ArrayList<String> rows = new ArrayList<>();
 
       // adds the top of the table (the header) to the list of rows
@@ -221,19 +222,23 @@ public class TerminalUtils {
       // ingredients, 8 chars can make it without using out of date food, 21 chars can make it with
       // out of date food.
       rows.add(
-          "+─────+──────────────────────────────────────────RECIPES────────────+──────────+───────────────────────+");
+          "+─────+──────────────────────────────────────────RECIPES────────────+──────────+────────"
+              + "───────────────+");
       rows.add(
-          "│ Num │ Name                                          │ Ingredients │ CanMake? │ CanMakeInclOutOfDate? │");
+          "│ Num │ Name                                          │ Ingredients │ CanMake? │ CanMake"
+              + "InclOutOfDate? │");
       rows.add(
-          "+─────+───────────────────────────────────────────────+─────────────+──────────+───────────────────────+");
+          "+─────+───────────────────────────────────────────────+─────────────+──────────+────────"
+              + "───────────────+");
 
       recipes.forEach(recipe -> rows.add(
-          String.format(tableFormat, recipes.indexOf(recipe) + 1, recipe.getName(),
-              recipe.getIngredients().size(), recipe.canMakeRecipe(foodStorage, false),
-              recipe.canMakeRecipe(foodStorage, true))));
+          String.format("│ %-3d │ %-45s │ %-11d │ %-8s │ %-21s │", recipes.indexOf(recipe) + 1,
+              recipe.getName(), recipe.getIngredients().size(), recipe.canMakeRecipe(foodStorage,
+                  false), recipe.canMakeRecipe(foodStorage, true))));
 
       rows.add(
-          "+─────+───────────────────────────────────────────────+─────────────+──────────+───────────────────────+");
+          "+─────+───────────────────────────────────────────────+─────────────+──────────+────────"
+              + "───────────────+");
 
       return String.join("\n", rows);
     }
@@ -257,25 +262,30 @@ public class TerminalUtils {
     } else {
 
       // num, name, amount, measurement unit, appproximation (if needed)
-      String tableFormat = "│ %-3d │ %-30s │ %,-9.1f │ %-9s │ ~ %-20s │";
+      String tableFormat = "";
 
       ArrayList<String> rows = new ArrayList<>();
 
       //adds the header to the list of rows.
       rows.add(
-          "+─────+────────────────────────────────INGREDIENTS─+───────────+────────────────────────+");
+          "+─────+────────────────────────────────INGREDIENTS─+───────────+────────────────────────"
+              + "+");
       rows.add(
-          "│ Num │ Name                           │ Amount    │ Unit      │ Approximation          │");
+          "│ Num │ Name                           │ Amount    │ Unit      │ Approximation          "
+              + "│");
       rows.add(
-          "+─────+────────────────────────────────+───────────+───────────+────────────────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+────────────────────────"
+              + "+");
 
-      ingredients.forEach(ingredient -> rows.add(String.format(tableFormat,
-          ingredients.indexOf(ingredient) + 1, ingredient.getName(), ingredient.getAmount(),
-          ingredient.getMeasurementUnit(), approximations.get(ingredients.indexOf(ingredient)))));
+      ingredients.forEach(ingredient -> rows.add(String.format(
+          "│ %-3d │ %-30s │ %,-9.1f │ %-9s │ ~ %-20s │", ingredients.indexOf(ingredient) + 1,
+          ingredient.getName(), ingredient.getAmount(), ingredient.getMeasurementUnit(),
+          approximations.get(ingredients.indexOf(ingredient)))));
 
       //prints out bottom of the table.
       rows.add(
-          "+─────+────────────────────────────────+───────────+───────────+────────────────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+────────────────────────"
+              + "+");
 
       return String.join("\n", rows);
     }
