@@ -124,7 +124,7 @@ public class GroceryInstance {
   }
 
   /**
-   * Gets the total price of this {@link GroceryInstance}
+   * Gets the total price of this {@link GroceryInstance}.
    *
    * @return a double containing the total price of this GroceryInstance.
    */
