@@ -1,9 +1,8 @@
 package edu.ntnu.idi.idatt.utils;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.BufferedInputStream;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -106,7 +105,8 @@ public class SoundPlayer {
     try {
       clip = AudioSystem.getClip();
 
-      // creates an InputStream for the inputSound, more or less used to get the file location of the
+      // creates an InputStream for the inputSound, more or less used to get the file location of
+      // the sound.
       InputStream inputSound = getClass().getResourceAsStream("/sounds/inputSound.wav");
 
       // If the file is not found, throw an IOException
@@ -150,7 +150,8 @@ public class SoundPlayer {
     try {
       clip = AudioSystem.getClip();
 
-      // creates an InputStream for the inputSound, more or less used to get the file location of the
+      // creates an InputStream for the inputSound, more or less used to get the file location of
+      // the sound.
       InputStream addSound = getClass().getResourceAsStream("/sounds/addSound.wav");
 
       // If the file is not found, throw an IOException
@@ -194,7 +195,8 @@ public class SoundPlayer {
     try {
       clip = AudioSystem.getClip();
 
-      // creates an InputStream for the inputSound, more or less used to get the file location of the
+      // creates an InputStream for the inputSound, more or less used to get the file location of
+      // the sound.
       InputStream removeSound = getClass().getResourceAsStream("/sounds/removeSound.wav");
 
       // If the file is not found, throw an IOException
