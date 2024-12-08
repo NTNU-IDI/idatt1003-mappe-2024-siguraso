@@ -5,16 +5,15 @@ import edu.ntnu.idi.idatt.models.FoodStorage;
 import edu.ntnu.idi.idatt.models.GroceryInstance;
 import edu.ntnu.idi.idatt.models.GroceryType;
 import edu.ntnu.idi.idatt.models.Recipe;
-import edu.ntnu.idi.idatt.utils.TerminalUtils;
 import edu.ntnu.idi.idatt.utils.SoundPlayer;
-
+import edu.ntnu.idi.idatt.utils.TerminalUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Class that creates the menus of the program, and handles the user input for what the user wants
- * to do
+ * to do.
  */
 public class UserInterface {
 
@@ -149,15 +148,15 @@ public class UserInterface {
    * <p>[2] Remove a grocery class.</p>
    * <p>[3] Edit a grocery class (e.g. change name or unit)</p>
    * <p>[4] Return to main menu.</p>
-   *
-   * @return an integer (of the primitive type "int") that tells the program what the user wants to
-   * do.
    */
   private int initiateGroceryTypeAction() {
-    return choiceWindow(new String[]{"Add a grocery class.", "Remove a grocery class.",
+    return choiceWindow(
+        new String[]{"Add a grocery class.",
+            "Remove a grocery class.",
             "Edit grocery class (change name or measurement unit).", "Return to main menu."},
         terminalUtils.groceryTypeTable(foodStorage.getAllGroceryTypes())
-            + "\nManage grocery classes:");
+            + "\nManage grocery classes:"
+    );
   }
 
   /**
@@ -170,12 +169,10 @@ public class UserInterface {
    * <p>[3] Remove recipe.</p>
    * <p>[4] View suggested recipes.</p>
    * <p>[5] Return to main menu.</p>
-   *
-   * @return an integer (of the primitive type "int") that tells the program what action the user
-   * wants to initiate.
    */
   private int initiateCookbookAction() {
-    return choiceWindow(new String[]{"View recipe",
+    return choiceWindow(
+        new String[]{"View recipe",
             "Add recipe (!Make sure to add the relevant grocery classes beforehand!).",
             "Remove recipe.",
             "View suggested recipes (based on what you have available in the food storage).",
@@ -201,6 +198,13 @@ public class UserInterface {
         case 4 -> soundPlayer.toggleSoundMute();
 
         case 5 -> quitProgram = true;
+
+        default -> {
+          terminalUtils.clearScreen();
+          System.out.println("Invalid input, please try again.\n\nPress ENTER to continue...");
+          terminalUtils.getInput();
+          soundPlayer.playInputSound();
+        }
       }
     } while (!quitProgram);
 
@@ -247,6 +251,13 @@ public class UserInterface {
 
         //return to main menu
         case 8 -> returnToMainMenu = true;
+
+        default -> {
+          terminalUtils.clearScreen();
+          System.out.println("Invalid input, please try again.\n\nPress ENTER to continue...");
+          terminalUtils.getInput();
+          soundPlayer.playInputSound();
+        }
       }
     } while (!returnToMainMenu);
   }
@@ -285,6 +296,13 @@ public class UserInterface {
 
         //return to main menu.
         case 4 -> returnToMainMenu = true;
+
+        default -> {
+          terminalUtils.clearScreen();
+          System.out.println("Invalid input, please try again.\n\nPress ENTER to continue...");
+          terminalUtils.getInput();
+          soundPlayer.playInputSound();
+        }
       }
     } while (!returnToMainMenu);
   }
@@ -301,9 +319,9 @@ public class UserInterface {
         case 1 -> {
           terminalUtils.clearScreen();
           try {
-            int viewIndex = chooseValidListIndex(
-                terminalUtils.cookbookTable(cookBook.getRecipes(), foodStorage) +
-                    "\nEnter the number of the recipe you would like to view (See Num on the above table).",
+            int viewIndex = chooseValidListIndex(terminalUtils.cookbookTable(cookBook
+                    .getRecipes(), foodStorage) + "\nEnter the number of the recipe you would like "
+                    + "to view (See Num on the above table).",
                 cookBook.getRecipes().size());
 
             viewRecipe(viewIndex);
@@ -335,6 +353,13 @@ public class UserInterface {
 
         // return to main menu.
         case 5 -> returnToMainMenu = true;
+
+        default -> {
+          terminalUtils.clearScreen();
+          System.out.println("Invalid input, please try again.\n\nPress ENTER to continue...");
+          terminalUtils.getInput();
+          soundPlayer.playInputSound();
+        }
       }
     } while (!returnToMainMenu);
   }
@@ -355,8 +380,8 @@ public class UserInterface {
       try {
         System.out.println(
             "What is the name of the grocery class you would like to add? (max 30 characters)");
-        String TypeName = terminalUtils.getInput();
-        foodStorage.getAllGroceryTypes().getLast().setName(TypeName);
+        String typeName = terminalUtils.getInput();
+        foodStorage.getAllGroceryTypes().getLast().setName(typeName);
 
         hasEnteredValidName = true;
       } catch (IllegalArgumentException e) {
@@ -376,8 +401,8 @@ public class UserInterface {
         System.out.println(
             "What is the measurement unit most associated with '" + foodStorage.getAllGroceryTypes()
                 .getLast().getName() + "' (e.g. kg, pcs., L, etc.)?");
-        String UnitName = terminalUtils.getInput();
-        foodStorage.getAllGroceryTypes().getLast().setMeasurementUnit(UnitName);
+        String unitName = terminalUtils.getInput();
+        foodStorage.getAllGroceryTypes().getLast().setMeasurementUnit(unitName);
 
         hasEnteredValidUnit = true;
       } catch (IllegalArgumentException e) {
@@ -555,8 +580,8 @@ public class UserInterface {
         terminalUtils.clearScreen();
         typeIndex = chooseValidListIndex(
             terminalUtils.groceryTypeTable(foodStorage.getAllGroceryTypes())
-                + "\nPlease enter the number of the grocery class you wish to select (See 'Num' in the above table)",
-            foodStorage.getAllGroceryTypes().size());
+                + "\nPlease enter the number of the grocery class you wish to select "
+                + "(See 'Num' in the above table)", foodStorage.getAllGroceryTypes().size());
 
         foodStorage.addInstance(new GroceryInstance(foodStorage.getSpecificType(typeIndex), 0.1,
             0.1, null));
@@ -566,10 +591,10 @@ public class UserInterface {
 
       while (!hasEnteredValidAmount) {
         try {
-          double amount = terminalUtils.doubleOption("Please enter the amount of '" +
-              foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '" +
-              foodStorage.getSpecificType(typeIndex).getName() +
-              "' that you would like to add to the food storage. (0.0 - 999.9)");
+          double amount = terminalUtils.doubleOption("Please enter the amount of '"
+              + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + "' of '"
+              + foodStorage.getSpecificType(typeIndex).getName()
+              + "' that you would like to add to the food storage. (0.0 - 999.9)");
 
           foodStorage.getAllGroceryInstances().getLast().setAmount(amount);
 
@@ -586,8 +611,8 @@ public class UserInterface {
         try {
           double pricePerUnit = terminalUtils.doubleOption(
               "Please enter the price per '" + foodStorage
-                  .getSpecificType(typeIndex).getMeasurementUnit() +
-                  "' (enter a decimal number 0.0 - 99999.9).");
+                  .getSpecificType(typeIndex).getMeasurementUnit()
+                  + "' (enter a decimal number 0.0 - 99999.9).");
 
           foodStorage.getAllGroceryInstances().getLast().setPricePerUnit(pricePerUnit);
 
@@ -619,17 +644,17 @@ public class UserInterface {
       // if user didnt want to create a new type, ignore the code below.
       if (createNewInstance) {
 
-        String isInstanceOK = uiYesNoOption(
-            "Name: " + foodStorage.getSpecificType(typeIndex).getName() +
-                "\nMeasurement Unit: " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit()
-                + "\nAmount: " + foodStorage.getAllGroceryInstances().getLast().getAmount() + " "
-                + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() +
-                "\nPrice per " + foodStorage.getSpecificType(typeIndex).getMeasurementUnit() + ": "
-                + foodStorage.getAllGroceryInstances().getLast().getPricePerUnit() +
-                "\nBest before: " + foodStorage.getAllGroceryInstances().getLast()
-                .getBestBeforeString() + "\n\nIs this OK? (Y/n)");
+        String isInstanceOk = uiYesNoOption(
+            "Name: " + foodStorage.getSpecificType(typeIndex).getName()
+                + "\nMeasurement Unit: " + foodStorage.getSpecificType(typeIndex)
+                .getMeasurementUnit() + "\nAmount: " + foodStorage.getAllGroceryInstances()
+                .getLast().getAmount() + " " + foodStorage.getSpecificType(typeIndex)
+                .getMeasurementUnit() + "\nPrice per " + foodStorage.getSpecificType(typeIndex)
+                .getMeasurementUnit() + ": " + foodStorage.getAllGroceryInstances().getLast()
+                .getPricePerUnit() + "\nBest before: " + foodStorage.getAllGroceryInstances()
+                .getLast().getBestBeforeString() + "\n\nIs this OK? (Y/n)");
 
-        if (isInstanceOK.equals("n")) {
+        if (isInstanceOk.equals("n")) {
           foodStorage.getAllGroceryInstances().removeLast();
         } else {
           terminalUtils.clearScreen();
@@ -765,10 +790,10 @@ public class UserInterface {
         try {
           double pricePerUnit = terminalUtils.doubleOption(
               "Please enter the price per '" + foodStorage
-                  .getSpecificInstance(editIndex).getMeasurementUnit() +
-                  "' you would like to change to. (Changing from "
-                  + foodStorage.getSpecificInstance(
-                  editIndex).getPricePerUnit() + ".) (enter a decimal number 0.0 - 99999.9.)"
+                  .getSpecificInstance(editIndex).getMeasurementUnit()
+                  + "' you would like to change to. (Changing from "
+                  + foodStorage.getSpecificInstance(editIndex).getPricePerUnit()
+                  + ".) (enter a decimal number 0.0 - 99999.9.)"
                   + "\n(Enter '0' if you dont want to change it.)");
 
           // Since the set method for the grocery instance class doesn't allow for an amount to be 0
@@ -879,8 +904,8 @@ public class UserInterface {
     terminalUtils.clearScreen();
 
     String yesNoChoice = uiYesNoOption("Remove " + foodStorage.getSpecificType(removeAmountIndex)
-        .getName() + " from the food storage?\n\n" + "From old amount: " + oldAmount +
-        "\nTo new amount: " + (oldAmount - removeAmount)
+        .getName() + " from the food storage?\n\n" + "From old amount: " + oldAmount
+        + "\nTo new amount: " + (oldAmount - removeAmount)
         + "\n\nIs this OK? (Y/n)");
 
     terminalUtils.clearScreen();
@@ -973,9 +998,9 @@ public class UserInterface {
     for (int i = 0; i < amountOfIngredients; i++) {
       int typeIndex = 0;
       try {
-        typeIndex = chooseValidListIndex("Ingredient " + (i + 1) + "\n\n" +
-            terminalUtils.groceryTypeTable(foodStorage.getAllGroceryTypes()) +
-            "\nPlease choose which ingredient to add. (Enter the number 'Num' of the ingredient "
+        typeIndex = chooseValidListIndex("Ingredient " + (i + 1) + "\n\n"
+            + terminalUtils.groceryTypeTable(foodStorage.getAllGroceryTypes())
+            + "\nPlease choose which ingredient to add. (Enter the number 'Num' of the ingredient "
             + "you would like to add.)", foodStorage.getAllGroceryTypes().size());
         soundPlayer.playInputSound();
         terminalUtils.clearScreen();
@@ -1075,9 +1100,10 @@ public class UserInterface {
 
     terminalUtils.clearScreen();
 
-    System.out.println("\n\nName: " + newRecipe.getName() + "\n" +
-        "Description: " + newRecipe.getDescription() + "\n\n" + terminalUtils.ingredientsTable(
-        newRecipe.getIngredients(), newRecipe.getApproximations()) + "\n\nInstructions: ");
+    System.out.println("\n\nName: " + newRecipe.getName() + "\n"
+        + "Description: " + newRecipe.getDescription() + "\n\n"
+        + terminalUtils.ingredientsTable(newRecipe.getIngredients(),
+        newRecipe.getApproximations()) + "\n\nInstructions: ");
 
     newRecipe.getInstructions().forEach(instruction ->
         System.out.println(
@@ -1119,18 +1145,18 @@ public class UserInterface {
   private void viewSuggestedRecipes() {
     terminalUtils.clearScreen();
     String includeOutOfDateFood = uiYesNoOption(
-        "Would you like to include out of date groceries into consideration for what ingredients are currently available? (Y/n)");
+        "Would you like to include out of date groceries into consideration for what ingredients "
+            + "are currently available? (Y/n)");
 
     terminalUtils.clearScreen();
 
     try {
       System.out.println(
-          "NOTE: Recipes are only suggested if you have half or more of the ingredients available in the food storage.\n\n"
-              + "Suggested Recipes:\n" +
-              terminalUtils.cookbookTable(
-                  cookBook.recipeSuggestion(foodStorage.getAllGroceryInstances(),
-                      includeOutOfDateFood.equals("y")),
-                  foodStorage) + "\n\nPress ENTER to go back...");
+          "NOTE: Recipes are only suggested if you have half or more of the ingredients available "
+              + "in the food storage.\n\n" + "Suggested Recipes:\n" + terminalUtils.cookbookTable(
+              cookBook.recipeSuggestion(foodStorage.getAllGroceryInstances(),
+                  includeOutOfDateFood.equals("y")),
+              foodStorage) + "\n\nPress ENTER to go back...");
 
       terminalUtils.getInput();
 
@@ -1208,14 +1234,14 @@ public class UserInterface {
           soundPlayer.playInputSound();
         } else {
           terminalUtils.clearScreen();
-          System.out.println("Please enter an integer (1 - " +
-              foodStorage.getAllGroceryInstances().size()
+          System.out.println("Please enter an integer (1 - "
+              + foodStorage.getAllGroceryInstances().size()
               + "), that you haven't already added! \n");
         }
       } catch (Exception e) {
         terminalUtils.clearScreen();
-        System.out.println("Please enter an integer (1 - " +
-            foodStorage.getAllGroceryInstances().size() + "), that you haven't already added!\n");
+        System.out.println("Please enter an integer (1 - "
+            + foodStorage.getAllGroceryInstances().size() + "), that you haven't already added!\n");
       }
 
       terminalUtils.clearScreen();
@@ -1234,15 +1260,15 @@ public class UserInterface {
   }
 
   private String uiYesNoOption(String message) {
-    boolean hasEnteredYOrN = false;
+    boolean hasEnteredYorN = false;
     String yesNoChoice = "";
 
     System.out.println(message);
 
-    while (!hasEnteredYOrN) {
+    while (!hasEnteredYorN) {
       try {
         yesNoChoice = terminalUtils.yesNoOption();
-        hasEnteredYOrN = true;
+        hasEnteredYorN = true;
         soundPlayer.playConfirmSound();
       } catch (IllegalArgumentException e) {
         System.out.println(e.getMessage() + "\n");
