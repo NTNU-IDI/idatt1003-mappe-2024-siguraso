@@ -14,9 +14,9 @@ public class FoodWasteApp {
    * @param args the arguments that are passed to the main method.
    */
   public static void main(String[] args) {
-    UserInterface UI = new UserInterface();
+    UserInterface ui = new UserInterface();
 
-    UI.init();
-    UI.start();
+    ui.init();
+    ui.start();
   }
 }
