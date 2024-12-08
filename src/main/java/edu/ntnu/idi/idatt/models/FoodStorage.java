@@ -179,17 +179,17 @@ public class FoodStorage {
    * Removes all instances of {@link GroceryInstance} that have an amount of 0.
    */
   private void removeEmptyInstances() {
-    this.groceryInstances.removeIf(GI -> GI.getAmount() == 0);
+    this.groceryInstances.removeIf(gi -> gi.getAmount() == 0);
   }
 
-  private boolean isSameType(GroceryInstance G1, GroceryInstance G2) {
-    return G1.getName().equals(G2.getName()) && G1.getMeasurementUnit()
-        .equals(G2.getMeasurementUnit());
+  private boolean isSameType(GroceryInstance g1, GroceryInstance g2) {
+    return g1.getName().equals(g2.getName()) && g1.getMeasurementUnit()
+        .equals(g2.getMeasurementUnit());
   }
 
-  private boolean isSameInstance(GroceryInstance G1, GroceryInstance G2) {
-    return isSameType(G1, G2) && G1.getBestBeforeString()
-        .equals(G2.getBestBeforeString()) && G1.getPricePerUnit() == G2.getPricePerUnit();
+  private boolean isSameInstance(GroceryInstance g1, GroceryInstance g2) {
+    return isSameType(g1, g2) && g1.getBestBeforeString()
+        .equals(g2.getBestBeforeString()) && g1.getPricePerUnit() == g2.getPricePerUnit();
   }
 
   /**
@@ -202,7 +202,7 @@ public class FoodStorage {
   public List<GroceryInstance> groceryInstanceSearch(String searchTerm) {
 
     return this.groceryInstances.stream()
-        .filter(GI -> GI.getName().toLowerCase().contains(searchTerm.toLowerCase())).toList();
+        .filter(gi -> gi.getName().toLowerCase().contains(searchTerm.toLowerCase())).toList();
   }
 
   // add/remove methods
