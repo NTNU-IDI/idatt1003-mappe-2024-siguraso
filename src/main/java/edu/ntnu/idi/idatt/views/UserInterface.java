@@ -277,16 +277,7 @@ public class UserInterface {
         }
 
         // remove grocery type
-        case 2 -> {
-          terminalUtils.clearScreen();
-          String removeConfirmation = uiYesNoOption(
-              "Do you really wish to remove a grocery class? (Y/n");
-
-          if (removeConfirmation.equals("y")) {
-            removeGroceryType();
-          }
-
-        }
+        case 2 -> removeGroceryType();
 
         // edit grocery type
         case 3 -> {

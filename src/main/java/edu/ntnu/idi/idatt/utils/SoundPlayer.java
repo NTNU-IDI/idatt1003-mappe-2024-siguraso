@@ -184,7 +184,7 @@ public class SoundPlayer {
 
   /**
    * Plays the remove sound, a sound that is played when the user removes an item from the food
-   * storage. It contains a man screaming (NOT LOUD!).
+   * storage. It contains a man screaming (NOT LOUD/EAR SAFE!).
    */
   public void playRemoveSound() {
     if (muteSound) {
