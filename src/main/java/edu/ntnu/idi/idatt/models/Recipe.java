@@ -186,8 +186,8 @@ public class Recipe {
         // also checks if it has the same measurement unit, since they can share names as well as
         // having different measurement units.
 
-        if (!instance.isOutOfDate() &&
-            ingredient.getMeasurementUnit().equals(instance.getMeasurementUnit())) {
+        if (!instance.isOutOfDate() && ingredient.getMeasurementUnit()
+            .equals(instance.getMeasurementUnit())) {
           variableWrapper.totalInstanceAmount += instance.getAmount();
         }
 
