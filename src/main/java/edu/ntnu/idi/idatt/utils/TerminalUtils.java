@@ -231,10 +231,14 @@ public class TerminalUtils {
           "+─────+───────────────────────────────────────────────+─────────────+──────────+────────"
               + "───────────────+");
 
-      recipes.forEach(recipe -> rows.add(
-          String.format("│ %-3d │ %-45s │ %-11d │ %-8s │ %-21s │", recipes.indexOf(recipe) + 1,
-              recipe.getName(), recipe.getIngredients().size(), recipe.canMakeRecipe(foodStorage,
-                  false), recipe.canMakeRecipe(foodStorage, true))));
+      recipes.forEach(recipe -> {
+        String canMake = recipe.canMakeRecipe(foodStorage, false) ? "Yes" : "No";
+        String canMakeInclOutOfDate = recipe.canMakeRecipe(foodStorage, true) ? "Yes"
+            : "No";
+        rows.add(
+            String.format("│ %-3d │ %-45s │ %-11d │ %-8s │ %-21s │", recipes.indexOf(recipe) + 1,
+                recipe.getName(), recipe.getIngredients().size(), canMake, canMakeInclOutOfDate));
+      });
 
       rows.add(
           "+─────+───────────────────────────────────────────────+─────────────+──────────+────────"
