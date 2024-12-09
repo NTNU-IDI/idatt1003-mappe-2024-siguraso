@@ -264,10 +264,6 @@ public class TerminalUtils {
     if (ingredients.isEmpty()) {
       return "=========================NO INGREDIENTS TO DISPLAY!=========================";
     } else {
-
-      // num, name, amount, measurement unit, appproximation (if needed)
-      String tableFormat = "";
-
       ArrayList<String> rows = new ArrayList<>();
 
       //adds the header to the list of rows.
