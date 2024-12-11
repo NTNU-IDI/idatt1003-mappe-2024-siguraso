@@ -39,6 +39,17 @@ public class UserInterface {
     foodStorage.addType(new GroceryType("Oregano - 100g container", "pcs."));
     foodStorage.addType(new GroceryType("Garlic - 2 Pack", "pcs."));
 
+    foodStorage.addInstance(
+        new GroceryInstance(foodStorage.getSpecificType(1), 0.5, 23.0, "01.01.2025"));
+    foodStorage.addInstance(
+        new GroceryInstance(foodStorage.getSpecificType(5), 1, 15.0, "10.12.2024"));
+    foodStorage.addInstance(
+        new GroceryInstance(foodStorage.getSpecificType(6), 1, 10.0, "01.01.2026"));
+    foodStorage.addInstance(
+        new GroceryInstance(foodStorage.getSpecificType(7), 1, 10.0, "11.12.2024"));
+    foodStorage.addInstance(
+        new GroceryInstance(foodStorage.getSpecificType(8), 1, 10.0, "02.01.2025"));
+
     //example recipe marinara sauce
     ArrayList<GroceryInstance> marinaraIngredients = new ArrayList<>();
     ArrayList<String> approx = new ArrayList<>();
@@ -109,7 +120,7 @@ public class UserInterface {
     terminalUtils.clearScreen();
     return choiceWindow(
         new String[]{"Manage food storage.", "Manage grocery classes.", "Manage cookbook/recipes.",
-            "Toggle sound mute. (Currently sound is " + soundStatus + ")", "Quit."},
+            "Toggle sound mute. (Currently: " + soundStatus + ")", "Quit."},
         "What do you wish to do?");
   }
 
@@ -1095,6 +1106,8 @@ public class UserInterface {
 
     if (addRecipe.equalsIgnoreCase("y")) {
       cookBook.addRecipe(newRecipe);
+
+      terminalUtils.clearScreen();
 
       System.out.println("Successfully added recipe to the cookbook."
           + "\nPress ENTER to continue...");

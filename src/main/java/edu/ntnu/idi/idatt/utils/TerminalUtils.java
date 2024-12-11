@@ -174,25 +174,25 @@ public class TerminalUtils {
       // character mapping: total: 93 chars: 3 chars num, 30 chars name, 9 chars amount,
       //                           9 Chars unit, 7 chars Price, 10 chars Price/unit DD.MM.YYYY
       rows.add(
-          "+─────+────────────────────────────────+────────GROCERIES──────────────────────+────────"
-              + "────+────────────+");
+          "+─────+────────────────────────────────+────────GROCERIES───────────────────────+───────"
+              + "─────+────────────+");
       rows.add(
-          "│ Num │ Name                           │ Amount    │ Unit      │ Total Price   │ Price/U"
-              + "nit │ BestBefore │");
+          "│ Num │ Name                           │ Amount    │ Unit      │ Total Price KR │ Price/"
+              + "Unit │ BestBefore │");
       rows.add(
-          "+─────+────────────────────────────────+───────────+───────────+───────────────+────────"
-              + "────+────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+────────────────+───────"
+              + "─────+────────────+");
 
       groceryInstances.forEach(instance -> rows.add(
-          String.format("│ %-3d │ %-30s │ %,-9.1f │ %-9s │ %,-13.2f │ %,-10.2f │ %-10s │",
+          String.format("│ %-3d │ %-30s │ %,-9.1f │ %-9s │ %,-14.2f │ %,-10.2f │ %-10s │",
               groceryInstances.indexOf(instance) + 1, instance.getName(), instance.getAmount(),
               instance.getMeasurementUnit(), instance.getPrice(), instance.getPricePerUnit(),
               instance.getBestBeforeString())));
 
       // prints out bottom of table
       rows.add(
-          "+─────+────────────────────────────────+───────────+───────────+───────────────+────────"
-              + "────+────────────+");
+          "+─────+────────────────────────────────+───────────+───────────+────────────────+───────"
+              + "─────+────────────+");
 
       return String.join("\n", rows);
     }
