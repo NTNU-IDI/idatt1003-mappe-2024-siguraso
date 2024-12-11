@@ -328,16 +328,7 @@ public class UserInterface {
         case 2 -> createRecipe();
 
         // remove recipe
-        case 3 -> {
-          terminalUtils.clearScreen();
-
-          String removeConfirmation = uiYesNoOption(
-              "Are you sure you wish to remove a recipe from the cookbook? (Y/n)");
-
-          if (removeConfirmation.equals("y")) {
-            removeRecipe();
-          }
-        }
+        case 3 -> removeRecipe();
 
         // view suggested recipes
         case 4 -> viewSuggestedRecipes();
@@ -1123,7 +1114,25 @@ public class UserInterface {
               + "\n\nPlease enter the number (See 'Num') of the recipe you would like to remove.",
           cookBook.getRecipes().size());
 
-      cookBook.removeRecipe(removeIndex);
+      terminalUtils.clearScreen();
+
+      String removeConfirm = uiYesNoOption(
+          "Do you really wish to remove the recipe: " + cookBook.getSpecificRecipe(removeIndex)
+              .getName() + "? (Y/n)");
+
+      String curRemoved = cookBook.getSpecificRecipe(removeIndex).getName();
+
+      if (removeConfirm.equals("y")) {
+        cookBook.removeRecipe(removeIndex);
+
+        terminalUtils.clearScreen();
+        System.out.println(
+            "Successfully removed recipe: " + curRemoved + ".\n\nPress ENTER to continue...");
+
+        terminalUtils.getInput();
+
+        soundPlayer.playRemoveSound();
+      }
     } catch (IllegalArgumentException e) {
       terminalUtils.clearScreen();
 

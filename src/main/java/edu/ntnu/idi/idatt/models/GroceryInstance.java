@@ -179,7 +179,6 @@ public class GroceryInstance {
     } else {
       throw new IllegalArgumentException("Please enter a valid date in the format DD.MM.YYYY");
     }
-
   }
 
   // Other void-methods.
