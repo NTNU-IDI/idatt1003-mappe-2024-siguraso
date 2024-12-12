@@ -12,6 +12,10 @@ import java.util.Date;
  * own prices, best-before dates, etc.. GroceryInstances define exactly these product-specific
  * variables based on a 'product class', or in other words, a GroceryType as well as other more
  * specific information about the product, like how much of the product there is.
+ *
+ * @author siguraso
+ * @version 3.0
+ * @since 0.1
  **/
 public class GroceryInstance {
 

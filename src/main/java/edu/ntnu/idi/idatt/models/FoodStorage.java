@@ -9,6 +9,10 @@ import java.util.List;
  * An instance of FoodStorage is used to store multiple instances of the {@link GroceryInstance}
  * class as well as multiple instances of the {@link GroceryType} class. The FoodStorage class is
  * used to more or less manage the groceries that the user has in their food storage.
+ *
+ * @author siguraso
+ * @version 3.0
+ * @since 0.1
  */
 public class FoodStorage {
 

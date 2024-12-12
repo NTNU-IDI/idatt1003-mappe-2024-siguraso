@@ -8,6 +8,10 @@ import java.util.List;
  * the recipe object is complete with ingredients, instructions, a description as well as including
  * approximations for the amounts of the different ingredients to make it easier to actually make
  * the recipes.
+ *
+ * @author siguraso
+ * @version 3.0
+ * @since 0.1
  */
 public class Recipe {
 

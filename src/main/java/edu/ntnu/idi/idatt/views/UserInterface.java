@@ -14,6 +14,10 @@ import java.util.List;
 /**
  * Class that creates the menus of the program, and handles the user input for what the user wants
  * to do.
+ *
+ * @author siguraso
+ * @version 3.0
+ * @since 0.1
  */
 public class UserInterface {
 

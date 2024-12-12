@@ -5,6 +5,10 @@ package edu.ntnu.idi.idatt.models;
  * potato, butter, etc.). This class is used in tandem with {@link GroceryInstance}, where
  * GroceryType explains what class the grocery is (if the grocery is a tomato, it is a part of the
  * "tomato general class", or in other words, the tomato GroceryType).
+ *
+ * @author siguraso
+ * @version 3.0
+ * @since 0.1
  */
 public class GroceryType {
 

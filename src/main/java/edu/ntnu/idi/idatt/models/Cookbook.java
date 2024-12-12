@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 /**
  * A class that takes a collection of recipes and manages them.
+ *
+ * @author siguraso
+ * @version 3.0
+ * @since 0.1
  */
 public class Cookbook {
 

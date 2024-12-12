@@ -13,6 +13,10 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * Class that plays small sound effects to spice up the user experience in the FoodWasteApp. The
  * sounds are stored in the main/resources/sounds directory. The sounds are played when the user
  * confirms an action or does a smaller input (e.g. selecting entering a menu).
+ *
+ * @author siguras
+ * @version 3.0
+ * @since 2.0
  */
 public class SoundPlayer {
 

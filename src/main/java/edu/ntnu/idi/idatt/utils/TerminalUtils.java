@@ -11,6 +11,10 @@ import java.util.Scanner;
  * Text-User-Interface class that manages the input/output of the program. The class contains
  * different methods that are used to validate user input, print out tables, and clear the terminal
  * window.
+ *
+ * @author siguraso
+ * @version 3.0
+ * @since 0.1
  */
 public class TerminalUtils {
 
