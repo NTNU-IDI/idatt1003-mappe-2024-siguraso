@@ -2,7 +2,9 @@
 
 STUDENT NAME = "Sigurd Andris Sørengen"
 
-## Project description
+STUDENT ID = "137405"
+
+# Project description
 
 This projects was developed as the end assignment used in for the programming course IDATT1003 at
 NTNU-Trondheim. The FoodWaste app is more or less a utility that helps people keep track of their
@@ -35,7 +37,7 @@ features:
 - A short description of the recipe
 - Instructions for how to make the recipe
 
-## Project structure
+# Project structure
 
 All source files for classes are stored
 in [src/main/java/edu/ntnu/idi/idatt](https://github.com/NTNU-IDI/idatt1003-mappe-2024-siguraso/tree/main/src/main/java/edu/ntnu/idi/idatt)
@@ -49,7 +51,7 @@ directory.
 The tests for each of the model classes are stored
 in [src/test/java/edu/ntnu/idi/idatt/models](https://github.com/NTNU-IDI/idatt1003-mappe-2024-siguraso/tree/main/src/test/java/edu/ntnu/idi/idatt/models).
 
-## How to run the project
+# How to run the project
 
 1. Go to the releases
    tab [here](https://github.com/NTNU-IDI/idatt1003-mappe-2024-siguraso/releases).
@@ -57,18 +59,54 @@ in [src/test/java/edu/ntnu/idi/idatt/models](https://github.com/NTNU-IDI/idatt10
 3. Open a new terminal window in the directory where you saved the .jar file and enter the terminal
    command `java -jar "filename".jar`.
 
-## How to run the tests
+# How to run the tests
 
 1. Download the source code.
 2. Open the source code using any IDE of your choice, where you have configured the project to be a
    Maven test project.
 4. Simply run the test you wish to run!
 
-## Project references
+# Project references
+
+## General references for theory:
 
 Horstman, C. S. (2024). *CoreJava Volume I: Fundamentals Twelfth Edition* (12th Edt.). Oracle Press.
+
+## References used to implement code:
 
 Oracle. (No year). *Class SimpleDateFormat*.
 url: https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
 
+Oracle. (No year). *Class BufferedInputStream*.
+url: https://docs.oracle.com/javase/8/docs/api/java/io/BufferedInputStream.html
 
+Oracle. (No year). *Class IOException*.
+url: https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html
+
+Oracle. (No year). *Class InputStream*.
+https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html
+
+Oracle. (No year). *Class AudioInputStream*.
+url: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/AudioInputStream.html
+
+Oracle. (No year). *Class AudioSystem*.
+url: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/AudioSystem.html
+
+Oracle. (No year). *Interface Clip*.
+url: https://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/Clip.html
+
+Oracle. (No year). *Class LineUnavailableException*.
+url: https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/javax/sound/sampled/LineUnavailableException.html
+
+Oracle. (No year). *Class UnsupportedAudioFileException*
+url: https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/javax/sound/sampled/UnsupportedAudioFileException.html
+
+## References for sound resources used in code:
+
+Kondo, K. (1998). *Ocarina of Time: Dialog Next Sound*. Nintendo. (Retrieved from: http://noproblo.dayjo.org/ZeldaSounds/OOT/index.html)
+
+Atlus Sound Team. (2016). *Persona 5: Confirm sound*. Atlus. (Retrieved from: https://www.youtube.com/watch?v=XiewSGTFdjA)
+
+Kirkhope, G. (1999). *Donkey Kong 64: Donkey Kong "YEAH" Sound Effect*. Nintendo. (Retrieved from: https://www.youtube.com/watch?v=cw38yZHOBgA)
+
+Kane. T. (2005). *Lego Star Wars: Yoda Death Sound Effect*. (Retrieved from: https://www.youtube.com/watch?v=glN0W8WogK8)
